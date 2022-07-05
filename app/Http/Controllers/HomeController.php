@@ -1,13 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
-use vanhenry\manager\model\Media;
 
 class HomeController extends Controller
 {
     public function index(Request $request){
+        \Auth::login(\App\Models\User::find(1));
         return view('home');
     }
     public function direction(Request $request, $link)

@@ -16,10 +16,8 @@ class GameWinController extends BaseGameController
         // }
 
 
-        // $gameType = 1;
-        // $gameWinType = GameWinType::find($gameType);
-        // $gameWinType->renderGameRecord();
-        // dd($gameWinType);
+        
+        // dd($currentGame->toArray());
 
         $user = Auth::user();
         $listGameWinType = GameWinType::where('act',1)->orderBy('ord','asc')->get();
