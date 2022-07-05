@@ -10,16 +10,16 @@ class GameWinController extends BaseGameController
 {
     public function index()
     {
-        $listGameWinType = GameWinType::get();
-        foreach ($listGameWinType as $key => $itemGameWinType) {
-            $itemGameWinType->renderGameRecord();
-        }
+        // $listGameWinType = GameWinType::get();
+        // foreach ($listGameWinType as $key => $itemGameWinType) {
+        //     $itemGameWinType->renderGameRecord();
+        // }
 
 
-        $gameType = 1;
-        $gameWinType = GameWinType::find($gameType);
-        $gameWinType->renderGameRecord();
-        dd($gameWinType);
+        // $gameType = 1;
+        // $gameWinType = GameWinType::find($gameType);
+        // $gameWinType->renderGameRecord();
+        // dd($gameWinType);
 
         $user = Auth::user();
         $listGameWinType = GameWinType::where('act',1)->orderBy('ord','asc')->get();

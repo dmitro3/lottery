@@ -51,9 +51,9 @@ class GameWinType extends BaseModel
         $dataInsert = [];
         for ($i = 0; $i < 24; $i++) {
             for ($j = 0; $j < 60; $j++) {
-                if (($i*60 + $j)/$currentMinuteRange) {
+                if (($i*60 + $j)%$currentMinuteRange == 0) {
                     $dataAdd = [];
-                    $dataAdd['id'] = (int)($year.$timeAnchor->format('m').$timeAnchor->format('d').$this->id.sprintf('%s%04s','',$count));
+                    $dataAdd['id'] = (int)($year.$timeAnchor->format('m').$timeAnchor->format('d').'0'.$this->id.sprintf('%s%04s','',$count));
                     $dataAdd['day'] = $day;
                     $dataAdd['month'] = $month;
                     $dataAdd['year'] = $year;
@@ -64,15 +64,16 @@ class GameWinType extends BaseModel
                     $dataAdd['admin_init'] = 0;
                     $dataAdd['created_at'] = now();
                     $dataAdd['updated_at'] = now();
-                    // $dataAdd['star']
+                    $dataAdd['start_time'] = $timeStampStart;
+                    $dataAdd['end_time'] = $timeStampStart + $this->seconds;
+                    $timeStampStart = $dataAdd['end_time'];
                     array_push($dataInsert, $dataAdd);
-                    dd($dataAdd);
                     $count++;
                 }
             }
         }
         if (count($dataInsert) > 0) {
-            self::insert($dataInsert);
+            GameWinRecord::insert($dataInsert);
         }
     }
 }
