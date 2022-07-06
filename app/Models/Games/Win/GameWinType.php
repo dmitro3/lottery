@@ -47,13 +47,13 @@ class GameWinType extends BaseModel
         $month = $timeAnchor->month;
         $year = $timeAnchor->year;
         $timeStampStart = $timeAnchor->startOfDay()->timestamp;
-        $count = 0;
+        $count = 1;
         $dataInsert = [];
         for ($i = 0; $i < 24; $i++) {
             for ($j = 0; $j < 60; $j++) {
                 if (($i*60 + $j)%$currentMinuteRange == 0) {
                     $dataAdd = [];
-                    $dataAdd['id'] = (int)($year.$timeAnchor->format('m').$timeAnchor->format('d').'0'.$this->id.sprintf('%s%04s','',$count));
+                    $dataAdd['id'] = (int)($year.$timeAnchor->format('m').$timeAnchor->format('d').$this->id.sprintf('%s%04s','',$count));
                     $dataAdd['day'] = $day;
                     $dataAdd['month'] = $month;
                     $dataAdd['year'] = $year;

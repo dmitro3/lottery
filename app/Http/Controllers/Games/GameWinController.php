@@ -8,21 +8,17 @@ use App\Models\Games\Win\{
 };
 class GameWinController extends BaseGameController
 {
-    public function index()
+    public function index($request)
     {
         // $listGameWinType = GameWinType::get();
         // foreach ($listGameWinType as $key => $itemGameWinType) {
         //     $itemGameWinType->renderGameRecord();
         // }
-
-
-        
-        // dd($currentGame->toArray());
-
-        $user = Auth::user();
+        $value = $request->cookie('switch_audio');
+        $activeAudio = isset($_COOKIE['switch_audio']) && $_COOKIE['switch_audio'] == 'true';
         $listGameWinType = GameWinType::where('act',1)->orderBy('ord','asc')->get();
         $listGameWinMultiple = GameWinMultiple::where('act',1)->orderBy('ord','asc')->get();
         $listGameWinMoneyItem = GameWinMoneyItem::where('act',1)->orderBy('ord','asc')->get();
-        return view('games.win.index',compact('listGameWinType','listGameWinMultiple','listGameWinMoneyItem'));
+        return view('games.win.index',compact('listGameWinType','listGameWinMultiple','listGameWinMoneyItem','activeAudio'));
     }
 }

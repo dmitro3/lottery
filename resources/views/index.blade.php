@@ -26,6 +26,7 @@
 	@yield('content')
 	@include('footer')
 	{[CMS_FOOTER]}
+	<script src="theme/frontend/js/sweetalert.min.js" defer></script>
 	<script src="theme/frontend/js/base.js" defer></script>
 	@yield('js')
 </body>

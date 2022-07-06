@@ -32,8 +32,9 @@ class PushServerProvider implements MessageComponentInterface {
             $this->connectionList->put($resourceId,$connection);
         }else {
             $from->send(json_encode([
-                'success '=>false,
-                'message' => 'Không tìm thấy phương thức!'
+                'code'      => 604,
+                'success '  => false,
+                'message'   => 'Không tìm thấy phương thức!'
             ]));
         }
     }

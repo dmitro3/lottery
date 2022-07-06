@@ -1,4 +1,76 @@
 BASE_GUI = {
+    init: function () {
+        BASE_GUI.initVanNoticeBarContent();
+        BASE_GUI.initBaseCheckBox();
+    },
+    initVanNoticeBarContent: function () {
+        var vanNoticeBarContent = document.querySelector(
+            ".van-notice-bar__content"
+        );
+        if (vanNoticeBarContent) {
+            const parentWidth = vanNoticeBarContent.parentElement.clientWidth;
+            const contentWidth = vanNoticeBarContent.clientWidth;
+            const duration = contentWidth / 50;
+            function resetMarqueeContent(durationReset) {
+                vanNoticeBarContent.setAttribute(
+                    "style",
+                    `transition-duration: 0s; transform: translateX(${parentWidth}px);`
+                );
+                setTimeout(() => {
+                    vanNoticeBarContent.setAttribute(
+                        "style",
+                        `transition-duration: ${durationReset}s; transform: translateX(-${contentWidth}px);`
+                    );
+                }, 300);
+            }
+            if (duration > 0) {
+                setTimeout(() => {
+                    vanNoticeBarContent.setAttribute(
+                        "style",
+                        `transition-duration: ${duration}s; transform: translateX(-${contentWidth}px);`
+                    );
+                    const duration2nd = (contentWidth + parentWidth) / 50;
+                    setTimeout(() => {
+                        resetMarqueeContent(duration2nd);
+                        setInterval(() => {
+                            resetMarqueeContent(duration2nd);
+                        }, (duration2nd + 0.3) * 1000);
+                    }, duration * 1000);
+                }, 2000);
+            }
+        }
+    },
+    initBaseCheckBox: function () {
+        var listCheckBox = document.querySelectorAll(".van-checkbox");
+        listCheckBox.forEach((element) => {
+            element.addEventListener("click", function () {
+                var vanCheckboxIcon = this.querySelector(".van-checkbox__icon");
+                var vanIcon = this.querySelector(".van-icon");
+                if (this.getAttribute("aria-checked") == "false") {
+                    this.setAttribute("aria-checked", "true");
+                    this.question;
+                    if (vanCheckboxIcon) {
+                        vanCheckboxIcon.classList.add(
+                            "van-checkbox__icon--checked"
+                        );
+                    }
+                    if (vanIcon) {
+                        vanIcon.classList.add("van-icon-success");
+                    }
+                } else {
+                    this.setAttribute("aria-checked", "false");
+                    if (vanCheckboxIcon) {
+                        vanCheckboxIcon.classList.remove(
+                            "van-checkbox__icon--checked"
+                        );
+                    }
+                    if (vanIcon) {
+                        vanIcon.classList.remove("van-icon-success");
+                    }
+                }
+            });
+        });
+    },
     createFlashNotify: function (message, autoHide = true) {
         var listOldFlashNotify = document.querySelectorAll(".flash-msg");
         listOldFlashNotify.forEach((element) => {
@@ -30,4 +102,49 @@ BASE_GUI = {
             loaddingBox.style.display = "none";
         }
     },
+    formatCurrency: function (number) {
+        var n = number.toString().split("").reverse().join("");
+        var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
+        return n2.split("").reverse().join("") + "đ";
+    },
 };
+BASE_SUPPORT = {
+    getCookie: function (cname) {
+        var name = cname + "=";
+        decodedCookie = document.cookie;
+        var ca = decodedCookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == " ") {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    },
+    setCookie: function (cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+        var expires = "expires=" + d.toGMTString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    },
+    _dispatchEvent: function (element, eventName) {
+        if (typeof Event == "function") {
+            const event = new Event(eventName);
+            element.dispatchEvent(event);
+        } else {
+            if ("createEvent" in document) {
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent(eventName, false, true);
+                element.dispatchEvent(evt);
+            } else {
+                element.fireEvent("on" + eventName);
+            }
+        }
+    },
+};
+window.addEventListener("DOMContentLoaded", function () {
+    BASE_GUI.init();
+});

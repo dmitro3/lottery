@@ -5,4 +5,8 @@ use App\Models\BaseModel;
 class GameWinRecord extends BaseModel
 {
     use HasFactory;
+    public function getTimeRemaining()
+    {
+        return $this->end_time - now()->timestamp;
+    }
 }

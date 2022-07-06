@@ -8,13 +8,10 @@
     </div>
 </div>
 <div>
-    <audio id="voice1" muted="muted">
+    <audio id="voice1">
         <source src="theme/frontend/audios/di1.da40b233.mp3" type="audio/mpeg">
     </audio>
-    <audio id="voice2" muted="muted">
+    <audio id="voice2">
         <source src="theme/frontend/audios/di2.317de251.mp3" type="audio/mpeg">
     </audio>
-</div>
-<div class="activityBox c-row c-row-middle-center">
-    <img width="55px" height="55px" src="theme/frontend/img/long.3de1acf5.svg" class="img">
 </div>

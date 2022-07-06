@@ -1923,8 +1923,8 @@ ol, ul {
 
 .van-checkbox__icon--checked .van-icon {
     color: #fff;
-    background-color: #1989fa;
-    border-color: #1989fa
+    border-color: #f4453e;
+    background-color: #f4453e;
 }
 
 .van-checkbox__icon--disabled {

@@ -1116,11 +1116,15 @@
     text-align: center;
     padding: 0 .16rem;
     border: .02667rem solid #5cba47;
-    color: #5cba47;
+    background-color: rgb(240, 240, 240);
+    color: rgb(0, 0, 0);
     border-radius: .26667rem;
     font-size: .32rem;
     margin-left: .13333rem;
-    background: rgba(92, 186, 71, .1)
+}
+.game-betting .content .box .random-box .item.active{
+    background-color: rgb(92, 186, 71);
+    color: rgb(255, 255, 255);
 }
 
 .game-betting .content .box .btn-box {
@@ -1236,7 +1240,7 @@
     background-color: #f0f0f0
 }
 
-.game .betting-mark .info .item .multiple-box .li.acion {
+.game .betting-mark .info .item .multiple-box .li.action {
     background-color: #f4453e
 }
 
@@ -1265,42 +1269,171 @@
     background: #fa574a;
     color: #fff
 }
-
-.game .betting-mark.color1 .box, .game .betting-mark.color3 .box, .game .betting-mark.color7 .box, .game .betting-mark.color9 .box, .game .betting-mark.colorgreen .box, .game .betting-mark.colorsmall .box {
+.game .betting-mark .amount-box .li, .game .betting-mark .multiple-box .li {
+    background-color: #f0f0f0;
+    color: #000000;
+  }
+  
+  .game .betting-mark .stepper-box .li {
+    background-color: #f0f0f0;
+    color: #c8c9cc;
+  }
+  
+  .game .betting-mark.color1 .box, .game .betting-mark.color3 .box, .game .betting-mark.color7 .box, .game .betting-mark.color9 .box, .game .betting-mark.colorgreen .box, .game .betting-mark.colorsmall .box {
     background: #26bd2f;
+    background-image: -webkit-gradient(linear, left top, right top, from(#26bd2f), to(#75c76b));
     background-image: linear-gradient(90deg, #26bd2f, #75c76b);
-    background-size: 100% 100%
-}
-
-.game .betting-mark.colorviolet .box {
+    background-size: 100% 100%;
+  }
+  
+  .game .betting-mark.color1 .box .color, .game .betting-mark.color3 .box .color, .game .betting-mark.color7 .box .color, .game .betting-mark.color9 .box .color, .game .betting-mark.colorgreen .box .color, .game .betting-mark.colorsmall .box .color {
+    color: #26bd2f;
+  }
+  
+  .game .betting-mark.color1 .amount-box .li.active, .game .betting-mark.color1 .multiple-box .li.active, .game .betting-mark.color3 .amount-box .li.active, .game .betting-mark.color3 .multiple-box .li.active, .game .betting-mark.color7 .amount-box .li.active, .game .betting-mark.color7 .multiple-box .li.active, .game .betting-mark.color9 .amount-box .li.active, .game .betting-mark.color9 .multiple-box .li.active, .game .betting-mark.colorgreen .amount-box .li.active, .game .betting-mark.colorgreen .multiple-box .li.active, .game .betting-mark.colorsmall .amount-box .li.active, .game .betting-mark.colorsmall .multiple-box .li.active {
+    background-color: #5cba47;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color1 .stepper-box .li.active, .game .betting-mark.color3 .stepper-box .li.active, .game .betting-mark.color7 .stepper-box .li.active, .game .betting-mark.color9 .stepper-box .li.active, .game .betting-mark.colorgreen .stepper-box .li.active, .game .betting-mark.colorsmall .stepper-box .li.active {
+    background-color: #5cba47;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color1 .foot .right, .game .betting-mark.color3 .foot .right, .game .betting-mark.color7 .foot .right, .game .betting-mark.color9 .foot .right, .game .betting-mark.colorgreen .foot .right, .game .betting-mark.colorsmall .foot .right {
+    background-color: #5cba47;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.colorviolet .box {
+    background-image: -webkit-gradient(linear, left top, right top, from(#b354fd), to(#d483ff));
     background-image: linear-gradient(90deg, #b354fd, #d483ff);
-    background-size: 100% 100%
-}
-
-.game .betting-mark.color2 .box, .game .betting-mark.color4 .box, .game .betting-mark.color6 .box, .game .betting-mark.color8 .box, .game .betting-mark.colorred .box {
+    background-size: 100% 100%;
+  }
+  
+  .game .betting-mark.colorviolet .box .color {
+    color: #b354fd;
+  }
+  
+  .game .betting-mark.colorviolet .amount-box .li.active, .game .betting-mark.colorviolet .multiple-box .li.active {
+    background-color: #9831e9;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.colorviolet .stepper-box .li.active {
+    background-color: #9831e9;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.colorviolet .foot .right {
+    background-color: #9831e9;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color2 .box, .game .betting-mark.color4 .box, .game .betting-mark.color6 .box, .game .betting-mark.color8 .box, .game .betting-mark.colorred .box {
     background: #fb4e4e;
+    background-image: -webkit-gradient(linear, left top, right top, from(#fb4e4e), to(#fe666e));
     background-image: linear-gradient(90deg, #fb4e4e, #fe666e);
-    background-size: 100% 100%
-}
-
-.game .betting-mark.color0 .box {
+    background-size: 100% 100%;
+  }
+  
+  .game .betting-mark.color2 .box .color, .game .betting-mark.color4 .box .color, .game .betting-mark.color6 .box .color, .game .betting-mark.color8 .box .color, .game .betting-mark.colorred .box .color {
+    color: #fb4e4e;
+  }
+  
+  .game .betting-mark.color2 .amount-box .li.active, .game .betting-mark.color2 .multiple-box .li.active, .game .betting-mark.color4 .amount-box .li.active, .game .betting-mark.color4 .multiple-box .li.active, .game .betting-mark.color6 .amount-box .li.active, .game .betting-mark.color6 .multiple-box .li.active, .game .betting-mark.color8 .amount-box .li.active, .game .betting-mark.color8 .multiple-box .li.active, .game .betting-mark.colorred .amount-box .li.active, .game .betting-mark.colorred .multiple-box .li.active {
     background-color: #fb4e4e;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color2 .stepper-box .li.active, .game .betting-mark.color4 .stepper-box .li.active, .game .betting-mark.color6 .stepper-box .li.active, .game .betting-mark.color8 .stepper-box .li.active, .game .betting-mark.colorred .stepper-box .li.active {
+    background-color: #fb4e4e;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color2 .foot .right, .game .betting-mark.color4 .foot .right, .game .betting-mark.color6 .foot .right, .game .betting-mark.color8 .foot .right, .game .betting-mark.colorred .foot .right {
+    background-color: #fb4e4e;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color0 .box {
+    background-color: #fb4e4e;
+    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(50%, #fb4e4e), color-stop(0, #eb43dd)) !important;
     background-image: linear-gradient(to bottom right, #fb4e4e 50%, #eb43dd 0) !important;
-    background-size: 100% 100%
-}
-
-.game .betting-mark.color5 .box {
+    background-size: 100% 100%;
+  }
+  
+  .game .betting-mark.color0 .box .color {
+    color: #fb4e4e;
+  }
+  
+  .game .betting-mark.color0 .amount-box .li.active, .game .betting-mark.color0 .multiple-box .li.active {
+    background-color: #fb4e4e;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color0 .stepper-box .li.active {
+    background-color: #fb4e4e;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color0 .foot .right {
+    background-color: #fb4e4e;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color5 .box {
     background: #5cba47;
+    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(50%, #5cba47), color-stop(0, #eb43dd)) !important;
     background-image: linear-gradient(to bottom right, #5cba47 50%, #eb43dd 0) !important;
-    background-size: 100% 100%
-}
-
-.game .betting-mark.colorbig .box {
+    background-size: 100% 100%;
+  }
+  
+  .game .betting-mark.color5 .box .color {
+    color: #5cba47;
+  }
+  
+  .game .betting-mark.color5 .amount-box .li.active, .game .betting-mark.color5 .multiple-box .li.active {
+    background-color: #5cba47;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color5 .stepper-box .li.active {
+    background-color: #5cba47;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.color5 .foot .right {
+    background-color: #5cba47;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.colorbig .box {
     background: #f5bb00;
+    background-image: -webkit-gradient(linear, left top, right top, from(#f5bb00), to(#fdd556));
     background-image: linear-gradient(90deg, #f5bb00, #fdd556);
-    background-size: 100% 100%
-}
-
+    background-size: 100% 100%;
+  }
+  
+  .game .betting-mark.colorbig .box .color {
+    color: #f5bb00;
+  }
+  
+  .game .betting-mark.colorbig .amount-box .li.active, .game .betting-mark.colorbig .multiple-box .li.active {
+    background-color: #ffc511;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.colorbig .stepper-box .li.active {
+    background-color: #ffc511;
+    color: #ffffff;
+  }
+  
+  .game .betting-mark.colorbig .foot .right {
+    background-color: #ffc511;
+    color: #ffffff;
+  }
+  
 .game .betting-mark .box {
     position: relative
 }
