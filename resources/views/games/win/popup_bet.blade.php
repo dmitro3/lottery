@@ -1,7 +1,12 @@
+@php
+    use \realtimemodule\pushserver\Helpers\PushServerHelper;
+@endphp
 <div class="van-overlay" style="z-index: 2031; display: none;"></div>
 <div class="van-popup van-popup--round van-popup--bottom van-slide-up-enter-active"
     style="max-width: 10rem; left: auto; z-index: 2032; display: none;">
     <div class="betting-mark">
+        <input type="hidden" name="mini_game">
+        <input type="hidden" name="mini_game_value">
         <div class="head">
             <div class="box">
                 <div class="con"></div>
@@ -16,7 +21,7 @@
                 <div class="tit">Số tiền</div>
                 <div class="c-row amount-box">
                     @foreach ($listGameWinMoneyItem as $key => $itemGameWinMoneyItem)
-                        <div class="li{{$key == 0 ? ' active default':''}}" data-amount="{{Support::show($itemGameWinMoneyItem,'money')}}">{{Support::show($itemGameWinMoneyItem,'name')}}</div>
+                        <div amount="{{PushServerHelper::generateHash($itemGameWinMoneyItem->id)}}" class="li{{$key == 0 ? ' active default':''}}" data-amount="{{Support::show($itemGameWinMoneyItem,'money')}}">{{Support::show($itemGameWinMoneyItem,'name')}}</div>
                     @endforeach
                 </div>
             </div>
@@ -42,9 +47,9 @@
                 </div>
             </div>
             <div class="item c-row c-row-middle">
-                <div role="checkbox" tabindex="0" aria-checked="false" class="van-checkbox">
-                    <div class="van-checkbox__icon van-checkbox__icon--square">
-                        <i class="van-icon"></i>
+                <div role="checkbox" tabindex="0" aria-checked="true" class="van-checkbox" id="accept-rule-box">
+                    <div class="van-checkbox__icon van-checkbox__icon--square van-checkbox__icon--checked">
+                        <i class="van-icon van-icon-success"></i>
                     </div>
                     <span class="van-checkbox__label">
                         <div class="agree p-r-15">Tôi đồng ý</div>
@@ -55,7 +60,7 @@
         </div>
         <div class="foot c-row">
             <div class="left"> Hủy </div>
-            <div class="right">
+            <div class="right" id="send-game-win-bet">
                 <span class="p-r-5">Tổng số tiền</span>
                 <span id="betting-mark-total-money"></span>
             </div>

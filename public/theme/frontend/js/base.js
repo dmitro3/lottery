@@ -1,7 +1,37 @@
 BASE_GUI = {
+    html: document.querySelector("html"),
     init: function () {
+        BASE_GUI.initSiteSize();
         BASE_GUI.initVanNoticeBarContent();
         BASE_GUI.initBaseCheckBox();
+    },
+    initSiteSize: function () {
+        BASE_GUI._calculateSiteSize();
+        var rtime;
+        var timeout = false;
+        var delta = 200;
+        window.addEventListener("resize", function () {
+            rtime = new Date();
+            if (timeout === false) {
+                timeout = true;
+                setTimeout(resizeend, delta);
+            }
+        });
+        function resizeend() {
+            if (new Date() - rtime < delta) {
+                setTimeout(resizeend, delta);
+            } else {
+                timeout = false;
+                BASE_GUI._calculateSiteSize();
+            }
+        }
+    },
+    _calculateSiteSize: function () {
+        var currentSize = window.innerWidth / 10;
+        currentSize = currentSize > 54 ? 54 : currentSize;
+        if (BASE_GUI.html) {
+            BASE_GUI.html.style.fontSize = currentSize + "px";
+        }
     },
     initVanNoticeBarContent: function () {
         var vanNoticeBarContent = document.querySelector(
@@ -105,7 +135,7 @@ BASE_GUI = {
     formatCurrency: function (number) {
         var n = number.toString().split("").reverse().join("");
         var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
-        return n2.split("").reverse().join("") + "đ";
+        return n2.split("").reverse().join("") + " đ";
     },
 };
 BASE_SUPPORT = {

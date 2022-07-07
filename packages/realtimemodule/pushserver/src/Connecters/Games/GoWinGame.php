@@ -3,19 +3,24 @@ namespace realtimemodule\pushserver\Connecters\Games;
 use realtimemodule\pushserver\Contracts\ConnecterInterface;
 use realtimemodule\pushserver\Helpers\PushServerHelper;
 use realtimemodule\pushserver\Models\User;
+use App\Games\GoWin\Factories\MiniGameFactory;
 use App\Models\Games\Win\{
     GameWinType,
-    GameWinMultiple,
     GameWinMoneyItem
 };
 class GoWinGame implements ConnecterInterface
 {
+    const END_TIME_CHECK = 5;
+
     const GAME_CONNECT_STATUS_SUCCESS = 200;
     const GAME_CONNECT_STATUS_NOT_LOGIN = 401;
     const GAME_CONNECT_STATUS_UNKNOWN_ERROR = 603;
     const GAME_CONNECT_STATUS_DATA_NOT_FOUND = 604;
+    const GAME_CONNECT_CURRENT_GAME_INVALID = 605;
+    const GAME_CONNECT_GAME_DATA_INVALID = 606;
 
     const GAME_ACTION_GET_CURRENT_GAME_TYPE_INFO = 1;
+    const GAME_ACTION_DO_BET = 2;
 
     protected $connection;
     protected $clients;
@@ -47,15 +52,25 @@ class GoWinGame implements ConnecterInterface
         switch ($action) {
             case self::GAME_ACTION_GET_CURRENT_GAME_TYPE_INFO:
                 return $this->getCurrentGameTypeInfo($action);
+                break;
+            case self::GAME_ACTION_DO_BET:
+                return $this->doSendBet($action);
+                break;
             default:
                 return $this->connection;
                 break;
         }
         return $this->connection;
     }
+    private function _getGameWinType($gameWinTypeId){
+        $gameWinType = \Cache::remember('gameWinTypeInfo'.$gameWinTypeId,60, function () use ($gameWinTypeId) {
+            return  GameWinType::find($gameWinTypeId);
+        });
+        return $gameWinType;
+    }
     private function getCurrentGameTypeInfo($action){
         $gameWinTypeId = PushServerHelper::unHash($this->messageInfo['game_type']);
-        $gameWinType = GameWinType::find($gameWinTypeId);
+        $gameWinType = $this->_getGameWinType($gameWinTypeId);
         if (!isset($gameWinType)) {
             $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
             return $this->connection;
@@ -72,6 +87,63 @@ class GoWinGame implements ConnecterInterface
         $data['game_type'] = $this->messageInfo['game_type'];
         $data['game_type_name'] = $gameWinType->name;
         $data['current_game_idx'] = $currentGame->id;
+        $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_SUCCESS,true,'Thành công.',$data,$action));
+        return $this->connection;
+    }
+    private function doSendBet($action){
+        $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
+        if (!isset($currentGameClientInfo)) {
+            $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
+            return $this->connection;
+        }
+        $gameWinTypeId = PushServerHelper::unHash($currentGameClientInfo['game_type']);
+        $gameWinType = $this->_getGameWinType($gameWinTypeId);
+        if (!isset($gameWinType)) {
+            $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
+            return $this->connection;
+        }
+        $currentGame = $gameWinType->getCurrentGameRecord();
+        if (!isset($currentGame)) {
+            $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
+            return $this->connection;
+        }
+        if ($currentGameClientInfo['current_game_idx'] != $currentGame->id || $currentGame->end_time - now()->timestamp <= self::END_TIME_CHECK) {
+            $this->from->send($this->buildResponse(self::GAME_CONNECT_CURRENT_GAME_INVALID,false,'Đã hết thời gian đặt cược của ván này.'));
+            return $this->connection;
+        }
+        $qty = isset($this->messageInfo['qty']) ? (int)$this->messageInfo['qty']:0;
+        $amoutItem = GameWinMoneyItem::find(PushServerHelper::unHash($this->messageInfo['amount']));
+        if ($qty < 1 || $qty > 999 || !isset($amoutItem)) {
+            $this->from->send($this->buildResponse(self::GAME_CONNECT_GAME_DATA_INVALID,false,'Dữ liệu không hợp lệ.'));
+            return $this->connection;
+        }
+        $totalMoney = $qty*$amoutItem->money;
+        $user =  $this->connection['userTargetMessage'];
+
+        // Check số tiền User. Tạm thời bỏ cmn qua.
+
+        $miniGame = MiniGameFactory::getMiniGame($this->messageInfo['mini_game'] ?? '');
+        if (!isset($miniGame)) {
+            $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
+            return $this->connection;
+        }
+        $miniGame->setValue($this->messageInfo['mini_game_value']);
+        if (!$miniGame->validateValue()) {
+            $this->from->send($this->buildResponse(self::GAME_CONNECT_GAME_DATA_INVALID,false,'Dữ liệu không hợp lệ.'));
+            return $this->connection;
+        }
+        // Trừ tiền User. Tạm thời bỏ cmn qua.
+
+        $itemUserBet = $miniGame->toDatabase($gameWinType,$currentGame,$user,$qty,$amoutItem);
+
+        $data['game_type_name'] = $gameWinType->name;
+        $data['game_idx'] = $currentGame->id;
+        $data['qty'] = $qty;
+        $data['base_amount'] = number_format($itemUserBet->amount_base).' đ';
+        $data['amount'] = number_format($itemUserBet->amount).' đ';
+        $data['mini_game_name'] = $miniGame->miniGamePreviewName;
+        $data['value_select_name'] = $miniGame->getValuePreviewName();
+        $data['value'] = $itemUserBet->select_value;
         $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_SUCCESS,true,'Thành công.',$data,$action));
         return $this->connection;
     }

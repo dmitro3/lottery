@@ -9,3 +9,20 @@ body {
 .swal-footer{
     text-align: center!important;
 }
+.swal-button{
+    outline: none!important;
+    box-shadow: none!important;
+}
+.content-game-win-bet-scuccess{
+    text-align: left;
+    font-size: 18px;
+}
+.content-game-win-bet-scuccess .item-info:not(:last-child){
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ebebeb;
+}
+.content-game-win-bet-scuccess .item-info .title{
+    font-size: 15px;
+    margin-bottom: 5px;
+}

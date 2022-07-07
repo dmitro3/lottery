@@ -3,6 +3,8 @@ var WIN_GUI = (function () {
     var overlay = document.querySelector(".van-overlay");
     var _betting_mark = popup.querySelector(".betting-mark");
     var box_metting_text = popup.querySelector(".box .choose");
+    var ipMiniGame = popup.querySelector("input[name=mini_game]");
+    var ipMiniGameValue = popup.querySelector("input[name=mini_game_value]");
     var popupCurrentGameName = document.querySelector(
         ".betting-mark .head .box .con"
     );
@@ -34,7 +36,13 @@ var WIN_GUI = (function () {
                 if (type == "size") {
                     _color = e.dataset.size;
                 }
+                if (ipMiniGame) {
+                    ipMiniGame.value = type;
+                }
                 if (_color != null) {
+                    if (ipMiniGameValue) {
+                        ipMiniGameValue.value = _color;
+                    }
                     var _class_add_betting = _prefix + _color;
                     var _class_add_popup = "van-slide-up-enter-active";
                     _betting_mark.classList.add(_class_add_betting);
@@ -90,10 +98,19 @@ var WIN_GUI = (function () {
             });
         }
         async function doRandomNum(times, listBtnNumber) {
+            var activeItem = null;
             for (var i = 0; i < times; i++) {
                 var randNumer = _getRandomInteger(0, listBtnNumber.length - 1);
-                console.log(listBtnNumber[randNumer]);
-                await timerRandom(100);
+                console.log();
+                activeItem = listBtnNumber[randNumer];
+                activeItem.classList.add("action");
+                setTimeout(() => {
+                    activeItem.classList.remove("action");
+                }, 60);
+                await timerRandom(80);
+            }
+            if (activeItem) {
+                activeItem.click();
             }
         }
         var listBtnNumber = document.querySelectorAll(
@@ -101,11 +118,13 @@ var WIN_GUI = (function () {
         );
         if (randomNumberBetBtn && listBtnNumber.length > 1) {
             randomNumberBetBtn.addEventListener("click", function () {
-                doRandomNum(40, listBtnNumber);
+                doRandomNum(50, listBtnNumber);
             });
         }
     };
     return {
+        ipMiniGame: ipMiniGame,
+        ipMiniGameValue: ipMiniGameValue,
         _: function () {
             showBet();
             closeBet();
@@ -343,6 +362,7 @@ var WIN_CALCULATE = (function () {
         }
     };
     return {
+        gowinQtyInput: gowinQtyInput,
         _: function () {
             initGlobalMultiple();
             initBettingMoney();
@@ -370,6 +390,9 @@ var WINDLOAD = (function () {
     var voice2 = document.querySelector("#voice2");
     var turnAudiorightWrongNotice =
         BASE_SUPPORT.getCookie("switch_audio") === "true";
+    var acceptRuleBox = document.querySelector("#accept-rule-box");
+
+    var sendGameWinBetBtn = document.querySelector("#send-game-win-bet");
 
     var switchAudio = function (elm) {
         var imageIcon = elm.querySelector("img");
@@ -482,15 +505,65 @@ var WINDLOAD = (function () {
             sendData(JSON.stringify(data));
         }
     };
+
+    var initSendGameWinBet = function () {
+        if (sendGameWinBetBtn) {
+            sendGameWinBetBtn.addEventListener("click", function () {
+                var itemBettingMarkAmountAcitve = document.querySelector(
+                    ".betting-mark .amount-box .active"
+                );
+                if (!itemBettingMarkAmountAcitve) {
+                    BASE_GUI.createFlashNotify("Vui lòng chọn số tiền!");
+                    return;
+                }
+                if (
+                    !acceptRuleBox ||
+                    acceptRuleBox.getAttribute("aria-checked") != "true"
+                ) {
+                    BASE_GUI.createFlashNotify(
+                        "Vui lòng kiểm tra tôi đã đồng ý quy tắc bán trước!"
+                    );
+                    return;
+                }
+                if (timeRemaining <= 5) {
+                    swal({
+                        title: "Đã hết thời gian đặt cược!",
+                        text: "Đã hết thời gian đặt cược cho ván này. Vui lòng đợi ván sau!",
+                        icon: "error",
+                        button: "Đóng!",
+                    });
+                    WIN_GUI._closeBet();
+                    return;
+                }
+                var data = {};
+                data.type = connectionGameType;
+                data.currentGame = currentGameInfo;
+                data.action = 2;
+                data.mini_game = WIN_GUI.ipMiniGame
+                    ? WIN_GUI.ipMiniGame.value
+                    : "";
+                data.mini_game_value = WIN_GUI.ipMiniGameValue
+                    ? WIN_GUI.ipMiniGameValue.value
+                    : "";
+                data.qty = WIN_CALCULATE.gowinQtyInput
+                    ? WIN_CALCULATE.gowinQtyInput.value
+                    : "";
+                data.amount =
+                    itemBettingMarkAmountAcitve.getAttribute("amount");
+                sendData(JSON.stringify(data));
+                WIN_GUI._closeBet();
+            });
+        }
+    };
     var actionProvider = function (data) {
+        BASE_GUI.hideLoading();
         if (data.success && data.action) {
-            setTimeout(() => {
-                BASE_GUI.hideLoading();
-            }, 500);
             switch (data.action) {
                 case 1:
                     initGameTypeInfo(data.data);
                     break;
+                case 2:
+                    betSuccess(data.data);
                 default:
                     break;
             }
@@ -589,12 +662,45 @@ var WINDLOAD = (function () {
             }, 1000);
         }
     };
-
+    var betSuccess = function (data) {
+        console.log(data);
+        var htmlContent = document.createElement("div");
+        htmlContent.classList.add("content-game-win-bet-scuccess");
+        htmlContent.innerHTML = `
+            <div class="item-info">
+                <div class="title">Phiên giao dịch:</div>
+                <div class="value">
+                    <strong>${data.game_idx}</strong>
+                    <span class="small-note">(${data.game_type_name})</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <div class="title">Mặt hàng đã chọn:</div>
+                <div class="value">
+                    ${data.mini_game_name} : 
+                    <strong>${data.value_select_name}</strong>
+                </div>
+            </div>
+            <div class="item-info">
+                <div class="title">Số tiền giao dịch:</div>
+                <div class="value">
+                    ${data.qty} x ${data.base_amount} = <strong>${data.amount}</strong>
+                </div>
+            </div>
+        `;
+        swal({
+            title: "Đặt hàng thành công!",
+            content: htmlContent,
+            icon: "success",
+            button: "Đóng",
+        });
+    };
     return {
         currentGameInfo: currentGameInfo,
         _: function () {
             init();
             initAudio();
+            initSendGameWinBet();
         },
         sendData(data) {
             sendData(data);
