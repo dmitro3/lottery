@@ -5,6 +5,10 @@ use App\Models\BaseModel;
 class GameWinType extends BaseModel
 {
     use HasFactory;
+    public function gameWinRecord()
+    {
+        return $this->hasMany(GameWinRecord::class);
+    }
     public function getCurrentGameRecord()
     {
         $nowTimeStamp = now()->timestamp;

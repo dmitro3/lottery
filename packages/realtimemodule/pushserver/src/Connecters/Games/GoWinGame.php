@@ -8,6 +8,9 @@ use App\Models\Games\Win\{
     GameWinType,
     GameWinMoneyItem
 };
+use App\Models\{
+    WalletTransactionType
+};
 class GoWinGame implements ConnecterInterface
 {
     const END_TIME_CHECK = 5;
@@ -18,6 +21,7 @@ class GoWinGame implements ConnecterInterface
     const GAME_CONNECT_STATUS_DATA_NOT_FOUND = 604;
     const GAME_CONNECT_CURRENT_GAME_INVALID = 605;
     const GAME_CONNECT_GAME_DATA_INVALID = 606;
+    const GAME_CONNECT_NOT_ENOUGH_MONEY = 607;
 
     const GAME_ACTION_GET_CURRENT_GAME_TYPE_INFO = 1;
     const GAME_ACTION_DO_BET = 2;
@@ -119,9 +123,10 @@ class GoWinGame implements ConnecterInterface
         }
         $totalMoney = $qty*$amoutItem->money;
         $user =  $this->connection['userTargetMessage'];
-
-        // Check số tiền User. Tạm thời bỏ cmn qua.
-
+        if ($totalMoney > $user->getAmount()) {
+            $this->from->send($this->buildResponse(self::GAME_CONNECT_NOT_ENOUGH_MONEY,false,'Số tiền không đủ.'));
+            return $this->connection;
+        }
         $miniGame = MiniGameFactory::getMiniGame($this->messageInfo['mini_game'] ?? '');
         if (!isset($miniGame)) {
             $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
@@ -132,9 +137,10 @@ class GoWinGame implements ConnecterInterface
             $this->from->send($this->buildResponse(self::GAME_CONNECT_GAME_DATA_INVALID,false,'Dữ liệu không hợp lệ.'));
             return $this->connection;
         }
-        // Trừ tiền User. Tạm thời bỏ cmn qua.
 
         $itemUserBet = $miniGame->toDatabase($gameWinType,$currentGame,$user,$qty,$amoutItem);
+        $reason = vsprintf('Trừ tiền cược game GoWin. Phiên giao dịch %s (%s).',[$currentGame->id,$gameWinType->name]);
+        $user->changeMoney(0 - $totalMoney,$reason,WalletTransactionType::MINUS_MONEY_BET_GAME_GOWIN,$itemUserBet->id);
 
         $data['game_type_name'] = $gameWinType->name;
         $data['game_idx'] = $currentGame->id;

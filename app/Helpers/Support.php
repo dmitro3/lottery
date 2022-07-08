@@ -212,4 +212,21 @@ class Support
         }
         return number_format($number, 0, $stringFormat, $stringChange);
     }
+    public static function json(array $arr, int $status = -1)
+    {
+        if ($status != -1) {
+            return response()->json($arr, $status);
+        }
+        return response()->json($arr);
+    }
+    public static function response(array $arr, int $status = -1)
+    {
+        if (request()->ajax()) {
+            return self::json($arr, $status);
+        } else {
+            \Session::flash('typeNotify', $arr['code'] != 200 ? 'error' : 'success');
+            \Session::flash('messageNotify', $arr['message']);
+            return (!isset($arr['redirect']) ? redirect('/') : redirect($arr['redirect']));
+        }
+    }
 }

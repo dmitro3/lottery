@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="game-list p-b-20">
-            {{-- @include('games.win.game_history') --}}
+            @include('games.win.game_history')
         </div>
         @include('games.win.popup_bet')
     </div>

@@ -26,3 +26,17 @@ body {
     font-size: 15px;
     margin-bottom: 5px;
 }
+.image-reload-money-user{
+    transform: rotate(0);
+}
+.image-reload-money-user.in-reload{
+    animation: rotateReload .5s 1 linear;
+}
+@keyframes rotateReload {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}

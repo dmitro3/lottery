@@ -2,6 +2,7 @@
 namespace App\Models\Games\Win;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\BaseModel;
+use App\Models\WalletTransactionType;
 use App\Games\GoWin\Factories\MiniGameFactory;
 use Exception;
 class GameWinRecord extends BaseModel
@@ -15,6 +16,10 @@ class GameWinRecord extends BaseModel
     {
         return $this->hasMany(GameWinUserBet::class);
     }
+    public function gameWinType()
+    {
+        return $this->belongsTo(GameWinType::class);
+    }
     public function initWinNumber()
     {
         $listGameWinUserBet = $this->gameWinUserBet()->select('mini_game','select_value','amount')->get();
@@ -26,7 +31,7 @@ class GameWinRecord extends BaseModel
             $dataAdd['number'] = $i;
             $calculateAmountMap->push($dataAdd);
         }
-        $canWinNumber = $calculateAmountMap->where('house_income','>',0);
+        $canWinNumber = $calculateAmountMap->where('house_income','>=',0);
 
         if (count($canWinNumber) < 1) {
             throw new Exception("Hệ thống bị lỗi");
@@ -41,8 +46,18 @@ class GameWinRecord extends BaseModel
          * Nếu muốn lấy nhiều nhất có thể thì sẽ lấy theo house_income lớn nhất.
          */
         
-        $winNumberInfo = $canWinNumber->sortBy('priorityPercentRegulation')->first();
-        return $winNumberInfo['number'];
+        $expectedWinNumberInfo = $canWinNumber->sortBy('priorityPercentRegulation')->first();
+
+        /**
+         * $expectedWinNumberInfo Là số dự kiến sẽ thắng.
+         * Phần này để dự phòng trường hợp ko ai chơi thì priorityPercentRegulation của tất cả các số sẽ bằng nhau. Mình cần random để tránh trường hợp 1 số thắng liên tiếp .
+         */
+       
+        $arrNumberSamePriorityPercentRegulation = $canWinNumber->where('priorityPercentRegulation',$expectedWinNumberInfo['priorityPercentRegulation']);
+        $winNumberInfo = $arrNumberSamePriorityPercentRegulation->random(1)->first();
+        $this->win_number = $winNumberInfo['number'];
+        $this->ready_to_end = 1;
+        $this->save();
     }
     private function _calculateAmountExample($winNumberExample,$arrGameWinUserBet,$totalIncomeAmount){
         $totalAmountReturnUser = 0;
@@ -74,5 +89,40 @@ class GameWinRecord extends BaseModel
         $ret['house_income'] = $totalIncomeAmount - $totalAmountReturnUser;
         $ret['priorityPercentRegulation'] = $priorityPercentRegulation;
         return $ret;
+    }
+    public function end()
+    {
+        $this->fresh();
+        if ($this->win_number == '' || $this->is_end == 1) {
+            return false;
+        }
+        $listUserBet = $this->gameWinUserBet()
+                            ->whereHas('user')
+                            ->with('user')
+                            ->where('game_win_user_bet_status_id',GameWinUserBetStatus::STATUS_WAIT_RESULT)
+                            ->where('is_returned',0)
+                            ->get();
+        foreach ($listUserBet as $itemUserBet) {
+            $miniGame = MiniGameFactory::getMiniGame($itemUserBet->mini_game);
+            if (!isset($miniGame)) {
+                continue;
+            }
+            $miniGame->setValue($itemUserBet->select_value);
+            if ($miniGame->isWin($this->win_number)) {
+                $amountReturnUser = $miniGame->calculationAmountWin($this->win_number,$itemUserBet['amount']);
+                $user = $itemUserBet->user;
+                $reason = vsprintf('Cộng tiền thắng game GoWin. Phiên giao dịch %s %s.',[$this->id,isset($this->gameWinType) ? '('.$this->gameWinType->name.')':'']);
+                $user->changeMoney($amountReturnUser,$reason,WalletTransactionType::PLUS_MONEY_WIN_GAME_GOWIN,$itemUserBet->id);
+                $itemUserBet->return_amount = $amountReturnUser;
+                $itemUserBet->is_returned = 1;
+                $itemUserBet->game_win_user_bet_status_id = GameWinUserBetStatus::STATUS_WIN;
+                $itemUserBet->save();
+            }else{
+                $itemUserBet->game_win_user_bet_status_id = GameWinUserBetStatus::STATUS_LOSE;
+                $itemUserBet->save();
+            }
+        }
+        $this->is_end = 1;
+        $this->save();
     }
 }

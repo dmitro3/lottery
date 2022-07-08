@@ -1,232 +1,16 @@
-<div class="tab c-row c-row-between">
-    <div class="li c-row c-row-center"><span class="txt action"> Lịch sử trò chơi </span></div>
-    <div class="li c-row c-row-center"><span class="txt"> Biểu đồ trên </span></div>
-    <div class="li c-row c-row-center"><span class="txt"> Đặt cược của tôi </span></div>
-</div>
-<div class="con-box" style="">
-    <div class="list m-t-10">
-        <div class="wrap">
-            <div class="c-tc van-row">
-                <div class="van-col van-col--8"> Kỳ xổ </div>
-                <div class="van-col van-col--5"> Số lượng </div>
-                <div class="van-col van-col--5"> Lớn Nhỏ </div>
-                <div class="van-col van-col--6"> Màu sắc </div>
-            </div>
-        </div>
-        <div>
-            <div class="hb">
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120195</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span class="red"> 0 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span>Nhỏ </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center c-row-middle">
-                                <span class="li red"></span>
-                                <span class="li violet"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120194</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span class="green"> 5 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span> Lớn </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li green"></span>
-                                <span class="li violet"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120193</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span class="green"> 7 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span> Lớn </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li green"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120192</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span class="red"> 4 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span>Nhỏ </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li red"></span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120191</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span class="red"> 4 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span>Nhỏ </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li red"></span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120190</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span class="red"> 2 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span>Nhỏ </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li red"></span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120189</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span class="red"> 8 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span> Lớn </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li red"></span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120188</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span class="green"> 7 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span> Lớn </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li green"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120187</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span class="green"> 7 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span> Lớn </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li green"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="c-tc item van-row">
-                    <div class="van-col van-col--8">
-                        <div class="c-tc goItem">2022070120186</div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem"><span class="red"> 4 </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--5">
-                        <div class="c-tc goItem">
-                            <span>Nhỏ </span>
-                        </div>
-                    </div>
-                    <div class="van-col van-col--6">
-                        <div class="goItem c-row c-tc c-row-center">
-                            <div class="c-tc c-row box c-row-center"><span class="li red"></span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="list-fooder"></div>
+<div class="game-gowin-basic-tab-control tab c-row c-row-between">
+    <div class="li c-row c-row-center">
+        <span class="txt action" target="#game-gowin-history">Lịch sử trò chơi</span>
     </div>
-    <div class="page-nav c-row c-row-center c-tc">
-        <div class="arr c-row c-row-middle-center"><i class="van-icon van-icon-arrow-left icon"
-                style="font-size: 20px;">
-            </i></div>
-        <div class="number">1/644</div>
-        <div class="arr c-row c-row-middle-center action"><i class="van-icon van-icon-arrow icon action"
-                style="font-size: 20px;">
-            </i></div>
+    <div class="li c-row c-row-center">
+        <span class="txt" target="#game-gowin-support-chart">Biểu đồ trên</span>
+    </div>
+    <div class="li c-row c-row-center">
+        <span class="txt" target="#game-gowin-user-bet-history">Đặt cược của tôi</span>
     </div>
 </div>
-<div class="con-box p-b-20" style="display: none;">
+<div id="game-gowin-history" class="con-box game-gowin-basic-tab"></div>
+<div id="game-gowin-support-chart" class="con-box game-gowin-basic-tab p-b-20" style="display: none;">
     <div class="list m-t-10">
         <div class="wrap">
             <div class="c-tc van-row">
@@ -791,7 +575,7 @@
             </i></div>
     </div>
 </div>
-<div class="con-box p-b-20" style="display: none;">
+<div id="game-gowin-user-bet-history" class="con-box game-gowin-basic-tab p-b-20" style="display: none;">
     <div class="c-row c-flew-end p-r-20">
         <div class="bettingMore c-tc c-row c-row-middle-center">Hơn<i class="van-icon van-icon-arrow"
                 style="color: rgb(84, 94, 104); font-size: 15px;">
@@ -800,8 +584,9 @@
     <div class="list m-t-10">
         <div class="p-t-5 p-b-5">
             <div class="van-empty">
-                <div class="van-empty__image"><img
-                        src="https://img.yzcdn.cn/vant/empty-image-default.png"></div>
+                <div class="van-empty__image">
+                    <img src="theme/frontend/img/empty-image-default.png">
+                </div>
                 <p class="van-empty__description">Không có dữ liệu</p>
             </div>
         </div>

@@ -1,7 +1,10 @@
 <?php
 namespace App\Games\GoWin\MiniGames;
 use App\Games\GoWin\Contracts\GoWinMiniGameInterface;
-use App\Models\Games\Win\GameWinUserBet;
+use App\Models\Games\Win\{
+    GameWinUserBet,
+    GameWinUserBetStatus
+};
 class MiniGame implements GoWinMiniGameInterface
 {
     public $miniGameName = '';
@@ -29,7 +32,7 @@ class MiniGame implements GoWinMiniGameInterface
         $itemGameWinUserBet->amount_base = $amoutItem->money;
         $itemGameWinUserBet->amount = $amoutItem->money * $qty;
         $itemGameWinUserBet->return_amount = 0;
-        $itemGameWinUserBet->status = 1;
+        $itemGameWinUserBet->game_win_user_bet_status_id = GameWinUserBetStatus::STATUS_WAIT_RESULT;
         $itemGameWinUserBet->is_returned = 0;
         $itemGameWinUserBet->created_at = now();
         $itemGameWinUserBet->updated_at = now();

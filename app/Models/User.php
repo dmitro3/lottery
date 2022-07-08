@@ -39,4 +39,32 @@ class User extends Authenticatable
     {
         return $this->belongsTo(District::class,'district_id','id');
     }
+    public function getWallet()
+    {
+        $userWallet = Wallet::where('user_id', $this->id)->first();
+        if (!isset($userWallet)) {
+            $userWallet = new Wallet;
+            $userWallet->user_id = $this->id;
+            $userWallet->amount = 0;
+            $userWallet->amount_freeze = 0;
+            $userWallet->amount_availability = 0;
+            $userWallet->save();
+        }
+        return $userWallet;
+    }
+    public function getAmount()
+    {
+        $userWallet = $this->getWallet();
+        return $userWallet->amount;
+    }
+    public function changeMoney($amount,$reason,$type,$mapId)
+    {
+        $userWallet = $this->getWallet();
+        return $userWallet->changeMoney($amount,$reason,$type,$mapId);
+    }
+    public function changeMoneyFreeze($amount,$reason,$type,$mapId)
+    {
+        $userWallet = $this->getWallet();
+        return $userWallet->changeMoneyFreeze($amount,$reason,$type,$mapId);
+    }
 }

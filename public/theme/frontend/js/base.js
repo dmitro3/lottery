@@ -134,8 +134,39 @@ BASE_GUI = {
     },
     formatCurrency: function (number) {
         var n = number.toString().split("").reverse().join("");
-        var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
+        var n2 = n.replace(/\d\d\d(?!$)/g, "$&.");
         return n2.split("").reverse().join("") + " đ";
+    },
+    reloadUserMoney(element = null) {
+        if (element && element.classList.contains("in-reload")) return;
+        if (element) {
+            element.classList.add("in-reload");
+            setTimeout(() => {
+                element.classList.remove("in-reload");
+            }, 500);
+        }
+        XHR.send({
+            url: "get-user-money",
+            method: "GET",
+        }).then((res) => {
+            if (res.code == 200 && res.money) {
+                var listUserMoneyPreview = document.querySelectorAll(
+                    ".user-money-preview"
+                );
+                listUserMoneyPreview.forEach((elm) => {
+                    elm.innerHTML = res.money;
+                });
+            } else {
+                if (res.message) {
+                    BASE_GUI.createFlashNotify(res.message);
+                }
+                if (res.redirect) {
+                    setTimeout(() => {
+                        window.location.href = res.redirect;
+                    }, 1500);
+                }
+            }
+        });
     },
 };
 BASE_SUPPORT = {
