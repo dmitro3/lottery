@@ -493,6 +493,10 @@
     color: #2572d5
 }
 
+.game-list .list .hb .yellow {
+    color: #ffc511
+}
+
 .game-list .list .hb .box .li {
     display: block;
     height: .26667rem;

@@ -205,6 +205,27 @@ BASE_SUPPORT = {
             }
         }
     },
+    callFunction(func, data) {
+        var arrayFunc = func.split(".");
+        if (arrayFunc.length === 1) {
+            var func = arrayFunc[0];
+            return (
+                null != window[func] &&
+                typeof window[func] === "function" &&
+                window[func](data)
+            );
+        } else if (arrayFunc.length === 2) {
+            var obj = arrayFunc[0];
+            func = arrayFunc[1];
+            return (
+                window[obj] != null &&
+                typeof window[obj] === "object" &&
+                null != window[obj][func] &&
+                typeof window[obj][func] === "function" &&
+                window[obj][func](data)
+            );
+        }
+    },
 };
 window.addEventListener("DOMContentLoaded", function () {
     BASE_GUI.init();

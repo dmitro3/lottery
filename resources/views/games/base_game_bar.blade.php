@@ -1,8 +1,8 @@
 <div class="navbar">
     <div class="navbar-left">
-        <div class="c-row c-row-middle-center">
+        <a href="/" class="c-row c-row-middle-center">
             <img src="theme/frontend/img/back.c3244ab0.png" class="navbar-back">
-        </div>
+        </a>
     </div>
     <div class="navbar-title">
         <div class="c-row c-row-middle-center">

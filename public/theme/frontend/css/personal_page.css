@@ -1,0 +1,212 @@
+.mian {
+    background-color: #fbfcfd;
+}
+
+.mian .profile {
+    padding: 0.4rem;
+    font-size: 0.37333rem;
+}
+
+.mian .profile .item {
+    border-bottom: 0.02667rem solid #dadada;
+    padding: 0 0 0.4rem;
+    margin-bottom: 0.53333rem;
+}
+
+.mian .profile .item .img .userImg,
+.mian .profile .item .img {
+    height: 1.06667rem;
+    width: 1.06667rem;
+    border-radius: 1.06667rem;
+}
+
+.mian .profile .item .lab {
+    color: #000;
+}
+
+.mian .profile .item .txt {
+    color: #959595;
+}
+
+.mian .popup-box .title {
+    height: 1.6rem;
+    width: 100%;
+    background: url(../img/myProfilebg.298e3612.png) no-repeat 0 0;
+    background-size: 100% 100%;
+}
+
+.mian .popup-box .con {
+    padding: 0.26667rem 0;
+    border-bottom: 0.02667rem solid #dadada;
+}
+
+.mian .popup-box .con .input {
+    width: 100%;
+    height: 0.93333rem;
+    line-height: 0.93333rem;
+    border: none;
+    padding: 0 0.4rem;
+}
+
+.mian .popup-box .con .lab {
+    padding: 0 0.26667rem;
+    margin-bottom: 0.26667rem;
+}
+
+.mian .popup-box .food {
+    height: 1.33333rem;
+    line-height: 1.33333rem;
+}
+
+.mian .popup-box .food .item {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.45333rem;
+}
+
+.mian .popup-box .food .item.sure {
+    color: #6abe57;
+}
+
+.mian {
+    background-color: #fbfcfd;
+}
+
+.mian .profile {
+    padding: 0.4rem;
+    font-size: 0.37333rem;
+}
+
+.mian .profile .item {
+    border-bottom: 0.02667rem solid #dadada;
+    padding: 0 0 0.4rem;
+    margin-bottom: 0.53333rem;
+}
+
+.mian .profile .item .img .userImg,
+.mian .profile .item .img {
+    height: 1.06667rem;
+    width: 1.06667rem;
+    border-radius: 1.06667rem;
+}
+
+.mian .profile .item .lab {
+    color: #000;
+}
+
+.mian .profile .item .txt {
+    color: #959595;
+}
+
+.mian .popup-box .title {
+    height: 1.6rem;
+    width: 100%;
+    background: url(..images/myProfilebg.298e3612.png) no-repeat 0 0;
+    background-size: 100% 100%;
+}
+
+.mian .popup-box .con {
+    padding: 0.26667rem 0;
+    border-bottom: 0.02667rem solid #dadada;
+}
+
+.mian .popup-box .con .input {
+    width: 100%;
+    height: 0.93333rem;
+    line-height: 0.93333rem;
+    border: none;
+    padding: 0 0.4rem;
+}
+
+.mian .popup-box .con .lab {
+    padding: 0 0.26667rem;
+    margin-bottom: 0.26667rem;
+}
+
+.mian .popup-box .food {
+    height: 1.33333rem;
+    line-height: 1.33333rem;
+}
+
+.mian .popup-box .food .item {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.45333rem;
+}
+
+.item.sure {
+    color: #6abe57;
+}
+
+
+.mian {
+    background-color: #fbfcfd
+}
+
+.mian .profile {
+    padding: .4rem;
+    font-size: .37333rem
+}
+
+.mian .profile .item {
+    border-bottom: .02667rem solid #dadada;
+    padding: 0 0 .4rem;
+    margin-bottom: .53333rem
+}
+
+.mian .profile .item .img .userImg, .mian .profile .item .img {
+    height: 1.06667rem;
+    width: 1.06667rem;
+    border-radius: 1.06667rem
+}
+
+.mian .profile .item .lab {
+    color: #000
+}
+
+.mian .profile .item .txt {
+    color: #959595
+}
+
+.mian .popup-box .title {
+    height: 1.6rem;
+    width: 100%;
+    background: url(../images/myProfilebg.298e3612.png) no-repeat 0 0;
+    background-size: 100% 100%
+}
+
+.mian .popup-box .con {
+    padding: .26667rem 0;
+    border-bottom: .02667rem solid #dadada
+}
+
+.mian .popup-box .con .input {
+    width: 100%;
+    height: .93333rem;
+    line-height: .93333rem;
+    border: none;
+    padding: 0 .4rem
+}
+
+.mian .popup-box .con .lab {
+    padding: 0 .26667rem;
+    margin-bottom: .26667rem
+}
+
+.mian .popup-box .food {
+    height: 1.33333rem;
+    line-height: 1.33333rem
+}
+
+.mian .popup-box .food .item {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: .45333rem
+}
+
+.mian .popup-box .food .item.sure {
+    color: #6abe57
+}

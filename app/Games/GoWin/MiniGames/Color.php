@@ -17,6 +17,18 @@ class Color extends MiniGame implements GoWinMiniGameInterface
         'violet' => 5,
         'red' => 2
     ];
+    protected $colorHistoryPreview = [
+        0 => ['red','violet'],
+        1 => ['green'],
+        2 => ['red'],
+        3 => ['green'],
+        4 => ['red'],
+        5 => ['green','violet'],
+        6 => ['red'],
+        7 => ['green'],
+        8 => ['red'],
+        9 => ['green'],
+    ];
     public function isWin($number)
     {
         return in_array($number,$this->colorNumberMap[$this->value] ?? []);
@@ -24,5 +36,17 @@ class Color extends MiniGame implements GoWinMiniGameInterface
     public function calculationAmountWin($number,$amountBet)
     {
         return $amountBet*($this->colorMultiple[$this->value] ?? 0);
+    }
+    public function getHistoryHtml($winNumber)
+    {
+        $winNumber = (int)$winNumber;
+        if (!isset($this->colorHistoryPreview[$winNumber])) {
+            return '';
+        }
+        $strRet = '';
+        foreach ($this->colorHistoryPreview[$winNumber] as $itemColor) {
+            $strRet.= vsprintf('<span class="li %s"></span>',[$itemColor]);
+        }
+        return $strRet;
     }
 }

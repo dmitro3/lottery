@@ -29,6 +29,7 @@ class Number extends MiniGame implements GoWinMiniGameInterface
     }
     public function getHistoryHtml($winNumber)
     {
-        return vsprintf('<span class="%s">%s</span>',[$this->numberColorHistory[$winNumber],$winNumber]);
+        $winNumber = (int)$winNumber;
+        return vsprintf('<span class="%s">%s</span>',[$this->numberColorHistory[$winNumber] ?? '',$winNumber]);
     }
 }

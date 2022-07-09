@@ -1,0 +1,54 @@
+.mian {
+    background-color: #fbfcfd
+}
+
+.mian .box {
+    padding: .4rem
+}
+
+.mian .box .list {
+    background: #fff;
+    border-radius: .4rem;
+    overflow: hidden
+}
+
+.mian .box .list .item {
+    padding: .26667rem .4rem;
+    background: rgba(254, 247, 247, .68)
+}
+
+.mian .box .list .item .money {
+    font-size: .4rem;
+    color: #fb4e4e
+}
+
+.mian .box .list .item .money.action {
+    color: #6abe57
+}
+
+.mian .box .list .item .number, .mian .box .list .item .time {
+    font-size: .32rem;
+    color: #000
+}
+
+.mian .box .list .item .number {
+    font-size: .4rem
+}
+
+.mian .box .list .item .number .btn {
+    padding: .13333rem .26667rem;
+    font-size: .32rem;
+    margin-left: .26667rem;
+    border-radius: .13333rem;
+    background-color: #ffce1f;
+    color: #fff
+}
+
+.mian .box .list .item .state {
+    text-align: center;
+    font-weight: 600
+}
+
+.mian .box .list .item .txt {
+    text-align: center
+}

@@ -1,0 +1,52 @@
+.mian {
+    background-color: #fbfcfd
+}
+
+.mian .banner {
+    position: relative
+}
+
+.mian .banner .img {
+    height: 4.53333rem;
+    width: 100%
+}
+
+.mian .banner .com {
+    position: absolute;
+    top: 50%;
+    right: .53333rem;
+    z-index: 888;
+    transform: translateY(-65%)
+}
+
+.mian .banner .com .logo {
+    width: 3.2rem;
+    height: 1.06667rem
+}
+
+.mian .banner .com .number, .mian .banner .com .txt {
+    font-size: .42667rem;
+    font-weight: 600;
+    color: #fff
+}
+
+.mian .banner .com .number {
+    height: .8rem;
+    line-height: .8rem;
+    text-align: center;
+    border: .02667rem solid #eee
+}
+
+.mian .list {
+    padding: .4rem
+}
+
+.mian .list .item {
+    height: 1.33333rem;
+    background: #fff;
+    box-shadow: 0 .08rem .50667rem .10667rem #f0f1f3;
+    border-radius: .24rem;
+    margin-bottom: .53333rem;
+    font-size: .42667rem;
+    padding: 0 .4rem
+}

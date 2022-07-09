@@ -50,4 +50,20 @@ class GameWinController extends BaseGameController
             'html' => view('games.win.history_results.game_history_result',compact('listItems'))->render()
         ]);
     }
+    public function getGameSupportChart($request)
+    {
+        $gameWinTypeId = PushServerHelper::unHash($request->game_type ?? '');
+        $gameWinType = GameWinType::find($gameWinTypeId);
+        if (!isset($gameWinType)) {
+            return response()->json(['code'=>100]);
+        }
+        $listItems = $gameWinType->gameWinRecord()
+                                ->where('end_time','<',now()->timestamp)
+                                ->orderBy('id','desc')
+                                ->paginate(10);
+        return response()->json([
+            'code' => 200,
+            'html' => view('games.win.history_results.support_chart_result',compact('listItems'))->render()
+        ]);
+    }
 }

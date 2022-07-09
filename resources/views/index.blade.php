@@ -7,6 +7,9 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	{!! SEOHelper::HEADER_SEO(@$currentItem ? $currentItem : null) !!}
 	@yield('cssl')
+	<link rel="stylesheet" href="theme/frontend/css/base.css">
+    <link rel="stylesheet" href="theme/frontend/css/app.css">
+    <link rel="stylesheet" href="theme/frontend/css/van.css">
 	@yield('css')
 	<link rel="stylesheet" href="theme/frontend/css/add.css">
 	<script type="text/javascript">
@@ -22,9 +25,8 @@
 </head>
 <body style="font-size: 12px;">
 	<input type="hidden" name="auth_token" value="{{ \realtimemodule\pushserver\Helpers\PushServerHelper::getTokenUserKey() }}">
-	@include('header')
 	@yield('content')
-	@include('footer')
+	@include('loading')
 	{[CMS_FOOTER]}
 	<script src="theme/frontend/js/sweetalert.min.js" defer></script>
 	<script src="theme/frontend/js/xhr.js" defer></script>

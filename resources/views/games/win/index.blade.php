@@ -3,9 +3,9 @@
 @endphp
 @extends('index')
 @section('css')
-    <link rel="stylesheet" href="theme/frontend/css/base.css">
-    <link rel="stylesheet" href="theme/frontend/css/app.css">
-    <link rel="stylesheet" href="theme/frontend/css/van.css">
+    <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.woff2" as="font" type="font/woff2" crossorigin="">
+    <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.woff" as="font" type="font/woff" crossorigin="">
+    <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.ttf" as="font" type="font/ttf" crossorigin="">
     <script type="text/javascript">
         var connectionGameType = '{{PushServerHelper::generateHash(1)}}';
     </script>
@@ -70,6 +70,14 @@
         </div>
         @include('games.win.popup_bet')
     </div>
+</div>
+<div>
+    <audio id="voice1">
+        <source src="theme/frontend/audios/di1.da40b233.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="voice2">
+        <source src="theme/frontend/audios/di2.317de251.mp3" type="audio/mpeg">
+    </audio>
 </div>
 @endsection
 @section('js')

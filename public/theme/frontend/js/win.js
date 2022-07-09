@@ -159,11 +159,37 @@ var WIN_GUI = (function () {
             });
         });
     };
+    var initPaginateBox = function (element, callback = null) {
+        var listPaginateBoxLinkBtn = element.querySelectorAll(
+            ".paginate-box-link-btn.action"
+        );
+        listPaginateBoxLinkBtn.forEach((btn) => {
+            if (btn.dataset.href != "") {
+                btn.addEventListener("click", function () {
+                    BASE_GUI.showLoading();
+                    XHR.send({
+                        url: this.dataset.href,
+                        method: "GET",
+                    }).then((res) => {
+                        if (res.code == 200 && res.html) {
+                            element.innerHTML = res.html;
+                            initPaginateBox(element, callback);
+                            if (callback) {
+                                BASE_SUPPORT.callFunction(callback);
+                            }
+                        }
+                        BASE_GUI.hideLoading();
+                    });
+                });
+            }
+        });
+    };
     var loadGoWinHistoryGame = function () {
         var itemContent = document.querySelector("#game-gowin-history");
         if (itemContent) {
             const formData = new FormData();
             formData.append("game_type", WINDLOAD.currentGameInfo.game_type);
+            BASE_GUI.showLoading();
             XHR.send({
                 url: "get-game-gowin-history",
                 method: "GET",
@@ -173,11 +199,57 @@ var WIN_GUI = (function () {
             }).then((res) => {
                 if (res.code == 200 && res.html) {
                     itemContent.innerHTML = res.html;
+                    initPaginateBox(itemContent);
                 }
+                BASE_GUI.hideLoading();
             });
         }
     };
-    var loadGoWinSupportChart = function () {};
+    var _initSupportChartLineCanvas = function () {
+        var listItemCanvasLine = document.querySelectorAll(
+            "#game-gowin-support-chart .line-canvas"
+        );
+        listItemCanvasLine.forEach((element) => {
+            var startNumber = parseInt(element.getAttribute("start"));
+            var endNumber = parseInt(element.getAttribute("end"));
+            var widthCtx = element.width;
+            var heightCtx = element.height;
+            var ctx = element.getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo((widthCtx / 10) * startNumber + widthCtx / 20, 8);
+            ctx.lineTo(
+                (widthCtx / 10) * endNumber + widthCtx / 20,
+                heightCtx - 8
+            );
+            ctx.strokeStyle = "#ff5858";
+            ctx.stroke();
+        });
+    };
+    var loadGoWinSupportChart = function () {
+        var itemContent = document.querySelector("#game-gowin-support-chart");
+        if (itemContent) {
+            const formData = new FormData();
+            formData.append("game_type", WINDLOAD.currentGameInfo.game_type);
+            BASE_GUI.showLoading();
+            XHR.send({
+                url: "get-game-gowin-support-chart",
+                method: "GET",
+                data: {
+                    game_type: WINDLOAD.currentGameInfo.game_type,
+                },
+            }).then((res) => {
+                if (res.code == 200 && res.html) {
+                    itemContent.innerHTML = res.html;
+                    initPaginateBox(
+                        itemContent,
+                        "WIN_GUI._initSupportChartLineCanvas"
+                    );
+                    _initSupportChartLineCanvas();
+                }
+                BASE_GUI.hideLoading();
+            });
+        }
+    };
     var loadGoWinUserBetHistory = function () {};
     return {
         ipMiniGame: ipMiniGame,
@@ -193,6 +265,9 @@ var WIN_GUI = (function () {
         },
         loadGoWinHistoryGame() {
             loadGoWinHistoryGame();
+        },
+        _initSupportChartLineCanvas() {
+            _initSupportChartLineCanvas();
         },
         loadGoWinSupportChart() {
             loadGoWinSupportChart();

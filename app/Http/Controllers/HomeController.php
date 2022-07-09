@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(Request $request){
+    public function index(){
         \Auth::login(\App\Models\User::find(1));
         return view('home');
     }

@@ -1,0 +1,38 @@
+.mian {
+    background-color: #fbfcfd
+}
+
+.mian .banks {
+    padding: .4rem
+}
+
+.mian .banks .box {
+    background: #fff;
+    box-shadow: 0 .08rem .69333rem .10667rem #f1f2f5;
+    border-radius: .26667rem;
+    padding: .4rem
+}
+
+.mian .banks .box .item {
+    margin-bottom: .26667rem
+}
+
+.mian .banks .box .item .lab {
+    font-size: .4rem;
+    margin-bottom: .26667rem
+}
+
+.mian .banks .box .item .input .ipt {
+    width: 100%;
+    padding: 0 .4rem;
+    height: .93333rem;
+    line-height: .93333rem;
+    border-radius: .13333rem;
+    border: .05333rem solid #faa09d
+}
+
+.mian .banks .bank-btn .btn {
+    height: 1.01333rem;
+    width: 60%;
+    box-shadow: 0 0 .21333rem .02667rem rgba(92, 186, 71, .72)
+}
