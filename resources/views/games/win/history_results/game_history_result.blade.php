@@ -23,7 +23,6 @@
                         <div class="van-col van-col--5">
                             <div class="c-tc goItem">
                                 {!!$miniGameNumber->getHistoryHtml($item->win_number)!!}
-                                <span class="red"> 0 </span>
                             </div>
                         </div>
                         <div class="van-col van-col--5">
@@ -35,6 +34,7 @@
                         <div class="van-col van-col--6">
                             <div class="goItem c-row c-tc c-row-center">
                                 <div class="c-tc c-row box c-row-center c-row-middle">
+                                    {!!$miniGameColor->getHistoryHtml($item->win_number)!!}
                                     <span class="li red"></span>
                                     <span class="li violet"></span>
                                 </div>

@@ -51,4 +51,8 @@ class MiniGame implements GoWinMiniGameInterface
     {
         return 0;
     }
+    public function getHistoryHtml($winNumber)
+    {
+        return '';
+    }
 }

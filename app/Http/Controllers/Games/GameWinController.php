@@ -14,6 +14,12 @@ class GameWinController extends BaseGameController
 {
     public function index($request)
     {
+        // foreach (GameWinRecord::get() as $item) {
+        //     $item->win_number = rand(0,9);
+        //     $item->save();
+        // }
+        // var_dump(1);die();
+
         $user = \Auth::user();
         $activeAudio = isset($_COOKIE['switch_audio']) && $_COOKIE['switch_audio'] == 'true';
         $listGameWinType = GameWinType::where('act',1)->orderBy('ord','asc')->get();
@@ -24,7 +30,7 @@ class GameWinController extends BaseGameController
     public function renderGameWinRecord()
     {
         $listGameWinType = GameWinType::get();
-        foreach ($listGameWinType as $key => $itemGameWinType) {
+        foreach ($listGameWinType as $itemGameWinType) {
             $itemGameWinType->renderGameRecord();
         }
     }
