@@ -32,4 +32,8 @@ class Number extends MiniGame implements GoWinMiniGameInterface
         $winNumber = (int)$winNumber;
         return vsprintf('<span class="%s">%s</span>',[$this->numberColorHistory[$winNumber] ?? '',$winNumber]);
     }
+    public function getUserBetHistoryHtml()
+    {
+        return vsprintf('<div class="select select-%s"><span>%s</span></div>',[$this->numberColorHistory[$this->value],$this->value]);
+    }
 }

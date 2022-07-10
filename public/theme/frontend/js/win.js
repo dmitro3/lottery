@@ -166,7 +166,6 @@ var WIN_GUI = (function () {
         listPaginateBoxLinkBtn.forEach((btn) => {
             if (btn.dataset.href != "") {
                 btn.addEventListener("click", function () {
-                    BASE_GUI.showLoading();
                     XHR.send({
                         url: this.dataset.href,
                         method: "GET",
@@ -178,7 +177,6 @@ var WIN_GUI = (function () {
                                 BASE_SUPPORT.callFunction(callback);
                             }
                         }
-                        BASE_GUI.hideLoading();
                     });
                 });
             }
@@ -189,7 +187,6 @@ var WIN_GUI = (function () {
         if (itemContent) {
             const formData = new FormData();
             formData.append("game_type", WINDLOAD.currentGameInfo.game_type);
-            BASE_GUI.showLoading();
             XHR.send({
                 url: "get-game-gowin-history",
                 method: "GET",
@@ -201,7 +198,6 @@ var WIN_GUI = (function () {
                     itemContent.innerHTML = res.html;
                     initPaginateBox(itemContent);
                 }
-                BASE_GUI.hideLoading();
             });
         }
     };
@@ -230,7 +226,6 @@ var WIN_GUI = (function () {
         if (itemContent) {
             const formData = new FormData();
             formData.append("game_type", WINDLOAD.currentGameInfo.game_type);
-            BASE_GUI.showLoading();
             XHR.send({
                 url: "get-game-gowin-support-chart",
                 method: "GET",
@@ -246,11 +241,30 @@ var WIN_GUI = (function () {
                     );
                     _initSupportChartLineCanvas();
                 }
-                BASE_GUI.hideLoading();
             });
         }
     };
-    var loadGoWinUserBetHistory = function () {};
+    var loadGoWinUserBetHistory = function () {
+        var itemContent = document.querySelector(
+            "#game-gowin-user-bet-history"
+        );
+        if (itemContent) {
+            const formData = new FormData();
+            formData.append("game_type", WINDLOAD.currentGameInfo.game_type);
+            XHR.send({
+                url: "get-game-gowin-user-bet-history",
+                method: "GET",
+                data: {
+                    game_type: WINDLOAD.currentGameInfo.game_type,
+                },
+            }).then((res) => {
+                if (res.code == 200 && res.html) {
+                    itemContent.innerHTML = res.html;
+                    initPaginateBox(itemContent);
+                }
+            });
+        }
+    };
     return {
         ipMiniGame: ipMiniGame,
         ipMiniGameValue: ipMiniGameValue,
@@ -798,19 +812,21 @@ var WINDLOAD = (function () {
             ".game-gowin-basic-tab-control .action"
         );
         if (activeGameGowinBasicTabControl) {
-            switch (activeGameGowinBasicTabControl.getAttribute("target")) {
-                case "#game-gowin-history":
-                    WIN_GUI.loadGoWinHistoryGame();
-                    break;
-                case "#game-gowin-support-chart":
-                    WIN_GUI.loadGoWinSupportChart();
-                    break;
-                case "#game-gowin-user-bet-history":
-                    WIN_GUI.loadGoWinUserBetHistory();
-                    break;
-                default:
-                    break;
-            }
+            setTimeout(() => {
+                switch (activeGameGowinBasicTabControl.getAttribute("target")) {
+                    case "#game-gowin-history":
+                        WIN_GUI.loadGoWinHistoryGame();
+                        break;
+                    case "#game-gowin-support-chart":
+                        WIN_GUI.loadGoWinSupportChart();
+                        break;
+                    case "#game-gowin-user-bet-history":
+                        WIN_GUI.loadGoWinUserBetHistory();
+                        break;
+                    default:
+                        break;
+                }
+            }, 1000);
         }
     };
     var betSuccess = function (data) {
@@ -844,6 +860,7 @@ var WINDLOAD = (function () {
             icon: "success",
             button: "Đóng",
         });
+        WIN_GUI.loadGoWinUserBetHistory();
         BASE_GUI.reloadUserMoney();
     };
     return {
@@ -862,9 +879,7 @@ var WINDLOAD = (function () {
     };
 })();
 window.addEventListener("DOMContentLoaded", function () {
-    setTimeout(() => {
-        WIN_GUI._();
-        WIN_CALCULATE._();
-        WINDLOAD._();
-    }, 100);
+    WIN_GUI._();
+    WIN_CALCULATE._();
+    WINDLOAD._();
 });

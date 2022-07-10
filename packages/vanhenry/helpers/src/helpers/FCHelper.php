@@ -152,7 +152,7 @@ class FCHelper
             $json = json_decode($data, true);
         }
         if (is_array($json) && array_key_exists("path", $json)) {
-            $img = $json["path"];
+            $img = $json["path"].$json["file_name"];
             $def2 = $img;
             if ($folder != "" && $folder != "-1") {
                 if (strpos($folder, '.') && isset($json["resizes"])) {
@@ -160,7 +160,7 @@ class FCHelper
                     return $folder == '-1' ? $json[$attr] : $json["resizes"][$folder][$attr];
                 } else {
                     if (isset($folder) && isset($json["resizes"]) && file_exists($json["resizes"][$folder]['path'])) {
-                        $img = $json["resizes"][$folder]['path'];
+                        $img = $json["resizes"][$folder]['path'][$json["file_name"]];
                     } elseif(file_exists($def2)){
                         $img = $def2;
                     }else {
@@ -172,7 +172,6 @@ class FCHelper
             if (isset($json["has_file"]) && $json['has_file'] == 0) {
                 return $json["file_name"];
             }
-
             if (file_exists($img)) {
                 return $img;
             }

@@ -28,6 +28,7 @@
 	@yield('content')
 	@include('loading')
 	{[CMS_FOOTER]}
+	@yield('jsl')
 	<script src="theme/frontend/js/sweetalert.min.js" defer></script>
 	<script src="theme/frontend/js/xhr.js" defer></script>
 	<script src="theme/frontend/js/base.js" defer></script>

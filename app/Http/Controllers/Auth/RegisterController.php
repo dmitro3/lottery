@@ -72,25 +72,19 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => ['required'],
-            'name' => ['required'],
-            'phone' => ['required','unique:users'],
-            'email' => ['required','email','unique:users'],
-            'password' => ['required', 'min:8', 'confirmed'],
-            'class_study_id' => ['required']
+            'phone' => ['required','unique:users','regex:/^((\+)\d{2}|0)[1-9](\d{2}){4}$/'],
+            'password' => ['required', 'min:8'],
+            'referral_code' => ['required', 'exists:users'],
         ], [
-            'required' => 'Vui lòng chọn hoặc nhập :attribute',
+            'required' => 'Vui lòng nhập :attribute',
             'min' => ':attribute tối thiểu :min kí tự',
             'unique' => ':attribute đã tồn tại trong hệ thống',
-            'confirmed' => 'Mật khẩu và mật xác nhận lại phải giống nhau'
+            'exists' => ':attribute không tồn tại',
+            'phone.regex' => 'Vui lòng nhập :attribute đúng định dạng'
         ], [
-            'username' => 'Tên đăng nhập',
             'password' => 'Mật khẩu',
             'phone' => 'Số điện thoại',
-            'name' => 'Họ và tên bé',
-            'email' => 'Email',
-            'password_confirmation' => 'Mật khẩu xác nhận',
-            'class_study_id' => "Khối/Lớp"
+            'referral_code' => 'Mã giới thiệu',
         ]);
     }
     public function register($request)
@@ -104,52 +98,46 @@ class RegisterController extends Controller
             ]);
         }
 
-        $username = $request->username;
-        $user = $this->checkUser('username', $username);
+        $phone = $request->phone;
+        $user = $this->checkUser('phone', $phone);
 
         if(is_array($user)){
             return response($user);
         }
-
         $user = $this->createUser($request->all());
-
-        Auth::login($user);
-
+        Auth::login($user,true);
         return response()->json([
             'code' => 200,
-            'message' => trans("fdb::register_acc_success"),
-            'redirect_url' => url(\VRoute::get('profile'))
+            'message' => 'Đăng ký tài khoản thành công',
+            'redirect_url' => url('/')
         ]);
     }
     protected function createUser($data){
         $user = new User;
-        $user->username = $data['username'];
+        $user->phone = $data['phone'];
         $user->password = Hash::make($data['password']);
-        $user->class_study_id = isset($data['class_study_id']) ? (int)$data['class_study_id']:0;
-        $user->province_id = isset($data['province_id']) ? (int)$data['province_id']:0;
-        $user->district_id = isset($data['district_id']) ? (int)$data['district_id']:0;
-        $user->name = isset($data['name']) ? $data['name']:'';
-        $user->phone = isset($data['phone']) ? $data['phone']:'';
-        $user->email = isset($data['email']) ? $data['email']:'';
-        $user->gender_id = isset($data['gender']) ? (int)$data['gender']:0;
-        if ($user->gender_id == 1) {
-            $user->img = \SettingHelper::getSetting('nam_avatar_default');
+        $user->referral_code_enter = $data['referral_code'];
+        $userReferral = User::where('referral_code',$data['referral_code'])->first();
+        $user->introduce_user_id = isset($userReferral) ? $userReferral->id:-1;
+        $referralCode = \Str::random(11);
+        $userInDb = User::where('referral_code',$referralCode)->first();
+        while (isset($userInDb)) {
+            $referralCode = \Str::random(11);
         }
-        if ($user->gender_id == 2) {
-            $user->img = \SettingHelper::getSetting('nu_avatar_default');
-        }
+        $user->referral_code =$referralCode;
+        $user->name = 'Member'.strtoupper(\Str::random(8));
         $user->created_at = now();
         $user->updated_at = now();
         $user->save();
         return $user;
     }
 
-    protected function checkUser($feild, $username){
-        $user = User::where($feild, $username)->first();
+    protected function checkUser($field, $username){
+        $user = User::where($field, $username)->first();
         if($user !== null){
             return [
                 'code' => 100,
-                'message' => 'Tên đăng nhập đã tồn tại. Vui lòng chọn tên đăng nhập khác.'
+                'message' => 'Số điện thoại đã tồn tại. Vui lòng nhập số điện thoại khác.'
             ];
         }
     }

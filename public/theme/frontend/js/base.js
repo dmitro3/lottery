@@ -227,6 +227,138 @@ BASE_SUPPORT = {
         }
     },
 };
+BASE_GUI_HOME = {
+    elelemtExist: function (selecter) {
+        var element = document.querySelector(selecter);
+        if (element) {
+            return true;
+        }
+        return false;
+    },
+    init: function () {
+        BASE_GUI_HOME.sliderBanerHome();
+        BASE_GUI_HOME.initHomeTimeBox();
+    },
+    sliderBanerHome() {
+        if (!BASE_GUI_HOME.elelemtExist(".slider-home-main-banner")) return;
+        const swiperBannerHome = new Swiper(".slider-home-main-banner", {
+            slidesPerView: 1,
+            loop: false,
+            disableOnInteraction: true,
+            speed: 800,
+            spaceBetween: 0,
+            pagination: {
+                el: ".pagination-banner-home",
+                clickable: true,
+            },
+        });
+    },
+    initHomeTimeBox: function () {
+        var homeTimeBox = document.querySelector("#home-time-box");
+        if (!homeTimeBox) return;
+        var starDate = new Date(homeTimeBox.getAttribute("start"));
+
+        var dayTop = homeTimeBox.querySelector(".day .top");
+        var dayBottomCard = homeTimeBox.querySelector(".day .bottom-card");
+        var dayNumber = homeTimeBox.querySelector(".day .number");
+
+        var hourTop = homeTimeBox.querySelector(".hour .top");
+        var hourBottomCard = homeTimeBox.querySelector(".hour .bottom-card");
+        var hourNumber = homeTimeBox.querySelector(".hour .number");
+
+        var minuteTop = homeTimeBox.querySelector(".minute .top");
+        var minuteBottomCard = homeTimeBox.querySelector(
+            ".minute .bottom-card"
+        );
+        var minuteNumber = homeTimeBox.querySelector(".minute .number");
+
+        var secondTop = homeTimeBox.querySelector(".second .top");
+        var secondBottomCard = homeTimeBox.querySelector(
+            ".second .bottom-card"
+        );
+        var secondNumber = homeTimeBox.querySelector(".second .number");
+
+        var now = new Date();
+        var diffSseconds = parseInt(
+            (now.getTime() - starDate.getTime()) / 1000
+        );
+        var baseDay = parseInt(diffSseconds / 86400);
+        var baseHour = parseInt((diffSseconds - baseDay * 86400) / 3600);
+        var baseMinute = parseInt(
+            (diffSseconds - baseDay * 86400 - baseHour * 3600) / 60
+        );
+        var baseSecond =
+            (diffSseconds -
+                baseDay * 86400 -
+                baseHour * 3600 -
+                baseMinute * 60) %
+            60;
+        dayTop.innerHTML = baseDay;
+        hourTop.innerHTML = baseHour;
+        minuteTop.innerHTML = baseMinute;
+        secondTop.innerHTML = baseSecond;
+        setInterval(() => {
+            diffSseconds = diffSseconds + 1;
+            var nowDay = parseInt(diffSseconds / 86400);
+            var nowHour = parseInt((diffSseconds - nowDay * 86400) / 3600);
+            var nowMinute = parseInt(
+                (diffSseconds - nowDay * 86400 - nowHour * 3600) / 60
+            );
+            var nowSecond =
+                (diffSseconds -
+                    nowDay * 86400 -
+                    nowHour * 3600 -
+                    nowMinute * 60) %
+                60;
+            if (parseInt(dayTop.innerHTML) != nowDay) {
+                dayBottomCard.classList.remove("flipX");
+                setTimeout(() => {
+                    dayTop.innerHTML = nowDay < 10 ? "0" + nowDay : nowDay;
+                }, 900);
+                setTimeout(() => {
+                    dayNumber.innerHTML = nowDay < 10 ? "0" + nowDay : nowDay;
+                    dayBottomCard.classList.add("flipX");
+                }, 100);
+            }
+            if (parseInt(hourTop.innerHTML) != nowHour) {
+                hourBottomCard.classList.remove("flipX");
+                setTimeout(() => {
+                    hourTop.innerHTML = nowHour < 10 ? "0" + nowHour : nowHour;
+                }, 900);
+                setTimeout(() => {
+                    hourNumber.innerHTML =
+                        nowHour < 10 ? "0" + nowHour : nowSecond;
+                    hourBottomCard.classList.add("flipX");
+                }, 100);
+            }
+            if (parseInt(minuteTop.innerHTML) != nowMinute) {
+                minuteBottomCard.classList.remove("flipX");
+                setTimeout(() => {
+                    minuteTop.innerHTML =
+                        nowMinute < 10 ? "0" + nowMinute : nowMinute;
+                }, 900);
+                setTimeout(() => {
+                    minuteNumber.innerHTML =
+                        nowMinute < 10 ? "0" + nowMinute : nowMinute;
+                    minuteBottomCard.classList.add("flipX");
+                }, 100);
+            }
+            if (parseInt(secondTop.innerHTML) != nowSecond) {
+                secondBottomCard.classList.remove("flipX");
+                setTimeout(() => {
+                    secondTop.innerHTML =
+                        nowSecond < 10 ? "0" + nowSecond : nowSecond;
+                }, 900);
+                setTimeout(() => {
+                    secondNumber.innerHTML =
+                        nowSecond < 10 ? "0" + nowSecond : nowSecond;
+                    secondBottomCard.classList.add("flipX");
+                }, 10);
+            }
+        }, 1000);
+    },
+};
 window.addEventListener("DOMContentLoaded", function () {
     BASE_GUI.init();
+    BASE_GUI_HOME.init();
 });

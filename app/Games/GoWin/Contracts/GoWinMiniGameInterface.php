@@ -8,4 +8,5 @@ interface GoWinMiniGameInterface {
 	public function isWin($number);
 	public function calculationAmountWin($number,$amountBet);
 	public function getHistoryHtml($winNumber);
+	public function getUserBetHistoryHtml();
 }

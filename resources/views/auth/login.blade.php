@@ -4,7 +4,7 @@
     <div class="mian login">
         <div class="login-banner">
             <div class="bankPage c-row c-row-middle-center">
-                <a href="/" class="bank c-row c-row-middle-center">
+                <a href="{{ url()->previous() ?? '/' }}" class="bank c-row c-row-middle-center">
                     <img src="theme/frontend/images/back.c3244ab0.png" class="navbar-back">
                 </a>
             </div>
@@ -12,7 +12,8 @@
         </div>
         <div class="login-box">
             <div class="tit"> Đăng nhập </div>
-            <div class="mian-from">
+            <form class="mian-from form-validate" action="dang-nhap" autocomplete="off" absolute method="post" accept-charset="utf8" data-success="LOGIN_GUI.loginDone">
+                @csrf
                 <div class="lab"> Định dạng số điện thoại:<span>+84</span>
                 </div>
                 <div class="item c-row c-row-center first">
@@ -31,7 +32,7 @@
                     <input type="password" name="password" placeholder="Mật khẩu" class="pw-input">
                 </div>
                 <div class="mian-btn">
-                    <button class="gradient van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(92, 186, 71); border-color: rgb(92, 186, 71);">
+                    <button type="submit" class="gradient van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(92, 186, 71); border-color: rgb(92, 186, 71);">
                         <div class="van-button__content">
                             <span class="van-button__text">
                                 <span>Đăng nhập</span>
@@ -41,11 +42,17 @@
                     <div class="text m-t-15 c-row c-row-middle-center">
                         <a href="dang-ky" class="text p-r-5">Đăng ký</a>
                         ｜
-                        <a href="quen-mat-khau" class="text p-l-5">Lấy lại mật khẩu</a>
+                        <a href="huong-dan-lay-lai-mat-khau" class="text p-l-5">Lấy lại mật khẩu</a>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+@endsection
+@section('jsl')
+    <script src="theme/frontend/js/ValidateForm.js" defer></script>
+@endsection
+@section('js')
+    <script src="theme/frontend/js/auth.js" defer></script>
 @endsection

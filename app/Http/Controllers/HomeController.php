@@ -1,13 +1,14 @@
 <?php
 namespace App\Http\Controllers;
-
+use \App\Models\Slider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index(){
-        \Auth::login(\App\Models\User::find(1));
-        return view('home');
+        // \Auth::login(\App\Models\User::find(1));
+        $listSlider = Slider::act()->get();
+        return view('home',compact('listSlider'));
     }
     public function direction(Request $request, $link)
     {

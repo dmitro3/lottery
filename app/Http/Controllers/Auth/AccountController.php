@@ -11,10 +11,21 @@ class AccountController extends Controller
         return \Support::response([
             'code' => 100,
             'message' => 'Vui lòng đăng nhập',
-            'redirect' => \VRoute::get('login')
+            'redirect' => 'dang-nhap'
         ]);
     }
-    public function profile(Request $request, $route)
+    public function account(Request $request)
+    {
+        if(!Auth::check()){
+            return $this->goLogin();
+        }
+        $user = Auth::user();
+        if ($request->isMethod("POST")) {
+            return $this->updateProfile($request, $user);
+        }
+        return view('auth.account.account', compact('user'));
+    }
+    public function profile (Request $request)
     {
         if(!Auth::check()){
             return $this->goLogin();

@@ -5,9 +5,9 @@
         </a>
     </div>
     <div class="navbar-title">
-        <div class="c-row c-row-middle-center">
-            <img height="38px" width="100px" src="theme/frontend/img/headlogo.png" class="logo">
-        </div>
+        <a href="/" class="c-row c-row-middle-center">
+            <img height="38px" width="100px" src="{Ilogo.imgI}" class="logo">
+        </a>
     </div>
     <div class="navbar-right">
         <div class="c-row navbarR">

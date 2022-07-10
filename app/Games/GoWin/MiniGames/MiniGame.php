@@ -55,4 +55,8 @@ class MiniGame implements GoWinMiniGameInterface
     {
         return '';
     }
+    public function getUserBetHistoryHtml()
+    {
+        return '';
+    }
 }

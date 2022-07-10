@@ -68,17 +68,22 @@ class LoginController extends Controller
             ]);
         }
 
-        $username = $request->username;
-        $user = $this->checkUser('username',$username);
+        $phone = $request->phone;
+        $user = $this->checkUser('phone',$phone);
         if(is_array($user)){
             return response($user);
         }
 
-        $credentials = ['username' => $username, 'password'=>$request->password];
-        if (Auth::attempt($credentials, $request->remember)) {
+        $credentials = ['phone' => $phone, 'password'=>$request->password];
+        if (Auth::attempt($credentials, true)) {
             return $this->authenticated();
+        }else {
+            return response()->json([
+                'code' => 100,
+                'message' => 'Số điện thoại hoặc mật khẩu không chính xác',
+            ]);
         }
-        return $this->sendFailedLoginResponse('username',$request);
+        return $this->sendFailedLoginResponse('phone',$request);
     }
 
     protected function sendFailedLoginResponse($field, $request)
@@ -114,18 +119,19 @@ class LoginController extends Controller
                 'message' => 'Tài khoản đã bị khóa vui lòng liên hệ với quản trị viên'
             ];
         }
+        return $user;
     }
 
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => ['required'],
+            'phone' => ['required'],
             'password' => ['required'],
         ], [
             'required' => 'Vui lòng nhập :attribute',
         ], [
             'password' => 'Vui lòng nhập mật khẩu',
-            'username' => 'Vui lòng nhập tên đăng nhập'
+            'phone' => 'Vui lòng nhập số điện thoại'
         ]);
     }
 

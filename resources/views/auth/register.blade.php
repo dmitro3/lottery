@@ -4,14 +4,15 @@
     <div class="mian forgot">
         <div class="navbar">
             <div class="navbar-left">
-                <a href="/" class="bank c-row c-row-middle-center"><img src="theme/frontend/images/back.c3244ab0.png" class="navbar-back">
+                <a href="{{ url()->previous() ?? '/' }}" class="bank c-row c-row-middle-center"><img src="theme/frontend/images/back.c3244ab0.png" class="navbar-back">
                 </a>
             </div>
             <div class="navbar-title">Đăng ký</div>
             <div class="navbar-right"></div>
         </div>
         <div class="forgot-box">
-            <div class="mian-from m-t-20">
+            <form class="mian-from m-t-20 form-validate" action="dang-ky" autocomplete="off" absolute method="post" accept-charset="utf8" data-before="REGISTER_GUI.validateRegister" data-success="REGISTER_GUI.registerDone">
+                @csrf
                 <div class="lab">Định dạng số điện thoại:<span>+84</span>
                 </div>
                 <div class="item c-row c-row-center c-row-middle m-t-15 m-b-30 first">
@@ -27,7 +28,7 @@
                     <span class="img c-row c-row-middle-center">
                         <img height="20px" width="18px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAAGdhZPXAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAH6ADAAQAAAABAAAAIAAAAABT9vqhAAAEjUlEQVRIDa1XW2hcRRief845SXN27TaSoCglihRsvYCgINWHvbR7M1ERo30TUYrQJ8XLg6Drg4KI4osgRQSfBKOQhrrbxCbxofjig1SlrZeHhqgIrdrNnt3tZvfM+P8nO+u57m5lD2T/2/fNP/OfMzN/GOs+Vjb5otJZPZss9YxaLpMiw8qmnifJ6Yce4PzMjoa/9eLhe3tGqCLn58coUM8ln3PGgIWF7QDSyqWfVk4rl3pZ6UCKZ14qglJwdoGpeSp/PZd+9j8dcxrj+qZykIwtr33UsyW7oaeTQvWo5zP3eZzKsHLJV5TuTqN8HumeNNTyySNcsNs9iK4RW/m65FRHBaniqmrkoxX2qk8OAKj5q+gBIOIsAd0PZ661xk6tfusOUo2cUrudpOMqXifJub4qwZbSlofIxkm/QbLvQyWQpZJ3asiQUoK7PGqQAJACUCoJBVASCyCV7pFWsXhj2MgeUIhBHOLq0m7tB2B/+jFWPvUCCLmb/JLDVvzU+nseDHKIG7oEAhIBNO1H+guQXSPpLj2gmpXVzwNOn0PtmFfRb/hig8w2vtY3Q78DefSoUd/49QgweQuWfiM2s+9TOH687R8xQLbymbtB2I9h4Lxt6N9rHfsufP8HmKafiFVOf+ceILB2Ipq7dr8LS0u1LvA87ox4o3qJTi0P2VP5RuHQ/RJY00V0+LhrLMmgvlVIPRCZGb/xKQ34H26A0jVgv4NgU8om6cnsDgyjA65nAtfTO1iGIRHGTEy/rRMRDL5ifrn2zbDExkPpg8Rzph1GtArpbD2Xeo2kf1CFj1wz2OIgbnDuSD+7a0eSTXPP+4TZ7sowfiQZFhevEGGyK6+J3AWHnyrdYGRmig86EB3y1tyc58vpDhwpFB6ac9lbRWv7qUhkRICPj30S2JIRWHa1kL6tI+Uj6pwLw+GmqtmGsZQ4+dUvYXG/b2Dy+sOHb2KtzjP4zWiC8b+0CX3RPLHiubFp0Mbs7M2ybT2Kt9g0Xm8C+K6PzUrlN39Ct903ea1QmOZ28xgRdF3/Yrx8+gc3OUxvFTIHOrb9BMWkbn4YL5cDN4Xi9f1aDNa6xwFytjlMYsKOV1bPSc4ukg7y6g6fjJCnb3LbBqcj45IHG7GQwZRLk7CDF9LhK79fesreLBZn2mJ7rybkHgIKsGc4vkPAS1QK/rOfHGVLJvbh5ZMA4JexfbhIOJvDFYOPbU6UyxuK5ySv5dPzXIg7HCewS5zBPwowKimYnHQ+RhyQLnW6m8FphzvtWbpj4ivr74wqWdQ42Cq+hFWJMd04qQtbXEcvHpsjdVtG8Rx/LZt8EvH7/SDsrs6Zy+uf+f1+28kjWUzl9cf72pjkAs7U9oDQxl7vJ49vCCPQNwzixJfXqT8+2yhkHpe2fad6f4N4YfG+Wy2MMErf/05OXyt2EG8N01FGTZjrAE4DCIxf8yvw//8SlcTtV3koL/VNY83q5WOSDgU8TJiEM9zQRr/P2/YknrcPSuz+gUF1IjH1Qe+Eq87nrjesThq3wF46ndyzHYWO50iVa3yzHdfXEgvLf9OY/wLsYqnMSA3n7AAAAABJRU5ErkJggg==" class="password">
                     </span>
-                    <input placeholder="Mật khẩu" class="pw-input" type="password">
+                    <input placeholder="Mật khẩu" class="pw-input" type="password" name="password">
                 </div>
                 <div class="item c-row c-row-center c-row-middle">
                     <span class="img c-row c-row-middle-center">
@@ -36,7 +37,7 @@
                     <input type="text" placeholder="Mã giới thiệu" name="referral_code">
                 </div>
                 <div class="c-row c-row-middle">
-                    <div role="checkbox" tabindex="0" aria-checked="false" class="van-checkbox">
+                    <div role="checkbox" tabindex="0" aria-checked="false" class="van-checkbox" id="register-accept-privacy-policy">
                         <div class="van-checkbox__icon van-checkbox__icon--square">
                             <i class="van-icon"></i>
                         </div>
@@ -44,7 +45,7 @@
                             <div class="agree p-r-10">Tôi đồng ý</div>
                         </span>
                     </div>
-                    <div class="txt">Chính sách bảo mật</div>
+                    <a href="chinh-sach-bao-mat" class="smooth txt" title="Chính sách bảo mật">Chính sách bảo mật</a>
                 </div>
                 <div class="mian-btn m-t-40">
                     <button type="submit" class="gradient van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(92, 186, 71); border-color: rgb(92, 186, 71);">
@@ -54,8 +55,14 @@
                         </div>
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+@endsection
+@section('jsl')
+    <script src="theme/frontend/js/ValidateForm.js" defer></script>
+@endsection
+@section('js')
+    <script src="theme/frontend/js/auth.js" defer></script>
 @endsection

@@ -49,4 +49,8 @@ class Color extends MiniGame implements GoWinMiniGameInterface
         }
         return $strRet;
     }
+    public function getUserBetHistoryHtml()
+    {
+        return vsprintf('<div class="select select-%s"></div>',[$this->value]);
+    }
 }

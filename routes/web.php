@@ -23,24 +23,6 @@ Route::get('/clear', function () {
     echo '</pre>';
 });
 
-Route::get('/video/playlist/{playlist}', function ($playlist) {
-    return \FFMpeg::dynamicHLSPlaylist()
-        ->fromDisk('videos')
-        ->open('out/' . $playlist)
-        ->setKeyUrlResolver(function ($key) {
-            return route('video.key', ['key' => $key]);
-        })
-        ->setMediaUrlResolver(function ($mediaFilename) {
-            return \Storage::disk('videos')->url('out/' . $mediaFilename);
-        })
-        ->setPlaylistUrlResolver(function ($playlistFilename) {
-            return route('video.playlist', ['playlist' => $playlistFilename]);
-        });
-})->name('video.playlist');
-
-Route::get('/video/key/{key}', function ($key) {
-    return \Storage::disk('videos')->download('out/' . $key);
-})->name('video.key');
 
 
 
@@ -49,9 +31,10 @@ Route::group([
     'middleware' => ['web', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
     'namespace' => 'App\Http\Controllers'
 ], function () {
-    //ENDCOMMENT
-    Route::get('/test1', 'HomeController@test1');
-    Route::get('/alo', 'HomeController@alo');
+    Route::prefix('tai-khoan')->namespace('Auth')->group(function () {
+        Route::get('/', 'AccountController@account');
+        Route::match(['GET', 'POST'], '/trang-ca-nhan', 'AccountController@profile');
+    });
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('cronmark', array('uses' => 'LearningPlayController@mark'));
     Route::get('cronimg', array('uses' => 'CronImgController@convertImg'));
