@@ -11,6 +11,14 @@ class GamePlinkoController extends BaseGameController
     public function __construct()
     {
     }
+    public function index($request)
+    {
+        $user = \Auth::user();
+        return view('games.plinko.index', compact('user'));
+    }
+    public function play($request){
+        
+    }
     private function getAllGameRequest()
     {
         return [
