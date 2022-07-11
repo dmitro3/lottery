@@ -4,6 +4,13 @@ BASE_GUI = {
         BASE_GUI.initSiteSize();
         BASE_GUI.initVanNoticeBarContent();
         BASE_GUI.initBaseCheckBox();
+        BASE_GUI.initBasePopup();
+        BASE_GUI.initBaseLoadNotify();
+    },
+    initBaseLoadNotify: function () {
+        if (messageNotify && messageNotify != "") {
+            BASE_GUI.createFlashNotify(messageNotify);
+        }
     },
     initSiteSize: function () {
         BASE_GUI._calculateSiteSize();
@@ -131,6 +138,64 @@ BASE_GUI = {
         if (loaddingBox) {
             loaddingBox.style.display = "none";
         }
+    },
+    fadeIn: function (element, time = null) {
+        var baseFadeTime = time ? time / 1000 + "s" : ".3s";
+        element.style.opacity = 0;
+        element.style.transition = baseFadeTime;
+        element.style.display = "block";
+        setTimeout(() => {
+            element.style.opacity = 1;
+        }, 10);
+    },
+    fadeOut: function (element, time = null) {
+        var baseFadeTime = time ?? 300;
+        element.style.opacity = 1;
+        element.style.transition = baseFadeTime / 1000 + "s";
+        setTimeout(() => {
+            element.style.opacity = 0;
+            setTimeout(() => {
+                element.style.display = "none";
+            }, baseFadeTime);
+        }, 10);
+    },
+    initBasePopup: function () {
+        var listBtnShowVanPopup = document.querySelectorAll(
+            ".btn-show-van-popup"
+        );
+        listBtnShowVanPopup.forEach((element) => {
+            var mainPopupOverlay = document.querySelector(
+                element.dataset.target + "-overlay"
+            );
+            var mainPopup = document.querySelector(element.dataset.target);
+            element.addEventListener("click", function () {
+                if (mainPopupOverlay) {
+                    BASE_GUI.fadeIn(mainPopupOverlay);
+                }
+                if (mainPopup) {
+                    BASE_GUI.fadeIn(mainPopup);
+                }
+            });
+            var listBtnClosePopup =
+                mainPopup.querySelectorAll(".btn-close-popup");
+            listBtnClosePopup.forEach((element) => {
+                var mainPopup = element.closest(".van-popup");
+                var mainPopupOverlay = null;
+                if (mainPopup) {
+                    mainPopupOverlay = document.querySelector(
+                        "#" + mainPopup.getAttribute("id") + "-overlay"
+                    );
+                }
+                element.addEventListener("click", function () {
+                    if (mainPopupOverlay) {
+                        BASE_GUI.fadeOut(mainPopupOverlay);
+                    }
+                    if (mainPopup) {
+                        BASE_GUI.fadeOut(mainPopup);
+                    }
+                });
+            });
+        });
     },
     formatCurrency: function (number) {
         var n = number.toString().split("").reverse().join("");
@@ -353,7 +418,7 @@ BASE_GUI_HOME = {
                     secondNumber.innerHTML =
                         nowSecond < 10 ? "0" + nowSecond : nowSecond;
                     secondBottomCard.classList.add("flipX");
-                }, 10);
+                }, 100);
             }
         }, 1000);
     },

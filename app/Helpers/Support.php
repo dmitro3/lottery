@@ -8,6 +8,16 @@ use Currency;
 
 class Support
 {
+    public static function renderBackLinkParamater($linkBack){
+        return '?returnurl='.base64_encode($linkBack);
+    }
+    public static function generateBackLink($def = '/'){
+        $linkBack = $def;
+        if (isset(request()->returnurl) && request()->returnurl != '') {
+            $linkBack = base64_decode(request()->returnurl);
+        }
+        return $linkBack;
+    }
     public static function isDateTime($string, $format = 'Y-m-d H:i:s')
     {
         return \DateTime::createFromFormat($format, $string);

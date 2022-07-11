@@ -55,19 +55,4 @@
     @endif
     <div class="list-fooder"></div>
 </div>
-@if (count($listItems) > 0)
-    <div class="page-nav c-row c-row-center c-tc">
-        @php
-            $listItems->withQueryString();
-            $currentPage = $listItems->currentPage();
-            $lastPage = $listItems->lastPage();
-        @endphp
-        <div class="paginate-box-link-btn arr c-row c-row-middle-center {{$currentPage > 1 ? 'action':''}}" data-href="{{$currentPage > 1 ? $listItems->previousPageUrl():''}}">
-            <i class="van-icon van-icon-arrow-left icon {{$currentPage > 1 ? 'action':''}}" style="font-size: 20px;"></i>
-        </div>
-        <div class="number">{{$currentPage}}/{{$listItems->total()}}</div>
-        <div class="paginate-box-link-btn arr c-row c-row-middle-center {{$currentPage < $lastPage ? 'action':''}}" data-href="{{$currentPage < $lastPage ? $listItems->nextPageUrl():''}}">
-            <i class="van-icon van-icon-arrow icon {{$currentPage < $lastPage ? 'action':''}}" style="font-size: 20px;"></i>
-        </div>
-    </div>
-@endif
+{{$listItems->withQueryString()->links('games.win.history_results.pagination')}}

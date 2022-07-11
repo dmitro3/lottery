@@ -1,6 +1,6 @@
 var WIN_GUI = (function () {
-    var popup = document.querySelector(".van-popup");
-    var overlay = document.querySelector(".van-overlay");
+    var popup = document.querySelector(".van-popup-bet-game");
+    var overlay = document.querySelector(".van-overlay-bet-game");
     var _betting_mark = popup.querySelector(".betting-mark");
     var box_metting_text = popup.querySelector(".box .choose");
     var ipMiniGame = popup.querySelector("input[name=mini_game]");

@@ -51,4 +51,16 @@ var LOGIN_GUI = {
         }
     },
 };
+var ACCOUNT_GUI = {
+    changeProfileDone(data) {
+        if (data.message) {
+            BASE_GUI.createFlashNotify(data.message);
+        }
+        if (data.code == 200) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+    },
+};
 window.addEventListener("DOMContentLoaded", function () {});

@@ -862,7 +862,7 @@ var VALIDATE_FORM = ((options = {}) => {
                     width: `${buttonRect.width}px`,
                     height: `${buttonRect.height}px`,
                     position: `relative`,
-                    display: "inline-block",
+                    overflow: "hidden",
                 });
 
                 if (button.hasAttribute("content")) {

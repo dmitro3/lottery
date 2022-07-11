@@ -34,6 +34,14 @@ Route::group([
     Route::prefix('tai-khoan')->namespace('Auth')->group(function () {
         Route::get('/', 'AccountController@account');
         Route::match(['GET', 'POST'], '/trang-ca-nhan', 'AccountController@profile');
+        Route::get('/nhat-ky-dang-nhap', 'AccountController@loginLog');
+
+        // Ví
+        Route::get('/vi-cua-toi', 'WalletController@index');
+
+        // Nạp tiền
+        Route::get('/nap-tien', 'RechargeController@index');
+        Route::get('/init-recharge-method', 'RechargeController@initRechargeMethod');
     });
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('cronmark', array('uses' => 'LearningPlayController@mark'));

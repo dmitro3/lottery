@@ -76,6 +76,7 @@ class LoginController extends Controller
 
         $credentials = ['phone' => $phone, 'password'=>$request->password];
         if (Auth::attempt($credentials, true)) {
+            $user->logLoginAction();
             return $this->authenticated();
         }else {
             return response()->json([

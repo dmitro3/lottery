@@ -7,6 +7,7 @@ use App\Models\Games\Win\{
     GameWinMultiple,
     GameWinMoneyItem,
     GameWinUserBet,
+    GameWinRecord
 };
 
 class GameWinController extends BaseGameController

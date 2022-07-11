@@ -106,6 +106,7 @@ class RegisterController extends Controller
         }
         $user = $this->createUser($request->all());
         Auth::login($user,true);
+        $user->logLoginAction();
         return response()->json([
             'code' => 200,
             'message' => 'Đăng ký tài khoản thành công',

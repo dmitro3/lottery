@@ -6,6 +6,7 @@ use App\Notifications\User as UserNotify;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Helpers\Mobile_Detect;
 
 class User extends Authenticatable
 {
@@ -66,5 +67,19 @@ class User extends Authenticatable
     {
         $userWallet = $this->getWallet();
         return $userWallet->changeMoneyFreeze($amount,$reason,$type,$mapId);
+    }
+    public function logLoginAction()
+    {
+        $mobileDetect = new Mobile_Detect;
+        $userLoginLog = new UserLoginLog;
+        $userLoginLog->user_id = $this->id;
+        $userLoginLog->user_ip = request()->ip();
+        $userLoginLog->user_agent = request()->header('User-Agent');
+        $userLoginLog->device_type = $mobileDetect->isMobile() ? 'Mobile':'Pc';
+        $userLoginLog->save();
+    }
+    public function loginLog()
+    {
+        return $this->hasMany(UserLoginLog::class);
     }
 }

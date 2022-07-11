@@ -31,7 +31,7 @@
                         class="van-icon van-icon-volume-o van-notice-bar__left-icon">
                     </i>
                     <div role="marquee" class="van-notice-bar__wrap">
-                        <div class="van-notice-bar__content">Chào mừng bạn đến với chúng tôi. Chúc bạn có những giờ chơi vui vẻ và may mắn.</div>
+                        <div class="van-notice-bar__content">{[global_notifice]}</div>
                     </div>
                 </div>
                 <div class="txt">

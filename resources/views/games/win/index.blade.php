@@ -3,9 +3,6 @@
 @endphp
 @extends('index')
 @section('css')
-    <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.woff2" as="font" type="font/woff2" crossorigin="">
-    <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.woff" as="font" type="font/woff" crossorigin="">
-    <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.ttf" as="font" type="font/ttf" crossorigin="">
     <script type="text/javascript">
         var connectionGameType = '{{PushServerHelper::generateHash(1)}}';
     </script>
@@ -69,6 +66,24 @@
             @include('games.win.game_history')
         </div>
         @include('games.win.popup_bet')
+        <div class="van-overlay" id="pre-sale-rules-popup-overlay" style="z-index: 2034;display: none;"></div>
+        <div class="van-popup van-popup--center" id="pre-sale-rules-popup" style="width: 80%; border-radius: 10px; max-width: 340px; z-index: 2035;display: none;">
+            <div class="rule-box">
+                <div class="title c-row c-row-middle-center">Quy tắc bán trước</div>
+                <div class="info">
+                    <div class="comment">{[pre_sell_rule_content]}</div>
+                    <div class="rule-btn c-row m-t-20 c-row-center">
+                        <button class="btn-close-popup btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(242, 65, 59); border-color: rgb(242, 65, 59);">
+                            <div class="van-button__content">
+                                <span class="van-button__text">
+                                    <span>Tôi biết</span>
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div>

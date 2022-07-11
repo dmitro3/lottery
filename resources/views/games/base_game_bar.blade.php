@@ -11,9 +11,9 @@
     </div>
     <div class="navbar-right">
         <div class="c-row navbarR">
-            <div class="c-row item c-row-middle-center">
+            <a href="cham-soc-khach-hang{{Support::renderBackLinkParamater('win')}}" class="c-row item c-row-middle-center">
                 <img src="theme/frontend/img/audio.40994602.png" class="item-audio">
-            </div>
+            </a>
             <div class="c-row item c-row-middle-center" id="switch_audio" onclick="WINDLOAD.switchAudio(this)">
                 @if ($activeAudio)
                     <img src="theme/frontend/img/volume-up-line.png" class="item-volume">
@@ -48,18 +48,18 @@
         </div>
         <div class="total-btn c-row c-row-between">
             <div class="item">
-                <button class="btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(255, 206, 31); border-color: rgb(255, 206, 31);">
+                <a href="tai-khoan/rut-tien{{Support::renderBackLinkParamater('win')}}" class="btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(255, 206, 31); border-color: rgb(255, 206, 31);">
                     <div class="van-button__content">
                         <span class="van-button__text"> RÚT TIỀN </span>
                     </div>
-                </button>
+                </a>
             </div>
             <div class="item">
-                <button class="btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(242, 65, 59); border-color: rgb(242, 65, 59);">
+                <a href="tai-khoan/nap-tien{{Support::renderBackLinkParamater('win')}}" class="btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(242, 65, 59); border-color: rgb(242, 65, 59);">
                     <div class="van-button__content">
                         <span class="van-button__text"> NẠP TIỀN </span>
                     </div>
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
         <div role="alert" class="van-notice-bar">
             <i class="van-icon van-icon-volume-o van-notice-bar__left-icon"></i>
             <div role="marquee" class="van-notice-bar__wrap">
-                <div class="van-notice-bar__content">Chào mừng bạn đến với chúng tôi. Chúc bạn có những giờ chơi vui vẻ và may mắn.</div>
+                <div class="van-notice-bar__content">{[global_notifice]}</div>
             </div>
         </div>
     </div>

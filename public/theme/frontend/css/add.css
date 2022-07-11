@@ -85,3 +85,11 @@ body {
 .slider-pagination .swiper-pagination-bullet:not(:last-child) {
     margin-right: 6px;
 }
+.btn-confirm-change-profile{
+    background: white;
+    border: none;
+    outline: none;
+}
+.mian .menu-box .nav-muen .item .name{
+    color: #2c3e50;
+}

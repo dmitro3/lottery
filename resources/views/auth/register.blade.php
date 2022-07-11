@@ -4,7 +4,7 @@
     <div class="mian forgot">
         <div class="navbar">
             <div class="navbar-left">
-                <a href="{{ url()->previous() ?? '/' }}" class="bank c-row c-row-middle-center"><img src="theme/frontend/images/back.c3244ab0.png" class="navbar-back">
+                <a href="{{Support::generateBackLink()}}" class="bank c-row c-row-middle-center"><img src="theme/frontend/images/back.c3244ab0.png" class="navbar-back">
                 </a>
             </div>
             <div class="navbar-title">Đăng ký</div>
@@ -45,7 +45,7 @@
                             <div class="agree p-r-10">Tôi đồng ý</div>
                         </span>
                     </div>
-                    <a href="chinh-sach-bao-mat" class="smooth txt" title="Chính sách bảo mật">Chính sách bảo mật</a>
+                    <a href="chinh-sach-bao-mat{{Support::renderBackLinkParamater('dang-ky')}}" class="smooth txt" title="Chính sách bảo mật">Chính sách bảo mật</a>
                 </div>
                 <div class="mian-btn m-t-40">
                     <button type="submit" class="gradient van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(92, 186, 71); border-color: rgb(92, 186, 71);">

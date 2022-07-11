@@ -4,7 +4,7 @@
     <div class="mian login">
         <div class="login-banner">
             <div class="bankPage c-row c-row-middle-center">
-                <a href="{{ url()->previous() ?? '/' }}" class="bank c-row c-row-middle-center">
+                <a href="/" class="bank c-row c-row-middle-center">
                     <img src="theme/frontend/images/back.c3244ab0.png" class="navbar-back">
                 </a>
             </div>
@@ -40,9 +40,9 @@
                         </div>
                     </button>
                     <div class="text m-t-15 c-row c-row-middle-center">
-                        <a href="dang-ky" class="text p-r-5">Đăng ký</a>
+                        <a href="dang-ky{{Support::renderBackLinkParamater('dang-nhap')}}" class="text p-r-5">Đăng ký</a>
                         ｜
-                        <a href="huong-dan-lay-lai-mat-khau" class="text p-l-5">Lấy lại mật khẩu</a>
+                        <a href="huong-dan-lay-lai-mat-khau{{Support::renderBackLinkParamater('dang-nhap')}}" class="text p-l-5">Lấy lại mật khẩu</a>
                     </div>
                 </div>
             </form>

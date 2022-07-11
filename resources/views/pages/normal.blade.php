@@ -4,7 +4,7 @@
     <div class="mian">
         <div class="navbar">
             <div class="navbar-left">
-                <a href="{{ url()->previous() ?? '/' }}" class="bank c-row c-row-middle-center">
+                <a href="{{Support::generateBackLink()}}" class="bank c-row c-row-middle-center">
                     <img src="theme/frontend/img/back.c3244ab0.png" class="navbar-back">
                 </a>
             </div>
