@@ -40,5 +40,8 @@ Route::group([
     Route::get('cronimg', array('uses' => 'CronImgController@convertImg'));
     Route::get('cronmail', 'CronMailController@cronmail');
     Route::get('reset-email', 'CronMailController@reset');
+
+    Route::get('testhung', '\App\Http\Controllers\Games\GamePlinkoController@test');
+
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');
 });
