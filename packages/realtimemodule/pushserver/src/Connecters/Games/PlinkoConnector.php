@@ -1,5 +1,7 @@
 <?php
+
 namespace realtimemodule\pushserver\Connecters\Games;
+
 use realtimemodule\pushserver\Contracts\ConnecterInterface;
 use realtimemodule\pushserver\Models\User;
 
@@ -11,22 +13,12 @@ use App\Models\Games\Plinko\GamePlinkoRecord;
 use App\Models\Games\Plinko\GamePlinkoType;
 use App\Models\Games\Plinko\GamePlinkoUserBet;
 use App\Models\Games\Plinko\GamePlinkoUserBetDetail;
+use \realtimemodule\pushserver\Enums\Plinko\Status as PlinkoStatus;
 
 
 class PlinkoConnector implements ConnecterInterface
 {
-    const END_TIME_CHECK = 5;
 
-    const GAME_CONNECT_STATUS_SUCCESS = 200;
-    const GAME_CONNECT_STATUS_NOT_LOGIN = 401;
-    const GAME_CONNECT_STATUS_UNKNOWN_ERROR = 603;
-    const GAME_CONNECT_STATUS_DATA_NOT_FOUND = 604;
-    const GAME_CONNECT_CURRENT_GAME_INVALID = 605;
-    const GAME_CONNECT_GAME_DATA_INVALID = 606;
-    const GAME_CONNECT_NOT_ENOUGH_MONEY = 607;
-
-    const GAME_ACTION_GET_CURRENT_GAME_INFO = 1;
-    const GAME_ACTION_DO_BET = 2;
 
     protected $connection;
     protected $clients;
@@ -44,23 +36,23 @@ class PlinkoConnector implements ConnecterInterface
     public function response()
     {
         if (!isset($this->connection)) {
-            $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_UNKNOWN_ERROR, false, 'Lỗi không xác định.'));
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_UNKNOWN_ERROR, false, 'Lỗi không xác định.'));
             return $this->connection;
         }
         if (!isset($this->connection['userTargetMessage'])) {
             $userTargetMessage = User::find($this->connection['user_id']);
             if (!isset($userTargetMessage)) {
-                $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_NOT_LOGIN, false, 'Vui lòng đăng nhập để sử dụng tính năng này.'));
+                $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_NOT_LOGIN, false, 'Vui lòng đăng nhập để sử dụng tính năng này.'));
                 return $this->connection;
             }
             $this->connection['userTargetMessage'] = $userTargetMessage;
         }
         $action = $this->messageInfo['action'] ?? 0;
         switch ($action) {
-            case self::GAME_ACTION_GET_CURRENT_GAME_INFO:
+            case PlinkoStatus::GAME_ACTION_GET_CURRENT_GAME_INFO:
                 return $this->getCurrentGameTypeInfo($action);
                 break;
-            case self::GAME_ACTION_DO_BET:
+            case PlinkoStatus::GAME_ACTION_DO_BET:
                 return $this->play($action);
                 break;
             default:
@@ -69,23 +61,24 @@ class PlinkoConnector implements ConnecterInterface
         }
         return $this->connection;
     }
-    private function getCurrentGameTypeInfo($action){
+    private function getCurrentGameTypeInfo($action)
+    {
         $gamePlinkoType = GamePlinkoType::find(1);
         if (!isset($gamePlinkoType)) {
-            $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
             return $this->connection;
         }
         $currentGame = $gamePlinkoType->getCurrentGameRecord();
         if (!isset($currentGame)) {
-            $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
             return $this->connection;
         }
         $data = [];
         $timeRemaining = $currentGame->getTimeRemaining();
-        $data['html'] = view('games.plinko.current_game_info',compact('currentGame','gamePlinkoType',$timeRemaining))->render();
+        $data['html'] = view('games.plinko.current_game_info', compact('currentGame', 'gamePlinkoType', $timeRemaining))->render();
         $data['time_remaining'] = $timeRemaining;
         $data['current_game_idx'] = $currentGame->id;
-        $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_SUCCESS,true,'Thành công.',$data,$action));
+        $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_SUCCESS, true, 'Thành công.', $data, $action));
         return $this->connection;
     }
     private function validatorPlayRequest($data)
@@ -111,22 +104,23 @@ class PlinkoConnector implements ConnecterInterface
         $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
         $gameData = $this->messageInfo['gameData'] ?? null;
         if (!isset($currentGameClientInfo) || !isset($gameData)) {
-            $this->from->send($this->buildResponse(self::GAME_CONNECT_STATUS_DATA_NOT_FOUND,false,'Game tạm thời không khả dụng.'));
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
         }
         $validator = $this->validatorPlayRequest($gameData);
         if ($validator->fails()) {
-            $this->from->send($this->buildResponse(100,false,$validator->errors()->first()));
+            $this->from->send($this->buildResponse(100, false, $validator->errors()->first()));
             return $this->connection;
         }
         $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
         $user = $this->connection['userTargetMessage'];
         $betExist = GamePlinkoUserBet::where('game_plinko_record_id', $currentGameRecord->id)->where('user_id', $user->id)->count() > 0;
         if ($betExist) {
-            $this->from->send($this->buildResponse(100,false,'Bạn đã sẵn sàng, không thể hủy bỏ yêu cầu!'));
+            $this->from->send($this->buildResponse(100, false, 'Bạn đã sẵn sàng, không thể hủy bỏ yêu cầu!'));
             return $this->connection;
         }
 
         // kiểm tra tiền và trừ tiền user. A hưng chưa code !! Siêu quan trọng !! <<<<
+
 
         $bet = new GamePlinkoUserBet();
         $bet->user_id = $user->id;
@@ -136,10 +130,11 @@ class PlinkoConnector implements ConnecterInterface
         $bet->mode = $gameData['mode'];
         $bet->qty = $gameData['qty'];
         $bet->save();
-        $this->from->send($this->buildResponse(200,true,'Đặt hàng thành công!',[],$action));
+        $this->from->send($this->buildResponse(200, true, 'Đặt hàng thành công!', [], $action));
         return $this->connection;
     }
-    private function buildResponse($code,$status,$message,$data = [],$action = null){
+    private function buildResponse($code, $status, $message, $data = [], $action = null)
+    {
         $dataResponse = [];
         $dataResponse['code'] = $code;
         $dataResponse['success'] = $status;

@@ -17,7 +17,7 @@ class GamePlinkoController extends BaseGameController
     {
         $showBaseLoading = true;
         $user = \Auth::user();
-        return view('games.plinko.index', compact('user','showBaseLoading'));
+        return view('games.plinko.index', compact('user', 'showBaseLoading'));
     }
     // private function generateBetResults()
     // {

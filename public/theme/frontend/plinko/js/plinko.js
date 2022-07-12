@@ -2,6 +2,7 @@ var PLINKO = {
     _: function (selector) {
         return document.querySelector(selector);
     },
+    changeToStopButtonPlay: function () {},
     playGame: function () {
         var data = {};
         data.type = connectionGameType;
@@ -26,68 +27,100 @@ var PLINKO_UI = {
     },
 };
 
-var PLINKO_LOAD = (function () {
-    var connecter = null;
-    var wsReady = false;
-    var currentGameInfo = {};
-    var interValGameTime = null;
-    var timeRemaining = 0;
-
-    var gamePlinkoTimeBox = document.querySelector("#game-plinko-time-box");
-
-    var init = function () {
-        var userTokenIp = document.querySelector("input[name=auth_token]");
-        if (!userTokenIp) return;
-        var userToken = userTokenIp.value;
-        connecter = new WebSocket(
-            `ws://localhost:8080/?auth_token=${userToken}`
-        );
-        connecter.onopen = function (e) {
-            wsReady = true;
-            BASE_GUI.hideLoading();
-            PLINKO_UI.init();
-            initCurentGameInfo();
-        };
-        connecter.onmessage = function (e) {
-            actionProvider(JSON.parse(e.data));
-        };
-        connecter.onclose = function (e) {
-            wsReady = false;
-            BASE_GUI.showLoading();
-            BASE_GUI.createFlashNotify("Không thể kết nối tới server", false);
-        };
-        connecter.onerror = function (e) {
-            wsReady = false;
-            BASE_GUI.showLoading();
-            BASE_GUI.createFlashNotify("Không thể kết nối tới server", false);
-        };
-    };
-    var sendData = function (data) {
+var PLINKO_SOCKET = {
+    connecter: null,
+    wsReady: false,
+    openListeners: [],
+    messageListeners: [],
+    closeListeners: [],
+    errorListeners: [],
+    addOpenListener: function (callback) {
+        if (callback) {
+            this.openListeners.push(callback);
+        }
+    },
+    addMessageListener: function (callback) {
+        if (callback) {
+            this.messageListeners.push(callback);
+        }
+    },
+    addCloseListener: function (callback) {
+        if (callback) {
+            this.closeListeners.push(callback);
+        }
+    },
+    addErrorListener: function (callback) {
+        if (callback) {
+            this.errorListeners.push(callback);
+        }
+    },
+    sendData: function (data) {
         BASE_GUI.showLoading();
-        if (wsReady) {
+        if (this.wsReady) {
             connecter.send(data);
         } else {
             BASE_GUI.createFlashNotify("Không thể kết nối tới server", false);
         }
-    };
-    var initCurentGameInfo = function () {
-        data = {};
-        data.type = connectionGameType;
-        data.action = 1;
-        sendData(JSON.stringify(data));
-    };
-    var actionProvider = function (data) {
+    },
+    init: function () {
+        var userTokenIp = PLINKO._("input[name=auth_token]");
+        if (!userTokenIp) return;
+        var userToken = userTokenIp.value;
+        connecter = new WebSocket(
+            `ws://localhost:8888/?auth_token=${userToken}`
+        );
+        var self = this;
+        connecter.onopen = function (e) {
+            self.wsReady = true;
+            for (let listener of self.openListeners) {
+                listener(e);
+            }
+        };
+        connecter.onmessage = function (e) {
+            for (let listener of self.messageListeners) {
+                listener(e);
+            }
+        };
+        connecter.onclose = function (e) {
+            self.wsReady = false;
+            for (let listener of self.closeListeners) {
+                listener(e);
+            }
+        };
+        connecter.onerror = function (e) {
+            self.wsReady = false;
+            for (let listener of self.errorListeners) {
+                listener(e);
+            }
+        };
+    },
+};
+
+var GAME_PLINKO = {
+    init: function () {
+        PLINKO_SOCKET.init();
+        PLINKO_SOCKET.addOpenListener(this.onOpenSocket);
+        PLINKO_SOCKET.addCloseListener(this.onCloseSocket);
+        PLINKO_SOCKET.addErrorListener(this.onErrorSocket);
+        PLINKO_SOCKET.addMessageListener(this.onMessageSocket);
+    },
+    onOpenSocket: function (e) {
+        BASE_GUI.hideLoading();
+        PLINKO_UI.init();
+        GAME_PLINKO.initCurentGameInfo();
+    },
+    onCloseSocket: function (e) {
+        BASE_GUI.showLoading();
+        BASE_GUI.createFlashNotify("Không thể kết nối tới server", false);
+    },
+    onErrorSocket: function (e) {
+        BASE_GUI.showLoading();
+        BASE_GUI.createFlashNotify("Không thể kết nối tới server", false);
+    },
+    onMessageSocket: function (data) {
         BASE_GUI.hideLoading();
         if (data.success && data.action) {
-            switch (data.action) {
-                case 1:
-                    initGameInfo(data.data);
-                    break;
-                case 2:
-                    betSuccess(data.data);
-                default:
-                    break;
-            }
+            GAME_PLINKO.processMessageData(data);
         } else {
             if (data.message) {
                 BASE_GUI.createFlashNotify(data.message);
@@ -95,7 +128,33 @@ var PLINKO_LOAD = (function () {
                 BASE_GUI.createFlashNotify("Lỗi không xác đinh!");
             }
         }
-    };
+    },
+    initCurentGameInfo: function () {
+        data = {};
+        data.type = connectionGameType;
+        data.action = 1;
+        PLINKO_SOCKET.sendData(JSON.stringify(data));
+    },
+    processMessageData: function (data) {
+        switch (data.action) {
+            case game_statuses.GAME_ACTION_GET_CURRENT_GAME_INFO:
+                initGameInfo(data.data);
+                break;
+            case game_statuses.GAME_ACTION_DO_BET:
+                betSuccess(data.data);
+            default:
+                break;
+        }
+    },
+};
+
+var PLINKO_LOAD = (function () {
+    var currentGameInfo = {};
+    var interValGameTime = null;
+    var timeRemaining = 0;
+
+    var gamePlinkoTimeBox = PLINKO._("#game-plinko-time-box");
+
     var initGameInfo = function (data) {
         currentGameInfo.current_game_idx = data.current_game_idx ?? "";
         if (gamePlinkoTimeBox && data.html) {
@@ -115,8 +174,8 @@ var PLINKO_LOAD = (function () {
                     if (interValGameTime) {
                         clearInterval(interValGameTime);
                     }
-                    BASE_GUI.showLoading();
-                    window.location.href = window.location.href;
+                    // BASE_GUI.showLoading();
+                    // window.location.href = window.location.href;
                 } else {
                     if (countDownTimeBox) {
                         countDownTimeBox.innerHTML = `
@@ -150,5 +209,6 @@ var PLINKO_LOAD = (function () {
     };
 })();
 window.addEventListener("DOMContentLoaded", function () {
-    PLINKO_LOAD._();
+    // PLINKO_LOAD._();
+    GAME_PLINKO.init();
 });

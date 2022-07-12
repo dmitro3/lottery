@@ -1,12 +1,13 @@
 @php
-    use \realtimemodule\pushserver\Helpers\PushServerHelper;
+use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @endphp
 @extends('index')
 @section('css')
-    <link href="theme/frontend/plinko/css/style.css" rel="stylesheet">
-    <script type="text/javascript">
-        var connectionGameType = '{{PushServerHelper::generateHash(2)}}';
-    </script>
+<link href="theme/frontend/plinko/css/style.css" rel="stylesheet">
+<script type="text/javascript">
+    var connectionGameType = '{{PushServerHelper::generateHash(2)}}';
+    var game_statuses = <?php echo json_encode(\realtimemodule\pushserver\Enums\Plinko\Status::getConstList()) ?>
+</script>
 @endsection
 @section('content')
 <div id="app">
@@ -36,21 +37,21 @@
                                     <input type="radio" id="high" value="2" name="risk" checked />
                                     <span class="name">
                                         <img src="theme/frontend/plinko/images/high.webp" alt="High" />
-                                        100k VNĐ
+                                        100k
                                     </span>
                                 </label>
                                 <label for="normal" class="label_choose risk">
                                     <input type="radio" id="normal" value="1" name="risk" />
                                     <span class="name">
                                         <img src="theme/frontend/plinko/images/mid.webp" alt="Normal" />
-                                        10k VNĐ
+                                        10k
                                     </span>
                                 </label>
                                 <label for="low" class="label_choose risk">
                                     <input type="radio" id="low" value="0" name="risk" />
                                     <span class="name">
                                         <img src="theme/frontend/plinko/images/low.webp" alt="Low" />
-                                        1k VNĐ
+                                        1k
                                     </span>
                                 </label>
                             </div>
@@ -59,7 +60,7 @@
                             <button class="play">
                                 <img src="theme/frontend/plinko/images/play1.png" alt="Play" class="btn-play" />
                                 <img src="theme/frontend/plinko/images/play1_click.png" alt="Play" class="btn-play-hover" />
-                                <span class="text">Chơi</span>
+                                <span class="text">Start</span>
                             </button>
                         </div>
                         <div class="bet_box box">
@@ -123,8 +124,8 @@
 
 @endsection
 @section('js')
-    <script src="theme/frontend/plinko/js/gui.js" defer></script>
-    <script src="theme/frontend/plinko/js/lib.js" defer></script>
-    <script src="theme/frontend/plinko/js/main.bundle.js" defer></script>
-    <script src="theme/frontend/plinko/js/plinko.js" defer></script>
+<script src="theme/frontend/plinko/js/gui.js" defer></script>
+<script src="theme/frontend/plinko/js/lib.js" defer></script>
+<script src="theme/frontend/plinko/js/main.bundle.js" defer></script>
+<script src="theme/frontend/plinko/js/plinko.js" defer></script>
 @endsection
