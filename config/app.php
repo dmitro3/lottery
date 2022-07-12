@@ -188,6 +188,7 @@ return [
         vanhenry\minify\MinifyServiceProvider::class,
 
         realtimemodule\pushserver\Providers\PushServerServiceProvider::class,
+        crawlmodule\loterie\Providers\LoterieServiceProvider::class,
 
         /*
          * Application Service Providers...
