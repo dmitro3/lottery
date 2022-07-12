@@ -15,4 +15,16 @@ class Bag extends BaseEnum
     public const BAG7 = 0.02;
     public const BAG8 = 0.01;
     public const BAG9 = 0.005;
+
+    public function getBagIndexs()
+    {
+        $consts = array_keys(static::getConstList());
+        $idx = array_search($this->getName(), $consts);
+        $count = count($consts);
+        $start = 526;
+        $idxs = [];
+        $idxs[] = $start + $idx * 2;
+        $idxs[] = $start + $idx * 2 + ($count - $idx - 1) * 4;
+        return $idxs;
+    }
 }

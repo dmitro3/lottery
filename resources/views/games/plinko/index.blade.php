@@ -58,6 +58,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                                         <img src="theme/frontend/plinko/images/play1_click.png" alt="Play" class="btn-play-hover" />
                                         <span class="text">Chơi</span>
                                     </button>
+                                    <button id="test">Test result game</button>
                                 </div>
                                 <div class="bet_box box">
                                     <div class="box_name">Chế độ chơi</div>

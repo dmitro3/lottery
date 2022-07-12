@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +11,20 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+// mix.js("resources/js/app.js", "public/js").postCss(
+//     "resources/css/app.css",
+//     "public/css",
+//     [
+//         //
+//     ]
+// );
+// mix.js(
+//     [
+//         "public/theme/frontend/plinko/js/lib.js",
+//         "public/theme/frontend/plinko/js/main.bundle.js",
+//         "public/theme/frontend/plinko/js/gui.js",
+//         "public/theme/frontend/plinko/js/plinko.js",
+//     ],
+//     "public/js"
+// );
+mix.browserSync("127.0.0.1:8000");

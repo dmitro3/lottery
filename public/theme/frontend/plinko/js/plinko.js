@@ -13,6 +13,16 @@ var PLINKO = {
             },
         }).then((res) => {});
     },
+    testGame: function () {
+        XHR.send({
+            url: "testhung",
+            method: "GET",
+        }).then((res) => {
+            if (res.path && res.type) {
+                ShortPlinko.createDisc(res.path, res.type);
+            }
+        });
+    },
 };
 
 var PLINKO_UI = {
@@ -20,6 +30,10 @@ var PLINKO_UI = {
         var button = PLINKO._("button.play");
         button.addEventListener("click", function (e) {
             PLINKO.playGame();
+        });
+        var button = PLINKO._("button#test");
+        button.addEventListener("click", function (e) {
+            PLINKO.testGame();
         });
     },
 };
