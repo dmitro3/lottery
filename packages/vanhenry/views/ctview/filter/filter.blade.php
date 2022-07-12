@@ -11,6 +11,9 @@
     @endphp
     <form id="frmsearch" action="{{ $admincp }}/search/{{ $tableData->get('table_map', '') }}"
         class="">
+        @if(isset(request()->tab))
+            <input type="hidden" name="tab" value="{{request()->input('tab',0)}}">
+        @endif
         <div class="filter-table__top">
             <div class="group-filter--left">
                 @if(isset($history_table_name) || ($tableData->get('table_map', '') == 'h_histories' && isset(request()->raw_table_name) && in_array(request()->raw_table_name,$arrayIncludesHistory) ))
@@ -29,7 +32,8 @@
                 @endif
                 @foreach ($advanceSearchs as $search)
                     @php
-                        $viewSearch = strpos(FCHelper::er($search,'type_show'),'::') ? FCHelper::er($search,'type_show').'_view' : 'tv::ctsearch.'.StringHelper::normal(FCHelper::er($search ,'type_show'));
+                        preg_match('/(.*?)(::)(.+)/', $search->type_show, $matches);
+                        $viewSearch = isset($matches[1], $matches[2], $matches[3]) && $matches[2] == '::' ? $matches[1].$matches[2].'ctsearch.'.$matches[3] : 'tv::ctsearch.'.StringHelper::normal(FCHelper::er($search ,'type_show'));
                         $viewSearch = View::exists($viewSearch)?$viewSearch:"tv::ctsearch.base";
                     @endphp    
                     @include($viewSearch)

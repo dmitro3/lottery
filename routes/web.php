@@ -42,6 +42,7 @@ Route::group([
         // Nạp tiền
         Route::get('/nap-tien', 'RechargeController@index');
         Route::get('/init-recharge-method', 'RechargeController@initRechargeMethod');
+        Route::post('/send-direct-transfer-recharge', 'RechargeController@sendDirectTransferRecharge');
     });
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('cronmark', array('uses' => 'LearningPlayController@mark'));

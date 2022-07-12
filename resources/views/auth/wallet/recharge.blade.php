@@ -62,6 +62,9 @@
     </div>
 </div>
 @endsection
+@section('jsl')
+    <script src="theme/frontend/js/ValidateForm.js" defer></script>
+@endsection
 @section('js')
     <script src="theme/frontend/js/recharge.js" defer></script>
 @endsection

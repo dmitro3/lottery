@@ -411,6 +411,10 @@ _VH_CATE.submitEditable = function(control, value, _id, _this) {
         url: $('#editableajax').attr('href'),
         type: 'POST',
         data: _obj,
+    }).done(function () {
+        if ($(_this).attr("dt-reload") == 1) {
+            window.location.reload();
+        }
     });
 
 }

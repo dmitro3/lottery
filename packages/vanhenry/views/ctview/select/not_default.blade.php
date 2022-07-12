@@ -13,7 +13,6 @@ $select = explode(',', $select);
 $fullSelect = array();
 $select = array_merge($select,$fullSelect);
 $database = Config::get('database.connections.'.Config::get('database.default').'.database');
-$info_schema = DB::select("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '".$database."' AND TABLE_NAME = '".$table."' AND COLUMN_NAME IN('".implode(',', $select)."')");
 $isMultiselect = FCHelper::ep($arrConfig,'multiselect');
 $arrTmp = Cache::remember('_vh_admin_view_select_'.$tableData->get($table,'')."_".$show->name, 10, function() use($select,$where,$table,$transTable) {
 	if ($transTable != null) {
@@ -35,7 +34,6 @@ $arrTmp = Cache::remember('_vh_admin_view_select_'.$tableData->get($table,'')."_
 <?php $multi = explode(',', $currentID); $arrMerge = array_intersect($multi,$simpleDefault); ?>
 @if($show->editable == 1 && !$isMultiselect)
 <select dt-prop="{{$show->is_prop ?? 0}}" dt-prop-id="{{$show->id}}" name="{{$show->name}}" class="select2 editable" table="{{$show->parent_name}}" style="width: 150px">
-	<option value="0">Không xác định</option>
 	@foreach($arrTmp as $key => $value)
 	<option value="{{$value->id}}" {{$value->id == $currentID?"selected":""}}>{{ $value->name}}</option>
 	@endforeach

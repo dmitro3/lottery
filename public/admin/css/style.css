@@ -1616,6 +1616,7 @@ div.pagination {
 
 #mainedit .boxedit p.form-title {
     margin-bottom: 3px;
+    font-weight: bold;
 }
 
 #mainedit .boxedit p.des {
