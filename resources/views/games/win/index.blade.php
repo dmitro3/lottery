@@ -10,7 +10,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @section('content')
 <div id="app">
     <div class="mian game">
-        @include('games.base_game_bar')
+        @include('games.base_game_bar',['gameName'=>'wingo'])
         <div class="game-betting">
             <div class="tab">
                 <div class="box c-row">

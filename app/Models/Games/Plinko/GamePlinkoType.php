@@ -21,7 +21,6 @@ class GamePlinkoType extends BaseModel
     public static function generateGameRecords()
     {
         $types = static::select('id', 'seconds')->act()->get();
-
         foreach ($types as $key => $type) {
             $type->renderGameRecord();
         }

@@ -9,6 +9,7 @@ use realtimemodule\pushserver\Factories\ConnecterFactory;
 class PushServerProvider implements MessageComponentInterface {
 
     const TYPE_GAME_WIN = 1;
+    const TYPE_GAME_PLINKO = 2;
 
     protected $clients;
     protected $connectionList;
@@ -24,7 +25,6 @@ class PushServerProvider implements MessageComponentInterface {
         $resourceId = $from->resourceId;
         $connection = $this->connectionList->get($resourceId) ?? null;
         $messageInfo = PushServerHelper::extractJson($message);
-        
         if (isset($messageInfo['type'])) {
             $connecter = ConnecterFactory::getConnection(PushServerHelper::unHash($messageInfo['type']));
             $connecter->setData($connection,$this->clients,$this->connectionList,$messageInfo,$from);

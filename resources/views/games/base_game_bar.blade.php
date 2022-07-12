@@ -14,13 +14,15 @@
             <a href="cham-soc-khach-hang{{Support::renderBackLinkParamater('win')}}" class="c-row item c-row-middle-center">
                 <img src="theme/frontend/img/audio.40994602.png" class="item-audio">
             </a>
-            <div class="c-row item c-row-middle-center" id="switch_audio" onclick="WINDLOAD.switchAudio(this)">
-                @if (isset($activeAudio))
-                <img src="theme/frontend/img/volume-up-line.png" class="item-volume">
-                @else
-                <img src="theme/frontend/img/volume-off-outline.png" class="item-volume">
-                @endif
-            </div>
+            @if (isset($gameName) && $gameName == 'wingo')
+                <div class="c-row item c-row-middle-center" id="switch_audio" onclick="WINDLOAD.switchAudio(this)">
+                    @if (isset($activeAudio))
+                        <img src="theme/frontend/img/volume-up-line.png" class="item-volume">
+                    @else
+                        <img src="theme/frontend/img/volume-off-outline.png" class="item-volume">
+                    @endif
+                </div>
+            @endif
         </div>
     </div>
 </div>

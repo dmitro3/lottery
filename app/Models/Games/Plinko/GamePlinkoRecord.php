@@ -10,4 +10,8 @@ use Exception;
 
 class GamePlinkoRecord extends BaseModel
 {
+    public function getTimeRemaining()
+    {
+        return $this->end_time - now()->timestamp;
+    }
 }
