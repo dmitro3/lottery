@@ -82,4 +82,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserLoginLog::class);
     }
+    public function rechargeRequest()
+    {
+        return $this->hasMany(RechargeRequest::class);
+    }
 }

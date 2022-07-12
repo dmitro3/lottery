@@ -43,14 +43,13 @@ Route::group([
         Route::get('/nap-tien', 'RechargeController@index');
         Route::get('/init-recharge-method', 'RechargeController@initRechargeMethod');
         Route::post('/send-direct-transfer-recharge', 'RechargeController@sendDirectTransferRecharge');
+        Route::get('/lich-su-nap-tien', 'RechargeController@rechargeHistory');
     });
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('cronmark', array('uses' => 'LearningPlayController@mark'));
     Route::get('cronimg', array('uses' => 'CronImgController@convertImg'));
     Route::get('cronmail', 'CronMailController@cronmail');
     Route::get('reset-email', 'CronMailController@reset');
-
-    Route::get('testhung', '\App\Http\Controllers\Games\GamePlinkoController@test');
 
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');
 });

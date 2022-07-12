@@ -93,3 +93,71 @@ body {
 .mian .menu-box .nav-muen .item .name{
     color: #2c3e50;
 }
+
+.infinite-load-item-module .in-loading{
+    text-align: center;
+    padding: 10px;
+}
+
+.loader-dot {
+    --animation-duration: 1500ms;
+}
+
+.loader-dot .loader-item {
+    --item-size: 10px;
+    width: var(--item-size);
+    height: var(--item-size);
+    display: inline-block;
+    margin: 0 3px;
+    border-radius: 50%;
+    background: #C4C4C4;
+    -webkit-animation: loadDot 1500ms ease-in-out infinite;
+    animation: loadDot 1500ms ease-in-out infinite;
+}
+@-webkit-keyframes loadDot {
+
+    0%,
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    50% {
+        -webkit-transform: scale(1.5);
+        transform: scale(1.5);
+    }
+}
+
+@keyframes loadDot {
+
+    0%,
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    50% {
+        -webkit-transform: scale(1.5);
+        transform: scale(1.5);
+    }
+}
+
+.loader-dot .loader-item:nth-child(1) {
+    -webkit-animation-delay: calc(var(--animation-duration) / 5 * -4);
+    animation-delay: calc(var(--animation-duration) / 5 * -4);
+}
+
+.loader-dot .loader-item:nth-child(2) {
+    -webkit-animation-delay: calc(var(--animation-duration) / 5 * -3);
+    animation-delay: calc(var(--animation-duration) / 5 * -3);
+}
+
+.loader-dot .loader-item:nth-child(3) {
+    -webkit-animation-delay: calc(var(--animation-duration) / 5 * -2);
+    animation-delay: calc(var(--animation-duration) / 5 * -2);
+}
+
+.loader-dot .loader-item:nth-child(4) {
+    -webkit-animation-delay: calc(var(--animation-duration) / 5 * -1);
+    animation-delay: calc(var(--animation-duration) / 5 * -1);
+}

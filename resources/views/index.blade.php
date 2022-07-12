@@ -33,6 +33,7 @@
 	{[CMS_FOOTER]}
 	<script src="theme/frontend/js/xhr.js" defer></script>
 	<script src="theme/frontend/js/sweetalert.min.js" defer></script>
+	<script src="theme/frontend/js/infinite-load.js" defer></script>
 	@yield('jsl')
 	<script src="theme/frontend/js/base.js" defer></script>
 	@yield('js')

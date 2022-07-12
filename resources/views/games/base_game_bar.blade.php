@@ -1,3 +1,18 @@
+@php
+    $backLink = '';
+    if (isset($gameName)) {
+        switch ($gameName) {
+            case 'wingo':
+                $backLink = 'win';
+                break;
+            case 'plinko':
+                $backLink = 'plinko';
+                break;
+            default:
+                break;
+        }
+    }
+@endphp
 <div class="navbar">
     <div class="navbar-left">
         <a href="/" class="c-row c-row-middle-center">
@@ -11,7 +26,7 @@
     </div>
     <div class="navbar-right">
         <div class="c-row navbarR">
-            <a href="cham-soc-khach-hang{{Support::renderBackLinkParamater('win')}}" class="c-row item c-row-middle-center">
+            <a href="cham-soc-khach-hang{{Support::renderBackLinkParamater($backLink)}}" class="c-row item c-row-middle-center">
                 <img src="theme/frontend/img/audio.40994602.png" class="item-audio">
             </a>
             @if (isset($gameName) && $gameName == 'wingo')
@@ -50,14 +65,14 @@
         </div>
         <div class="total-btn c-row c-row-between">
             <div class="item">
-                <a href="tai-khoan/rut-tien{{Support::renderBackLinkParamater('win')}}" class="btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(255, 206, 31); border-color: rgb(255, 206, 31);">
+                <a href="tai-khoan/rut-tien{{Support::renderBackLinkParamater($backLink)}}" class="btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(255, 206, 31); border-color: rgb(255, 206, 31);">
                     <div class="van-button__content">
                         <span class="van-button__text"> RÚT TIỀN </span>
                     </div>
                 </a>
             </div>
             <div class="item">
-                <a href="tai-khoan/nap-tien{{Support::renderBackLinkParamater('win')}}" class="btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(242, 65, 59); border-color: rgb(242, 65, 59);">
+                <a href="tai-khoan/nap-tien{{Support::renderBackLinkParamater($backLink)}}" class="btn van-button van-button--default van-button--normal van-button--block van-button--round" style="color: rgb(255, 255, 255); background: rgb(242, 65, 59); border-color: rgb(242, 65, 59);">
                     <div class="van-button__content">
                         <span class="van-button__text"> NẠP TIỀN </span>
                     </div>

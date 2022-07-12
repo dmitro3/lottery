@@ -47,7 +47,3 @@
     </div>
 </div>
 @endsection
-@section('js')
-@section('js')
-    <script src="theme/frontend/js/infinite-load.js" defer></script>
-@endsection

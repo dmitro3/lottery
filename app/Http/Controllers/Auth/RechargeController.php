@@ -120,4 +120,17 @@ class RechargeController extends Controller
             'html'      => view('auth.wallet.recharge_method.direct_transfer_done_result',compact('rechargeMethod','rechargeRequest','rechargeRequestDirectTransferBankInfo'))->render()
         ]);
     }
+    public function rechargeHistory()
+    {
+        if(!Auth::check()) return $this->goLogin();
+        $user = Auth::user();
+        $listItems = $user->rechargeRequest()->with('rechargeStatus')->paginate(20);
+        if (isset(request()->type) && request()->type == 'load_item') {
+            return response()->json([
+                'code' => 200,
+                'html' => view('auth.wallet.recharge_history_result',compact('user','listItems'))->render()
+            ]);
+        }
+        return view('auth.wallet.recharge_history',compact('user','listItems'));
+    }
 }
