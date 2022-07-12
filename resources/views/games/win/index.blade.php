@@ -1,5 +1,5 @@
 @php
-    use \realtimemodule\pushserver\Helpers\PushServerHelper;
+use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @endphp
 @extends('index')
 @section('css')
@@ -15,17 +15,16 @@
             <div class="tab">
                 <div class="box c-row">
                     @foreach ($listGameWinType as $key => $itemGameWinType)
-                        <div class="item c-tc{{$key == 0 ? ' action':''}}" data-id="{{PushServerHelper::generateHash($itemGameWinType->id)}}"  src-active="theme/frontend/img/icon_clock_active.png"
-                        src-disable="theme/frontend/img/icon_clock.png">
-                            <div class="circular c-row c-row-middle-center c-tc"><span class="li">?</span></div>
-                            <div class="img c-row c-row-center p-b-10">
-                                <div class="van-image" style="width: 30px; height: 30px;">
-                                    <img src="{{$key == 0 ? 'theme/frontend/img/icon_clock_active.png':'theme/frontend/img/icon_clock.png'}}" class="van-image__img">
-                                </div>
-                                <i class="triangle"></i>
+                    <div class="item c-tc{{$key == 0 ? ' action':''}}" data-id="{{PushServerHelper::generateHash($itemGameWinType->id)}}" src-active="theme/frontend/img/icon_clock_active.png" src-disable="theme/frontend/img/icon_clock.png">
+                        <div class="circular c-row c-row-middle-center c-tc"><span class="li">?</span></div>
+                        <div class="img c-row c-row-center p-b-10">
+                            <div class="van-image" style="width: 30px; height: 30px;">
+                                <img src="{{$key == 0 ? 'theme/frontend/img/icon_clock_active.png':'theme/frontend/img/icon_clock.png'}}" class="van-image__img">
                             </div>
-                            <div class="txt c-tc">{{Support::show($itemGameWinType,'name')}}</div>
+                            <i class="triangle"></i>
                         </div>
+                        <div class="txt c-tc">{{Support::show($itemGameWinType,'name')}}</div>
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -41,17 +40,16 @@
                         </div>
                     </div>
                     <div class="number-box action m-t-10 c-row c-row-between c-flex-warp">
-                        @for ($i = 0; $i < 10; $i++)
-                            <button type="button" class="item c-row c-row-middle-center m-b-10">
-                                <div class="number c-row c-row-middle-center"><span class="txt">{{$i}}</span></div>
+                        @for ($i = 0; $i < 10; $i++) <button type="button" class="item c-row c-row-middle-center m-b-10">
+                            <div class="number c-row c-row-middle-center"><span class="txt">{{$i}}</span></div>
                             </button>
-                        @endfor
+                            @endfor
                     </div>
                     <div class="c-row c-row-between random-box">
                         <button class="random" id="random-number-bet-btn" type="button">ngẫu<br>&nbsp;nhiên&nbsp;</button>
                         <div class="c-row">
                             @foreach ($listGameWinMultiple as $key => $itemGameWinMultiple)
-                                <div class="item{{$key == 0 ? ' active default':''}}" data-multiple="{{$itemGameWinMultiple->multiple}}">{{$itemGameWinMultiple->name}}</div>
+                            <div class="item{{$key == 0 ? ' active default':''}}" data-multiple="{{$itemGameWinMultiple->multiple}}">{{$itemGameWinMultiple->name}}</div>
                             @endforeach
                         </div>
                     </div>
@@ -96,5 +94,5 @@
 </div>
 @endsection
 @section('js')
-    <script src="theme/frontend/js/win.js" defer></script>
+<script src="theme/frontend/js/win.js" defer></script>
 @endsection

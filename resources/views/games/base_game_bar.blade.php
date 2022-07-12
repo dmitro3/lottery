@@ -15,10 +15,10 @@
                 <img src="theme/frontend/img/audio.40994602.png" class="item-audio">
             </a>
             <div class="c-row item c-row-middle-center" id="switch_audio" onclick="WINDLOAD.switchAudio(this)">
-                @if ($activeAudio)
-                    <img src="theme/frontend/img/volume-up-line.png" class="item-volume">
+                @if (isset($activeAudio))
+                <img src="theme/frontend/img/volume-up-line.png" class="item-volume">
                 @else
-                    <img src="theme/frontend/img/volume-off-outline.png" class="item-volume">
+                <img src="theme/frontend/img/volume-off-outline.png" class="item-volume">
                 @endif
             </div>
         </div>
