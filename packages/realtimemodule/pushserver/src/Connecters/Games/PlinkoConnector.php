@@ -13,6 +13,7 @@ use App\Models\Games\Plinko\GamePlinkoRecord;
 use App\Models\Games\Plinko\GamePlinkoType;
 use App\Models\Games\Plinko\GamePlinkoUserBet;
 use App\Models\Games\Plinko\GamePlinkoUserBetDetail;
+use App\Models\WalletTransactionType;
 use \realtimemodule\pushserver\Enums\Plinko\Status as PlinkoStatus;
 
 
@@ -48,16 +49,16 @@ class PlinkoConnector implements ConnecterInterface
             $this->connection['userTargetMessage'] = $userTargetMessage;
         }
         $action = $this->messageInfo['action'] ?? 0;
+
         switch ($action) {
             case PlinkoStatus::GAME_ACTION_GET_CURRENT_GAME_INFO:
                 return $this->getCurrentGameTypeInfo($action);
-                break;
             case PlinkoStatus::GAME_ACTION_DO_BET:
                 return $this->play($action);
-                break;
+            case PlinkoStatus::GAME_ACTION_RETRIEVE_RESULT:
+                return $this->retrieveResult($action);
             default:
                 return $this->connection;
-                break;
         }
         return $this->connection;
     }
@@ -99,7 +100,7 @@ class PlinkoConnector implements ConnecterInterface
             'qty' => 'Số lượng bóng',
         ]);
     }
-    public function play($action)
+    private function play($action)
     {
         $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
         $gameData = $this->messageInfo['gameData'] ?? null;
@@ -120,17 +121,39 @@ class PlinkoConnector implements ConnecterInterface
         }
 
         // kiểm tra tiền và trừ tiền user. A hưng chưa code !! Siêu quan trọng !! <<<<
+        $qty = (int) $gameData['qty'];
+        $type = (int) $gameData['type'];
+        $mode = $gameData['mode'];
+        $ball = BallType::getByValue($type);
+        $money = $ball->getBetAmount();
 
+        $totalMoney = $qty * $money;
+        $user =  $this->connection['userTargetMessage'];
+        if ($totalMoney > $user->getAmount()) {
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_NOT_ENOUGH_MONEY, false, 'Số tiền không đủ.'));
+            return $this->connection;
+        }
 
-        $bet = new GamePlinkoUserBet();
-        $bet->user_id = $user->id;
-        $bet->game_plinko_type_id = 1;
-        $bet->game_plinko_record_id = $currentGameRecord->id;
-        $bet->type = (int)$gameData['type'];
-        $bet->mode = $gameData['mode'];
-        $bet->qty = $gameData['qty'];
-        $bet->save();
+        $itemUserBet = GamePlinkoUserBet::toDatabase($user, $currentGameRecord, $type, $mode, $qty, $totalMoney);
+        $reason = vsprintf('Trừ tiền cược game Plinko. Phiên giao dịch %s.', [$currentGameRecord->id]);
+        $user->changeMoney(0 - $totalMoney, $reason, WalletTransactionType::MINUS_MONEY_BET_GAME_PLINKO, $itemUserBet->id);
+
         $this->from->send($this->buildResponse(200, true, 'Đặt hàng thành công!', [], $action));
+        return $this->connection;
+    }
+    private function retrieveResult($action)
+    {
+        $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
+        if (!isset($currentGameClientInfo)) {
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
+        }
+
+        $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
+        // Chỗ này ngáo vãi
+        $user = $this->connection['userTargetMessage'];
+        $games = GamePlinkoUserBetDetail::select('path', 'type')->where('game_plinko_record_id', $currentGameRecord->id)->where('user_id', $user->id)->get()->toArray();
+
+        $this->from->send($this->buildResponse(200, true, 'Đặt hàng thành công!', compact('games'), $action));
         return $this->connection;
     }
     private function buildResponse($code, $status, $message, $data = [], $action = null)

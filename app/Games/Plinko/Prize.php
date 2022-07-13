@@ -92,6 +92,7 @@ class Prize
                     $dataInserts[] = [
                         'game_plinko_type_id' => 1,
                         'game_plinko_record_id' => $currentGameRecordId,
+
                         'created_at' => now(),
                         'updated_at' => now(),
                         'type' => $kresultBag,
@@ -125,6 +126,7 @@ class Prize
             $details = GamePlinkoUserBetDetail::select('id')->where('game_plinko_record_id', $currentGameRecordId)->where('type', $type)->inRandomOrder()->limit($qty)->get();
             foreach ($details as $kdetail => $detail) {
                 $detail->user_id = $bet->user_id;
+                $detail->game_plinko_user_bet_id = $bet->id;
                 $detail->save();
             }
         }

@@ -18,4 +18,7 @@ class Status extends BaseEnum
 
     const GAME_ACTION_GET_CURRENT_GAME_INFO = 1;
     const GAME_ACTION_DO_BET = 2;
+
+
+    const GAME_ACTION_RETRIEVE_RESULT = 3;
 }

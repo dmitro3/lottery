@@ -71,7 +71,10 @@
     display: block;
     cursor: pointer;
 }
-
+.box_game .play:disabled{
+    filter:grayscale(1);
+    cursor: not-allowed;
+}
 .box_game .play:hover .btn-play-hover,
 .box_game .play:focus .btn-play-hover {
     opacity: 1;
@@ -306,4 +309,27 @@ input[type=number] {
 }
 .game-betting .tab .box:after{
     display: none;
+}
+.ready{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 90;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #484848cc;
+    color: #ffff;
+    flex-direction: column;
+}
+.ready .time{
+    font-size: 35px;
+    margin-bottom: 5px;
+}
+.ready .time .item{
+    margin: 0;
+    background: #eb383f;
+    padding: 3px 5px;
 }

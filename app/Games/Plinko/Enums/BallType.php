@@ -23,6 +23,18 @@ class BallType extends BaseEnum
         }
         return 0;
     }
+    public function getBetAmountText()
+    {
+        switch ($this->getValue()) {
+            case BallType::NORMAL:
+                return '1k';
+            case BallType::MID:
+                return '10k';
+            case BallType::HOT:
+                return '100k';
+        }
+        return 0;
+    }
     public function calcPrize($numBall, $bagValue)
     {
         return $numBall * $this->getBetAmount() * $bagValue;

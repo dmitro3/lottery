@@ -20,12 +20,14 @@ var _GAME_PLINKO = (function () {
             valueInput--;
             valueInput = Math.max(valueInput, min);
             inputQty.value = valueInput;
+            inputQty.dispatchEvent(new Event("input"));
         });
         plus.addEventListener("click", function () {
             let valueInput = parseInt(inputQty.value);
             valueInput++;
             valueInput = Math.min(valueInput, max);
             inputQty.value = valueInput;
+            inputQty.dispatchEvent(new Event("input"));
         });
     };
     var changeMode = function () {
@@ -51,7 +53,6 @@ var _GAME_PLINKO = (function () {
     return {
         _: function () {
             changeInput();
-            changeMode();
         },
     };
 })();
