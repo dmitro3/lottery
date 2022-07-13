@@ -1,8 +1,8 @@
 "use strict";
 
 var VALIDATE_FORM = ((options = {}) => {
-    let _colorMain = "#ff8888";
-    let _backgroundMain = "#3b3b3b";
+    let _colorMain = "#ffffff";
+    let _backgroundMain = "#f64841";
     let _color = _colorMain;
     let _colorBorder = _colorMain;
     let _colorBackground = _backgroundMain;

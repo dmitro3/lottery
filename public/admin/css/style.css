@@ -2302,10 +2302,10 @@ span.tooltiptext:after {
 table {
     border-collapse: collapse;
     border-radius: 5px;
-    border-style: hidden !important;
-    box-shadow: 0 0 0 1px #ebebeb;
 }
-
+.table-data-view{
+    width: calc(100% - 2px);
+}
 @media (max-width: 1500px) {
     .navigation span.txt {
         font-size: 14px;

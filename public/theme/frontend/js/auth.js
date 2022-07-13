@@ -62,5 +62,14 @@ var ACCOUNT_GUI = {
             }, 1000);
         }
     },
+    createUserBankDone(data) {
+        if (data.message) {
+            BASE_GUI.createFlashNotify(data.message);
+        }
+        if (data.code == 200) {
+            setTimeout(() => {
+                window.location.href = data.back_link;
+            }, 1000);
+        }
+    },
 };
-window.addEventListener("DOMContentLoaded", function () {});

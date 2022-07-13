@@ -4,12 +4,13 @@
     $has_copy = $tableData->get('has_copy', '') == 1;
     $has_trash = $tableData->get('has_trash', '') == 1;
     $has_history = $tableData->get('has_history', '') == 1;
+    $actions = config('sys_action.'.FCHelper::ep($tableData,'table_map'),false);
 @endphp
 <div class="pagination">
     <span class="total">{{ trans('db::number_record') }}: <strong>{{ $listData->total() }}</strong></span>
     {{ $listData->withQueryString()->links('vh::vendor.pagination.pagination') }}
 </div>
-<div id="no-more-tables" class="row m0">
+<div id="no-more-tables">
     <div class="tablecontrol none">
         <a class="_vh_action_all btn bg-red-400 text-white" data-confirm="Bạn có thực sự muốn xóa?" href="{{ $admincp }}/deleteAll/{{ $tableData->get('table_map', '') }}" title="{{ trans('db::delete_all') }} {{ $tableData->get('name', '') }}">
         <i class="fa fa-trash" aria-hidden="true"></i> {{ trans('db::delete_all') }}
@@ -29,7 +30,7 @@
         });
     </script>
     <div class="main_table double-scroll">
-        <table class="col-md-12 table-bordered table-striped table-condensed cf p0 table-data-view">
+        <table class="table-bordered table-striped table-condensed cf p0 table-data-view">
             <thead class="cf">
                 <tr>
                     @if ($has_delete)
@@ -59,16 +60,16 @@
                             </th>
                         @endif
                     @endforeach
-                    @if ($has_delete || $has_update || $has_copy || $has_trash || $has_history)
+                    @if ($has_delete || $has_update || $has_copy || $has_trash || $has_history || $actions)
                         <th>Chức năng</th>
                     @endif
                 </tr>
             </thead>
             <tbody>
-                <?php $urlFull = base64_encode(Request::fullUrl()); ?>
+                <?php $urlFull = rawurlencode(base64_encode(Request::fullUrl())); ?>
                 @for ($i = 0; $i < $listData->count(); $i++)
                     <?php $itemMain = $listData->get($i); ?>
-                    <tr>
+                    <tr class="{{$has_update ? 'row-item-main':''}}" dt-id="{{ $has_update ? FCHelper::ep($itemMain, 'id') :''}}">
                         @if ($has_delete)
                             <td data-title="#">
                                 <div class="squaredTwo">
@@ -91,14 +92,10 @@
                                 @include($viewView,array('item'=>$show,'dataItem'=>$itemMain))
                             @endif
                         @endforeach
-
-                        @php
-                            $actions = config('sys_action.'.FCHelper::ep($tableData,'table_map'));
-                        @endphp
-                        @if ($has_delete || $has_copy || $has_update || $has_trash || $has_history || !is_null($actions))
+                        @if ($has_copy || $has_update || $has_trash || $has_history || $has_delete || $actions)
                             <td data-title="{{ trans('db::function') }}" style="min-width: 130px;"
                                 class="action">
-                                @if(!is_null($actions))
+                                @if($actions && is_array($actions))
                                     @foreach($actions as $action)
                                         @include('vh::table.action_button')
                                     @endforeach
@@ -149,6 +146,11 @@
                         @endif
                     </tr>
                 @endfor
+                @if($listData->count() == 0)
+                    <tr>
+                        <td colspan="100%">Chưa có dữ liệu!</td>
+                    </tr>
+                @endif
             </tbody>
         </table>
     </div>

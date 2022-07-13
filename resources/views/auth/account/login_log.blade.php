@@ -1,3 +1,6 @@
+@php
+    use App\Models\UserLoginLog;
+@endphp
 @extends('index')
 @section('css')
     <link rel="stylesheet" href="theme/frontend/css/wallet.css">
@@ -32,6 +35,9 @@
                     <div class="pagination-hidden-box" style="display: none">
                         {{$listItems->withQueryString()->links('vendors.pagination')}}
                     </div>
+                    @if (count($listItems) < UserLoginLog::PAGINATION_NUMBER)
+                        <div class="van-list__finished-text">Không còn nữa</div>
+                    @endif
                 @else
                     <div class="p-t-5 p-b-5">
                         <div class="van-empty">

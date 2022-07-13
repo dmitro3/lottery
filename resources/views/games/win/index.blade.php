@@ -94,5 +94,5 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 </div>
 @endsection
 @section('js')
-<script src="theme/frontend/js/win.js" defer></script>
+    <script src="theme/frontend/js/win.js" defer></script>
 @endsection

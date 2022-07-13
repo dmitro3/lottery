@@ -58,13 +58,15 @@ class RechargeController extends Controller
     }
     protected function validatorSendDirectTransfer(array $data)
     {
+        $minRechargeMoney = (int)\SettingHelper::getSetting('min_recharge_money',50000);
+        $maxRechargeMoney = (int)\SettingHelper::getSetting('max_recharge_money',1000000000);
         return Validator::make($data, [
-            'amount' => ['required','numeric','min:50000','max:1000000000'],
+            'amount' => ['required','numeric','min:'.$minRechargeMoney,'max:'.$maxRechargeMoney],
         ], [
             'required' => 'Vui lòng nhập :attribute',
             'amount.numeric' => 'Vui lòng nhập số tiền ở dạng số nguyên',
-            'amount.min' => 'Số tiền chuyển khoản tối thiểu 50.000 đ',
-            'amount.max' => 'Số tiền chuyển khoản tối đa 1000.000.000 đ',
+            'amount.min' => 'Số tiền chuyển khoản tối thiểu '.number_format($minRechargeMoney,0,',','.').' đ',
+            'amount.max' => 'Số tiền chuyển khoản tối đa '.number_format($maxRechargeMoney,0,',','.').' đ',
         ], [
             'amount' => 'Số tiền',
         ]);
@@ -103,6 +105,9 @@ class RechargeController extends Controller
         $rechargeRequest->amount = $request->amount;
         $rechargeRequest->recharged = 0;
         $rechargeRequest->save();
+        $rechargeRequestCode = $now->year.$now->month.$now->day.time().sprintf('%s%05s','',$rechargeRequest->id);
+        $rechargeRequest->code = $rechargeRequestCode;
+        $rechargeRequest->save();
 
         $rechargeRequestDirectTransferBankInfo = new RechargeRequestDirectTransferBankInfo;
         $rechargeRequestDirectTransferBankInfo->recharge_request_id = $rechargeRequest->id;
@@ -124,7 +129,7 @@ class RechargeController extends Controller
     {
         if(!Auth::check()) return $this->goLogin();
         $user = Auth::user();
-        $listItems = $user->rechargeRequest()->with('rechargeStatus')->paginate(20);
+        $listItems = $user->rechargeRequest()->with('rechargeStatus')->orderBy('id','desc')->paginate(RechargeRequest::PAGINATION_NUMBER);
         if (isset(request()->type) && request()->type == 'load_item') {
             return response()->json([
                 'code' => 200,

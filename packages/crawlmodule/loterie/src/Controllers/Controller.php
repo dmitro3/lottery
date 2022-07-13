@@ -43,6 +43,9 @@ class Controller extends BaseController
     }
     public function urlExists($url){
         $headers = @get_headers($url);
+        if (!is_array($headers)) {
+            return false;
+        }
         return stripos($headers[0],"200 OK")?true:false;
     }
 }

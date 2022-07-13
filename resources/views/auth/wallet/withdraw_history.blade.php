@@ -1,5 +1,5 @@
 @php
-    use App\Models\RechargeRequest;
+    use App\Models\WithdrawalRequest;
 @endphp
 @extends('index')
 @section('css')
@@ -14,7 +14,7 @@
                     <img src="theme/frontend/images/back.c3244ab0.png" class="navbar-back">
                 </a>
             </div>
-            <div class="navbar-title">Lịch sử nạp tiền</div>
+            <div class="navbar-title">Lịch sử rút tiền</div>
             <div class="navbar-right"></div>
         </div>
         <div class="box">
@@ -32,14 +32,14 @@
                                     </div>
                                     <div >
                                         <div class="money m-b-10 m-t-10">
-                                            <span style="color: {{Support::show($item->rechargeStatus,'color')}};"> {{number_format($item->amount,0,',','.')}} đ</span>
+                                            <span style="color: {{Support::show($item->withdrawalRequestStatus,'color')}};"> {{number_format($item->amount,0,',','.')}} đ</span>
                                         </div>
                                     </div>
                                     <div class="time">{{Support::showDateTime($item->created_at,'Y/m/d H:i:s')}}</div>
                                 </div>
                                 <div >
                                     <div class="state m-b-5">
-                                        <span style="color: {{Support::show($item->rechargeStatus,'color')}};">{{Support::show($item->rechargeStatus,'name')}}</span>
+                                        <span style="color: {{Support::show($item->withdrawalRequestStatus,'color')}};">{{Support::show($item->withdrawalRequestStatus,'name')}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
                         <div class="pagination-hidden-box" style="display: none">
                             {{$listItems->withQueryString()->links('vendors.pagination')}}
                         </div>
-                        @if (count($listItems) < RechargeRequest::PAGINATION_NUMBER)
+                        @if (count($listItems) < WithdrawalRequest::PAGINATION_NUMBER)
                             <div class="van-list__finished-text">Không còn nữa</div>
                         @endif
                     @else

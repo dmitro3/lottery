@@ -123,7 +123,7 @@ BASE_GUI = {
             if (autoHide) {
                 setTimeout(() => {
                     elementFlashNotify.remove();
-                }, 1500);
+                }, 2500);
             }
         }
     },
@@ -231,6 +231,45 @@ BASE_GUI = {
                     }, 1500);
                 }
             }
+        });
+    },
+    copyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.style.position = "fixed";
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = "2em";
+        textArea.style.height = "2em";
+        textArea.style.padding = 0;
+        textArea.style.border = "none";
+        textArea.style.outline = "none";
+        textArea.style.boxShadow = "none";
+        textArea.style.background = "transparent";
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            var successful = document.execCommand("copy");
+            if (successful) {
+                BASE_GUI.createFlashNotify("Sao chép thành công");
+            }
+            document.body.removeChild(textArea);
+            return true;
+        } catch (err) {
+            document.body.removeChild(textArea);
+            return false;
+        }
+    },
+    initCopyTextbtn() {
+        var listCopyTextBtn = document.querySelectorAll(".copy-text-btn");
+        listCopyTextBtn.forEach((element) => {
+            element.onclick = function () {
+                var text = this.getAttribute("data-clipboard-text");
+                if (text) {
+                    BASE_GUI.copyTextToClipboard(text);
+                }
+            };
         });
     },
 };

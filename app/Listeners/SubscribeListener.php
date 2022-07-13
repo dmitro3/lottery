@@ -4,7 +4,9 @@ use App\Models\{
     RechargeRequest,
     RechargeStatus,
     RechargeMethod,
-    WalletTransactionType
+    WalletTransactionType,
+    WithdrawalRequest,
+    WithdrawalRequestStatus
 };
 class SubscribeListener
 {
@@ -18,6 +20,9 @@ class SubscribeListener
             }
             if ($tbl == 'recharge_requests') {
                 $this->updateRechargeRequests($table, $data, $id , $oldData);
+            }
+            if ($tbl == 'withdrawal_requests') {
+                $this->updateWithdrawalRequests($table, $data, $id , $oldData);
             }
         });
     }
@@ -44,6 +49,30 @@ class SubscribeListener
                 }
                 $itemRechargeRequest->save();
             }
+        }
+    }
+    public function updateWithdrawalRequests($table, $data, $id , $oldData)
+    {
+        if (!isset($data) || !isset($data['withdrawal_request_status_id'])) return;
+        $itemWithdrawalRequest = WithdrawalRequest::whereHas('user')->with('user')->find($id);
+        if (!isset($itemWithdrawalRequest)) return;
+
+        if ($itemWithdrawalRequest->status_changed == 1) {
+            $itemWithdrawalRequest->withdrawal_request_status_id = $oldData->withdrawal_request_status_id;
+            $itemWithdrawalRequest->save();
+        }else{
+            if ($data['withdrawal_request_status_id'] == $oldData->withdrawal_request_status_id) return;
+            if ($data['withdrawal_request_status_id'] == WithdrawalRequestStatus::STATUS_CANCEL) {
+                $user = $itemWithdrawalRequest->user;
+                $reason = 'Hoàn tiền khi hủy yêu cầu rút tiền';
+                $user->changeMoney($itemWithdrawalRequest->amount,$reason,WalletTransactionType::REFUND_CANCEL_WITHDRAWAL_REQUEST,$itemWithdrawalRequest->id);
+            }
+            $itemWithdrawalRequest->status_changed = 1;
+            $itemWithdrawalRequest->status_changed_at = now();
+            if (\Auth::guard('h_users')->check()) {
+                $itemWithdrawalRequest->h_user_id = \Auth::guard('h_users')->id();
+            }
+            $itemWithdrawalRequest->save();
         }
     }
 }

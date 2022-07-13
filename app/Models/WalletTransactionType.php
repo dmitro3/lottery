@@ -8,4 +8,5 @@ class WalletTransactionType extends BaseModel
     const WITHDRAW_MONEY = 2;
     const MINUS_MONEY_BET_GAME_GOWIN = 3;
     const PLUS_MONEY_WIN_GAME_GOWIN = 4;
+    const REFUND_CANCEL_WITHDRAWAL_REQUEST = 5;
 }

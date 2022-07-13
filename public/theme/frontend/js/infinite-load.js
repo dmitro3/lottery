@@ -15,7 +15,15 @@ class infiniteLoadBox {
     constructor(element) {
         _defineProperty(this, "element", void 0);
         _defineProperty(this, "io", void 0);
+        _defineProperty(this, "initFunc", void 0);
+        _defineProperty(this, "loadSuccessFunc", void 0);
         this.element = element;
+        this.initFunc = this.element.dataset.init;
+        this.loadSuccessFunc = this.element.dataset.success;
+        console.log(this);
+        if (this.initFunc && this.initFunc != "") {
+            this.callFunction(this.initFunc);
+        }
         this.initLoadAction();
         return this;
     }
@@ -61,6 +69,9 @@ class infiniteLoadBox {
             _this.endLoad();
             if (res.code == 200 && res.html) {
                 this.element.insertAdjacentHTML("beforeend", res.html);
+                if (this.loadSuccessFunc && this.loadSuccessFunc != "") {
+                    this.callFunction(this.loadSuccessFunc);
+                }
             }
         });
     }
@@ -81,6 +92,27 @@ class infiniteLoadBox {
         var loaddingIcon = this.element.querySelector(".in-loading");
         if (loaddingIcon) {
             loaddingIcon.remove();
+        }
+    }
+    callFunction(func, data) {
+        var arrayFunc = func.split(".");
+        if (arrayFunc.length === 1) {
+            var func = arrayFunc[0];
+            return (
+                null != window[func] &&
+                typeof window[func] === "function" &&
+                window[func](data)
+            );
+        } else if (arrayFunc.length === 2) {
+            var obj = arrayFunc[0];
+            func = arrayFunc[1];
+            return (
+                window[obj] != null &&
+                typeof window[obj] === "object" &&
+                null != window[obj][func] &&
+                typeof window[obj][func] === "function" &&
+                window[obj][func](data)
+            );
         }
     }
 }

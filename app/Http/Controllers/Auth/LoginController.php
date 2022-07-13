@@ -64,7 +64,7 @@ class LoginController extends Controller
         if ($validator->fails()) {
             return \Support::response([
                 'code' => 100,
-                'message' => $validator->errors(),
+                'message' => $validator->errors()->first(),
             ]);
         }
 

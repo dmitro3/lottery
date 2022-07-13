@@ -86,4 +86,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(RechargeRequest::class);
     }
+    public function userBank()
+    {
+        return $this->hasMany(UserBank::class);
+    }
+    public function withdrawalRequest()
+    {
+        return $this->hasMany(WithdrawalRequest::class);
+    }
 }

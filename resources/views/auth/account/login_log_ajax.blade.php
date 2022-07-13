@@ -1,3 +1,6 @@
+@php
+    use App\Models\UserLoginLog;
+@endphp
 @if (count($listItems) > 0)
     @foreach ($listItems as $item)
         <div class="item c-row c-row-between">
@@ -14,6 +17,6 @@
         {{$listItems->withQueryString()->links('vendors.pagination')}}
     </div>
 @endif
-@if (count($listItems) < 20)
+@if (count($listItems) < UserLoginLog::PAGINATION_NUMBER)
     <div class="van-list__finished-text">Không còn nữa</div>
 @endif

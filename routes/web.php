@@ -35,6 +35,8 @@ Route::group([
         Route::get('/', 'AccountController@account');
         Route::match(['GET', 'POST'], '/trang-ca-nhan', 'AccountController@profile');
         Route::get('/nhat-ky-dang-nhap', 'AccountController@loginLog');
+        Route::get('/them-tai-khoan-ngan-hang', 'AccountController@addBankAccount');
+        Route::post('/send-add-bank-account', 'AccountController@sendAddBankAccount');
 
         // Ví
         Route::get('/vi-cua-toi', 'WalletController@index');
@@ -44,6 +46,11 @@ Route::group([
         Route::get('/init-recharge-method', 'RechargeController@initRechargeMethod');
         Route::post('/send-direct-transfer-recharge', 'RechargeController@sendDirectTransferRecharge');
         Route::get('/lich-su-nap-tien', 'RechargeController@rechargeHistory');
+        
+        // Rút tiền
+        Route::get('/rut-tien', 'WithdrawController@index');
+        Route::post('/send-withdraw-request', 'WithdrawController@sendWithdrawRequest');
+        Route::get('/lich-su-rut-tien', 'WithdrawController@withdrawHistory');
     });
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('cronmark', array('uses' => 'LearningPlayController@mark'));

@@ -369,38 +369,46 @@ _VH_CATE.initReactWithParent = function() {
     });
 }
 
-_VH_CATE.setUpAjaxEditable = function() {
-    $(document).on('dblclick', 'input.editable', function(event) {
+_VH_CATE.setUpAjaxEditable = function () {
+    $(document).on("dblclick", "input.editable", function (event) {
         event.preventDefault();
         $(this).prop("disabled", false);
         $(this).focus();
     });
-    $(document).on('keypress', 'input.editable', function(event) {
+    $(document).on("keypress", "input.editable", function (event) {
         if (event.which == 13) {
             $(this).focusout();
         }
-
     });
-    $(document).on('focusout', 'input.editable', function(event) {
+    $(document).on("focusout", "input.editable", function (event) {
         event.preventDefault();
         var disabled = $(this).prop("disabled");
         if (!disabled) {
             $(this).prop("disabled", true);
-            var _id = $(this).parent().parent().find('input.one').attr('dt-id');
-            _VH_CATE.submitEditable($(this).attr('name'), $(this).val(), _id, this);
+            var _id = $(this).closest(".row-item-main").attr("dt-id");
+            _VH_CATE.submitEditable(
+                $(this).attr("name"),
+                $(this).val(),
+                _id,
+                this
+            );
         }
     });
-    $(document).on('change', 'input.editable[type=checkbox]', function(event) {
+    $(document).on("change", "input.editable[type=checkbox]", function (event) {
         event.preventDefault();
-        var _id = $(this).parent().parent().find('input.one').attr('dt-id');
-        _VH_CATE.submitEditable($(this).attr('name'), $(this).is(':checked') ? 1 : 0, _id, this);
+        var _id = $(this).closest(".row-item-main").attr("dt-id");
+        _VH_CATE.submitEditable(
+            $(this).attr("name"),
+            $(this).is(":checked") ? 1 : 0,
+            _id,
+            this
+        );
     });
-    $(document).on('change', 'select.editable', function(event) {
-        var _id = $(this).parent().parent().find('input.one').attr('dt-id');
-        _VH_CATE.submitEditable($(this).attr('name'), $(this).val(), _id, this);
+    $(document).on("change", "select.editable", function (event) {
+        var _id = $(this).closest(".row-item-main").attr("dt-id");
+        _VH_CATE.submitEditable($(this).attr("name"), $(this).val(), _id, this);
     });
-}
-
+};
 _VH_CATE.submitEditable = function(control, value, _id, _this) {
     var _obj = {};
     _obj[control] = value;
