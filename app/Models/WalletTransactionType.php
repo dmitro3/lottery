@@ -17,4 +17,5 @@ class WalletTransactionType extends BaseModel
 
 
     const MINUS_MONEY_BET_GAME_PLINKO = 10;
+    const PLUS_MONEY_BET_GAME_PLINKO = 11;
 }

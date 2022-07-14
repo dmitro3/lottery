@@ -38,18 +38,14 @@ class GamePlinkoController extends BaseGameController
     // }
     public function test()
     {
-        // $games = GamePlinkoUserBetDetail::select('path', 'type')->get()->toArray();
-        // dd($games);
-        $bets = GamePlinkoRecord::find(2022071310981)->gamePlinkoUserBets()->get();
-        foreach ($bets as $k => $bet) {
-            $x = $bet->gamePlinkoUserBetDetails()->get();
-            dd($x);
-        }
+        $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
+        $userBet = $currentGameRecord->gamePlinkoUserBets()->select('id')->where('user_id', 4)->where('is_returned', 0)->orderBy('id', 'desc')->first();
+        dd($userBet);
     }
     public function getGameHistory($request)
     {
         $user = \Auth::user();
-        $listItems =  GamePlinkoUserBetDetail::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(10);
+        $listItems =  GamePlinkoUserBet::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(10);
 
 
         return response()->json([

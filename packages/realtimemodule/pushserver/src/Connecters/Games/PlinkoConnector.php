@@ -134,7 +134,7 @@ class PlinkoConnector implements ConnecterInterface
             return $this->connection;
         }
 
-        $itemUserBet = GamePlinkoUserBet::toDatabase($user, $currentGameRecord, $type, $mode, $qty, $totalMoney);
+        $itemUserBet = GamePlinkoUserBet::toDatabase($user, $currentGameRecord, $ball, $mode, $qty, $totalMoney);
         $reason = vsprintf('Trừ tiền cược game Plinko. Phiên giao dịch %s.', [$currentGameRecord->id]);
         $user->changeMoney(0 - $totalMoney, $reason, WalletTransactionType::MINUS_MONEY_BET_GAME_PLINKO, $itemUserBet->id);
 
@@ -148,12 +148,16 @@ class PlinkoConnector implements ConnecterInterface
             $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
         }
 
-        $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
-        // Chỗ này ngáo vãi
         $user = $this->connection['userTargetMessage'];
-        $games = GamePlinkoUserBetDetail::select('path', 'type')->where('game_plinko_record_id', $currentGameRecord->id)->where('user_id', $user->id)->get()->toArray();
 
-        $this->from->send($this->buildResponse(200, true, 'Đặt hàng thành công!', compact('games'), $action));
+        $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
+        $userBet = $currentGameRecord->gamePlinkoUserBets()->where('user_id', $user->id)->where('is_returned', 0)->orderBy('id', 'desc')->first();
+        if ($userBet) {
+            $games = $userBet->gamePlinkoUserBetDetails()->select('path', 'type')->orderBy('zigzag', 'desc')->get()->toArray();
+            $userBet->is_returned = 1;
+            $userBet->save();
+            $this->from->send($this->buildResponse(200, true, 'Đặt hàng thành công!', compact('games'), $action));
+        }
         return $this->connection;
     }
     private function buildResponse($code, $status, $message, $data = [], $action = null)

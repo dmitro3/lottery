@@ -86,13 +86,12 @@ class Prize
                 $bag = Bag::$kbag();
                 $bagIndexs = $bag->getBagIndexs();
                 $size = $numBall * 5;
-                $paths = GamePlinkoPath::select('id', 'start', 'dest', 'path')->whereIn('start', $startPoints)->whereIn('dest', $bagIndexs)->inRandomOrder()->limit($size)->get();
+                $paths = GamePlinkoPath::select('id', 'start', 'dest', 'path', 'zigzag')->whereIn('start', $startPoints)->whereIn('dest', $bagIndexs)->inRandomOrder()->limit($size)->get();
                 for ($i = 0; $i < $numBall; $i++) {
                     $path = $paths->random(1)->first();
                     $dataInserts[] = [
                         'game_plinko_type_id' => 1,
                         'game_plinko_record_id' => $currentGameRecordId,
-
                         'created_at' => now(),
                         'updated_at' => now(),
                         'type' => $kresultBag,
@@ -101,7 +100,8 @@ class Prize
                         'dest' => $path->dest,
                         'game_plinko_path_id' => $path->id,
                         'bag_name' => $kbag,
-                        'bag_value' => $bagValue
+                        'bag_value' => $bagValue,
+                        'zigzag' => $path->zigzag
                     ];
                     $count++;
                     if ($count % 200 == 0) {

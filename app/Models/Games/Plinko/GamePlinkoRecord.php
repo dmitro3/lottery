@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\BaseModel;
 use App\Models\WalletTransactionType;
 use App\Games\GoWin\Factories\MiniGameFactory;
+use App\Games\Plinko\Enums\BallType;
 use Exception;
 
 class GamePlinkoRecord extends BaseModel
@@ -24,41 +25,31 @@ class GamePlinkoRecord extends BaseModel
         if ($this->is_end == 1) {
             return false;
         }
-        $bets = $this->gamePlinkoUserBets()->get();
+        $bets = $this->gamePlinkoUserBets()->where('game_win_user_bet_status_id', GamePlinkoUserBet::STATUS_WAIT_RESULT)->with('user')->get();
         foreach ($bets as $k => $bet) {
+            $type = (int)$bet->type;
+            $ball = BallType::getByValue($type);
+            $baseAmount = $ball->getBetAmount();
             $total = 0;
-            $details = $bet->gamePlinkoUserBetDetails()->with('user')->get();
+            $details = $bet->gamePlinkoUserBetDetails()->get();
             foreach ($details as $kdetail => $detail) {
-                
+                $amount = $baseAmount * 1;
+                $bagValue = $detail->bag_value;
+                $subtotal = $bagValue * $amount;
+                $total += $subtotal;
+                $detail->is_checked = 1;
+                $detail->amount_base = $baseAmount;
+                $detail->amount = $amount;
+                $detail->return_amount = $subtotal;
+                $detail->save();
             }
-            
+            $bet->game_win_user_bet_status_id = GamePlinkoUserBet::STATUS_FINISH;
+            $bet->return_amount = $total;
+            $bet->save();
+            $user = $bet->user;
+            $reason = vsprintf('Cộng tiền thắng game Plinko. Phiên giao dịch %s.', [$this->id]);
+            $user->changeMoney($total, $reason, WalletTransactionType::PLUS_MONEY_BET_GAME_PLINKO, $bet->id);
         }
-        // $listUserBet = $this->gameWinUserBet()
-        //     ->whereHas('user')
-        //     ->with('user')
-        //     ->where('game_win_user_bet_status_id', GameWinUserBetStatus::STATUS_WAIT_RESULT)
-        //     ->where('is_returned', 0)
-        //     ->get();
-        // foreach ($listUserBet as $itemUserBet) {
-        //     $miniGame = MiniGameFactory::getMiniGame($itemUserBet->mini_game);
-        //     if (!isset($miniGame)) {
-        //         continue;
-        //     }
-        //     $miniGame->setValue($itemUserBet->select_value);
-        //     if ($miniGame->isWin($this->win_number)) {
-        //         $amountReturnUser = $miniGame->calculationAmountWin($this->win_number, $itemUserBet['amount']);
-        //         $user = $itemUserBet->user;
-        //         $reason = vsprintf('Cộng tiền thắng game GoWin. Phiên giao dịch %s %s.', [$this->id, isset($this->gameWinType) ? '(' . $this->gameWinType->name . ')' : '']);
-        //         $user->changeMoney($amountReturnUser, $reason, WalletTransactionType::PLUS_MONEY_WIN_GAME_GOWIN, $itemUserBet->id);
-        //         $itemUserBet->return_amount = $amountReturnUser;
-        //         $itemUserBet->is_returned = 1;
-        //         $itemUserBet->game_win_user_bet_status_id = GameWinUserBetStatus::STATUS_WIN;
-        //         $itemUserBet->save();
-        //     } else {
-        //         $itemUserBet->game_win_user_bet_status_id = GameWinUserBetStatus::STATUS_LOSE;
-        //         $itemUserBet->save();
-        //     }
-        // }
         $this->is_end = 1;
         $this->save();
     }
