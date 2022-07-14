@@ -37,6 +37,11 @@ Route::group([
         Route::get('/nhat-ky-dang-nhap', 'AccountController@loginLog');
         Route::get('/them-tai-khoan-ngan-hang', 'AccountController@addBankAccount');
         Route::post('/send-add-bank-account', 'AccountController@sendAddBankAccount');
+        Route::get('/lich-su-giao-dich', 'AccountController@transactionHistory');
+        Route::get('/lich-su-cuoc', 'AccountController@betHistory');
+
+        Route::get('/wingo-bet-history ', 'AccountController@wingoBetHistory');
+        Route::get('/plinko-bet-history ', 'AccountController@plinkoBetHistory');
 
         // Ví
         Route::get('/vi-cua-toi', 'WalletController@index');

@@ -14,6 +14,15 @@
                 <span class="name {{isset($activeTab) && $activeTab == 'home' ? 'action':''}}">TRANG CHỦ</span>
             </div>
         </a>
+        <a href="tai-khoan/marketing" class="van-tabbar-item {{isset($activeTab) && $activeTab == 'marketing' ? 'van-tabbar-item--active':''}}">
+            <div class="van-tabbar-item__icon"></div>
+            <div class="van-tabbar-item__text">
+                <div class="muan">
+                    <img src="theme/frontend/images/invite.90e0a700.png" class="img">
+                </div>
+                <span class="name">TIẾP THỊ</span>
+            </div>
+        </a>
         <a href="tai-khoan/vi-cua-toi" class="van-tabbar-item {{isset($activeTab) && $activeTab == 'wallet' ? 'van-tabbar-item--active':''}}">
             <div class="van-tabbar-item__icon">
             </div>

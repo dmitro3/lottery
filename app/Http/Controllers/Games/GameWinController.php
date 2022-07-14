@@ -76,6 +76,7 @@ class GameWinController extends BaseGameController
             return response()->json(['code'=>100]);
         }
         $user = \Auth::user();
+        $type = $request->type ?? 'normal';
         $listItems = GameWinUserBet::where('user_id',$user->id)
                                     ->with('gameWinUserBetStatus')
                                     ->where('game_win_type_id',$gameWinType->id)
@@ -83,7 +84,12 @@ class GameWinController extends BaseGameController
                                     ->paginate(10);
         return response()->json([
             'code' => 200,
-            'html' => view('games.win.history_results.user_bet_history',compact('listItems'))->render()
+            'html' => view('games.win.history_results.user_bet_history',compact('listItems','type'))->render()
         ]);
+    }
+    public function betHistoryWingo()
+    {   
+        $listGameWinType = GameWinType::where('act',1)->orderBy('ord','asc')->get();
+        return view('games.win.user_bet_history_all',compact('listGameWinType'));
     }
 }

@@ -43,7 +43,7 @@
             @if(isset($history_table_name) || ($tableData->get('table_map', '') == 'h_histories' && isset(request()->raw_table_name) && in_array(request()->raw_table_name,$arrayIncludesHistory) ))
                 <a class="refresh ms-2" href="{{ url('esystem/history/'.($history_table_name ?? request()->raw_table_name ).'/0')  }}"><i class="fa fa-refresh" aria-hidden="true"></i></a>
             @else
-                <a class="refresh ms-2" href="{{ url('esystem/view/' . $tableData['table_map'] . (isset($key) ? '?tab=' . $key : '')) }}"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                <a class="refresh ms-2" href="{{ url('esystem/view/' . $tableData['table_map'] . (request()->input('tab', false) ? '?tab=' . request()->input('tab') : '')) }}"><i class="fa fa-refresh" aria-hidden="true"></i></a>
             @endif
         </div>
         <div class="filter-table__bottom">

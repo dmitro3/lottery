@@ -162,4 +162,60 @@ class AccountController extends Controller
             'back_link' => $request->back_link ?? 'tai-khoan/rut-tien?'
         ]);
     }
+    public function transactionHistory ()
+    {
+        if(!Auth::check()) return $this->goLogin();
+        $user = Auth::user();
+        $userWaller = $user->getWallet();
+        $listItems = $userWaller->walletHistory()
+                                ->with('walletTransactionType')
+                                ->orderBy('id','desc')
+                                ->paginate(20);
+        if (isset(request()->type) && request()->type == 'load_item') {
+            return response()->json([
+                'code' => 200,
+                'html' => view('auth.account.transaction_history_ajax',compact('user','listItems'))->render()
+            ]);
+        }
+        return view('auth.account.transaction_history',compact('user','listItems'));
+    }
+    public function betHistory()
+    {
+        if(!Auth::check()) return $this->goLogin();
+        $user = Auth::user();
+        return view('auth.account.bet_history',compact('user'));
+    }
+    public function wingoBetHistory()
+    {
+        if(!Auth::check()) return $this->goLogin();
+        $user = Auth::user();
+        $listItems = $user->gameWinUserBet()
+                        ->with('gameWinUserBetStatus','gameWinType')
+                        ->orderBy('id','desc')
+                        ->paginate(20);
+        $type = 'normal';
+        if (isset(request()->type) && request()->type == 'load_item') {
+            $type = 'load_item';
+        }
+        return response()->json([
+            'code' => 200,
+            'html' => view('auth.account.wingo_bet_history_result',compact('user','listItems','type'))->render()
+        ]);
+    }
+    public function plinkoBetHistory()
+    {
+        if(!Auth::check()) return $this->goLogin();
+        $user = Auth::user();
+        $listItems = $user->gamePlinkoUserBet()
+                        ->orderBy('id','desc')
+                        ->paginate(20);
+        $type = 'normal';
+        if (isset(request()->type) && request()->type == 'load_item') {
+            $type = 'load_item';
+        }
+        return response()->json([
+            'code' => 200,
+            'html' => view('auth.account.plinko_bet_history_result',compact('user','listItems','type'))->render()
+        ]);
+    }
 }

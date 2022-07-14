@@ -91,5 +91,7 @@
 		Route::get('editSitemap','SysController@editSitemap');
 		Route::post('updateSitemap','SysController@updateSitemap');
 		Route::post('change-type-menu',array( 'uses'=>"SysController@changeTypeMenu"));
+
+		Route::post('checkFieldDuplicated/{table}', array('uses' => "Admin@checkFieldDuplicated"));
 	});
 ?>

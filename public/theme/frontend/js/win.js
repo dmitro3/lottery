@@ -166,6 +166,7 @@ var WIN_GUI = (function () {
         listPaginateBoxLinkBtn.forEach((btn) => {
             if (btn.dataset.href != "") {
                 btn.addEventListener("click", function () {
+                    BASE_GUI.showLoading();
                     XHR.send({
                         url: this.dataset.href,
                         method: "GET",
@@ -177,6 +178,7 @@ var WIN_GUI = (function () {
                                 BASE_SUPPORT.callFunction(callback);
                             }
                         }
+                        BASE_GUI.hideLoading();
                     });
                 });
             }

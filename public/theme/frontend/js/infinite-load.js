@@ -20,7 +20,6 @@ class infiniteLoadBox {
         this.element = element;
         this.initFunc = this.element.dataset.init;
         this.loadSuccessFunc = this.element.dataset.success;
-        console.log(this);
         if (this.initFunc && this.initFunc != "") {
             this.callFunction(this.initFunc);
         }

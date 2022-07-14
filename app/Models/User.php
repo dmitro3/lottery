@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Helpers\Mobile_Detect;
+use App\Models\Games\Win\{
+    GameWinUserBet
+};
+use App\Models\Games\Plinko\{
+    GamePlinkoUserBet
+};
 
 class User extends Authenticatable
 {
@@ -93,5 +99,17 @@ class User extends Authenticatable
     public function withdrawalRequest()
     {
         return $this->hasMany(WithdrawalRequest::class);
+    }
+    public function gameWinUserBet()
+    {
+        return $this->hasMany(GameWinUserBet::class);
+    }
+    public function gamePlinkoUserBet()
+    {
+        return $this->hasMany(GamePlinkoUserBet::class);
+    }
+    public function userIntroduce()
+    {
+        return $this->belongsTo(User::class,'introduce_user_id');
     }
 }
