@@ -594,7 +594,7 @@ var WINDLOAD = (function () {
         if (!userTokenIp) return;
         var userToken = userTokenIp.value;
         connecter = new WebSocket(
-            `ws://localhost:8080/?auth_token=${userToken}`
+            `ws://localhost:8888/?auth_token=${userToken}`
         );
         connecter.onopen = function (e) {
             wsReady = true;

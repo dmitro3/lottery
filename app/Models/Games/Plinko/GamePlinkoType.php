@@ -10,6 +10,10 @@ class GamePlinkoType extends BaseModel
 {
     use HasFactory;
 
+    public function gamePlinkoRecord()
+    {
+        return $this->hasMany(GamePlinkoRecord::class);
+    }
     public function getCurrentGameRecord()
     {
         $nowTimeStamp = now()->timestamp;

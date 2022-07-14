@@ -1,4 +1,5 @@
 <?php
+
 namespace realtimemodule\pushserver\Commands;
 
 use \realtimemodule\pushserver\PushServerProvider;
@@ -30,7 +31,7 @@ class PushServer extends Command
                         new PushServerProvider()
                     )
                 ),
-                8080
+                8888
             );
             $server->run();
         } catch (\Exception $e) {

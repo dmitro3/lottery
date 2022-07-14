@@ -17,7 +17,7 @@ class GamePlinkoController extends BaseGameController
     {
         $showBaseLoading = true;
         $user = \Auth::user();
-        return view('games.plinko.index', compact('user','showBaseLoading'));
+        return view('games.plinko.index', compact('user', 'showBaseLoading'));
     }
     // private function generateBetResults()
     // {
@@ -36,4 +36,21 @@ class GamePlinkoController extends BaseGameController
     //     $prize = new Prize($gameRequests);
     //     $prize->generateBetDetails($currentGameRecord->id);
     // }
+    public function test()
+    {
+        $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
+        $userBet = $currentGameRecord->gamePlinkoUserBets()->select('id')->where('user_id', 4)->where('is_returned', 0)->orderBy('id', 'desc')->first();
+        dd($userBet);
+    }
+    public function getGameHistory($request)
+    {
+        $user = \Auth::user();
+        $listItems =  GamePlinkoUserBet::where('user_id', $user->id)->where('game_win_user_bet_status_id', '<>', GamePlinkoUserBet::STATUS_WAIT_RESULT)->orderBy('id', 'desc')->paginate(10);
+
+
+        return response()->json([
+            'code' => 200,
+            'html' => view('games.plinko.history_results.game_history_result', compact('listItems'))->render()
+        ]);
+    }
 }
