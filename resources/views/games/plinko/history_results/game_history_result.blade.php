@@ -1,3 +1,6 @@
+@php
+    use \App\Models\Games\Plinko\GamePlinkoUserBet;
+@endphp
 <div class="list m-t-10">
     @if (count($listItems) > 0)
     <div class="wrap">
@@ -33,17 +36,12 @@
                     $amount = Support::show($item,'amount');
                     $ramount = Support::show($item,'return_amount');
                     $sub = $ramount - $amount;
+                    $clazz = Support::show($item,'game_win_user_bet_status_id') == GamePlinkoUserBet::STATUS_WIN?'green':'red';
                     @endphp
 
-                    @if($sub > 0)
-                    <div class="c-tc goItem green">
+                    <div class="c-tc goItem {{$clazz}}">
                         {{number_format($sub,0,',','.')}}đ
                     </div>
-                    @else
-                    <div class="c-tc goItem red">
-                        {{number_format($sub,0,',','.')}}đ
-                    </div>
-                    @endif
                 </div>
             </div>
             @endforeach

@@ -43,7 +43,8 @@ class GamePlinkoRecord extends BaseModel
                 $detail->return_amount = $subtotal;
                 $detail->save();
             }
-            $bet->game_win_user_bet_status_id = GamePlinkoUserBet::STATUS_FINISH;
+            $status = $total > $bet->amount ? GamePlinkoUserBet::STATUS_WIN : GamePlinkoUserBet::STATUS_LOSE;
+            $bet->game_win_user_bet_status_id = $status;
             $bet->return_amount = $total;
             $bet->save();
             $user = $bet->user;

@@ -7,6 +7,7 @@ use realtimemodule\pushserver\Models\User;
 
 use App\Games\Plinko\Enums\Bag;
 use App\Games\Plinko\Enums\BallType;
+use App\Games\Plinko\Enums\Config as PlinkoConfig;
 use App\Games\Plinko\Prize;
 use App\Models\Games\Plinko\GamePlinkoPath;
 use App\Models\Games\Plinko\GamePlinkoRecord;
@@ -125,8 +126,14 @@ class PlinkoConnector implements ConnecterInterface
         $type = (int) $gameData['type'];
         $mode = $gameData['mode'];
         $ball = BallType::getByValue($type);
-        $money = $ball->getBetAmount();
+        if (($qty < PlinkoConfig::MINIMUM_BALL || $qty > PlinkoConfig::MAXIMUM_BALL)) {
 
+            $this->from->send($this->buildResponse(100, false, vsprintf('Số lượng bóng tối thiểu là %s, tối đa là %s !', [PlinkoConfig::MINIMUM_BALL, PlinkoConfig::MAXIMUM_BALL])));
+        }
+        $money = $ball->getBetAmount();
+        if ($money == 0) {
+            $this->from->send($this->buildResponse(100, false, 'Loại bóng không hợp lệ!'));
+        }
         $totalMoney = $qty * $money;
         $user =  $this->connection['userTargetMessage'];
         if ($totalMoney > $user->getAmount()) {
@@ -152,12 +159,13 @@ class PlinkoConnector implements ConnecterInterface
 
         $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
         $userBet = $currentGameRecord->gamePlinkoUserBets()->where('user_id', $user->id)->where('is_returned', 0)->orderBy('id', 'desc')->first();
+        $games = [];
         if ($userBet) {
             $games = $userBet->gamePlinkoUserBetDetails()->select('path', 'type')->orderBy('zigzag', 'desc')->get()->toArray();
             $userBet->is_returned = 1;
             $userBet->save();
-            $this->from->send($this->buildResponse(200, true, 'Đặt hàng thành công!', compact('games'), $action));
         }
+        $this->from->send($this->buildResponse(200, true, 'Lấy kết quả thành công!', compact('games'), $action));
         return $this->connection;
     }
     private function buildResponse($code, $status, $message, $data = [], $action = null)

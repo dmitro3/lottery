@@ -69,6 +69,7 @@ class CalculateResult extends Command
     private function generateGameResult()
     {
         $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
+        if (!$currentGameRecord) return;
         if ($currentGameRecord->is_end == 1) return;
         $records = GamePlinkoUserBet::where('game_plinko_record_id', $currentGameRecord->id)->get();
         $gameRequests = [

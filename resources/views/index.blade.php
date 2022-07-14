@@ -6,6 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	{!! SEOHelper::HEADER_SEO(@$currentItem ? $currentItem : null) !!}
+	<script src="theme/frontend/js/hackertimer.js"></script>
 	<link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.woff2" as="font" type="font/woff2" crossorigin="">
     <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.woff" as="font" type="font/woff" crossorigin="">
     <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.ttf" as="font" type="font/ttf" crossorigin="">
@@ -31,6 +32,7 @@
 	@yield('content')
 	@include('loading')
 	{[CMS_FOOTER]}
+	
 	<script src="theme/frontend/js/xhr.js" defer></script>
 	<script src="theme/frontend/js/sweetalert.min.js" defer></script>
 	@yield('jsl')

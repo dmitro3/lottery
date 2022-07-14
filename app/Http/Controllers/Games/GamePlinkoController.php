@@ -45,7 +45,7 @@ class GamePlinkoController extends BaseGameController
     public function getGameHistory($request)
     {
         $user = \Auth::user();
-        $listItems =  GamePlinkoUserBet::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(10);
+        $listItems =  GamePlinkoUserBet::where('user_id', $user->id)->where('game_win_user_bet_status_id', '<>', GamePlinkoUserBet::STATUS_WAIT_RESULT)->orderBy('id', 'desc')->paginate(10);
 
 
         return response()->json([

@@ -10,7 +10,8 @@ use App\Models\User;
 class GamePlinkoUserBet extends BaseModel
 {
     const STATUS_WAIT_RESULT = 1;
-    const STATUS_FINISH = 2;
+    const STATUS_LOSE = 2;
+    const STATUS_WIN = 3;
 
     use HasFactory;
     public function user()

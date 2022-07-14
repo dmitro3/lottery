@@ -96,7 +96,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M8 24C8 22.8954 8.89543 22 10 22H38C39.1046 22 40 22.8954 40 24C40 25.1046 39.1046 26 38 26H10C8.89543 26 8 25.1046 8 24Z" fill="white" />
                                                 </svg>
                                             </button>
-                                            <input id="ball" type="number" value="1" name="qty" min="1" max="10" />
+                                            <input id="ball" type="number" value="1" name="qty" min="{{\App\Games\Plinko\Enums\Config::MINIMUM_BALL}}" max="{{\App\Games\Plinko\Enums\Config::MAXIMUM_BALL}}" />
                                             <button id="pbball" class="plus btn_bet">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
                                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M24 8C25.1046 8 26 8.89543 26 10V22H38C39.1046 22 40 22.8954 40 24C40 25.1046 39.1046 26 38 26H26V38C26 39.1046 25.1046 40 24 40C22.8954 40 22 39.1046 22 38V26H10C8.89543 26 8 25.1046 8 24C8 22.8954 8.89543 22 10 22H22V10C22 8.89543 22.8954 8 24 8Z" fill="white" />
@@ -123,5 +123,5 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 <script src="theme/frontend/plinko/js/gui.js" defer></script>
 <script src="theme/frontend/plinko/js/lib.js" defer></script>
 <script src="theme/frontend/plinko/js/main.bundle.js" defer></script>
-<script src="theme/frontend/plinko/js/plinko.js" defer></script>
+<script src="theme/frontend/game/ts/plinko.js" defer></script>
 @endsection
