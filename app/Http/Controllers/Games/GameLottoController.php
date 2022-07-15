@@ -15,8 +15,8 @@ class GameLottoController extends BaseGameController
 {
     public function index($request)
     {
-        $showBaseLoading = true;
+        $showBaseLoading = false;
         $user = \Auth::user();
-        return view('games.plinko.index', compact('user', 'showBaseLoading'));
+        return view('games.lotto.index', compact('user', 'showBaseLoading'));
     }
 }

@@ -1,0 +1,390 @@
+.result_plot_threads *,
+.result_plot_threads {
+    box-sizing: border-box;
+}
+
+.result_plot_threads {
+    background-color: #ebebeb;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    margin: auto;
+    display: block;
+}
+
+.result_plot_threads .panel[data-state="hide"] {
+    display: none;
+}
+
+.result_plot_threads .panel[data-state="show"] {
+    display: block;
+}
+
+.result_plot_threads .item_type_game input {
+    margin-right: 3.5px;
+    position: relative;
+    z-index: 1;
+    top: -1px;
+}
+
+.result_plot_threads .item_number {
+    display: inline-block;
+}
+
+.result_plot_threads .item_type_game {
+    border: solid thin #dddddd;
+    background: #fff;
+    border-radius: 5px;
+    padding: 3.5px 2.5px;
+    display: flex;
+    align-items: center;
+    flex: none;
+    min-width: 76px;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.result_plot_threads .types .nav-item {
+    border: solid thin #dddddd;
+    background: #fff;
+    display: inline-block;
+    padding: 3.5px 2.5px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.result_plot_threads .types .nav-item[data-state='true'] {
+    background: #bbbb;
+}
+
+.result_plot_threads .box_booking {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border: solid thin #fff;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.result_plot_threads .box_booking .title_lg {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    border-bottom: solid thin #ebebeb;
+    padding-bottom: 5px;
+}
+
+.result_plot_threads .box_mini {
+    background: #ebebebeb;
+    padding: 7.5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px 2px rgb(0 0 0 / 10%);
+    margin: 10px 0 25px 0;
+}
+
+.result_plot_threads .types span {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: inline-block;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.result_plot_threads .ls_lotto .lotto {
+    display: inline-block;
+    padding: 5px 7px;
+    border: solid thin #ebebeb;
+    background: #95b811;
+    border-radius: 5px;
+    color: #fff;
+    flex-basis: min-content;
+}
+
+.result_plot_threads .ls_lotto {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.result_plot_threads .lb_total {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.result_plot_threads .box_booking input {
+    width: 100%;
+    border: solid thin #ebebeb;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 15px;
+}
+
+.result_plot_threads .panel .s-content {
+    margin-top: 10px;
+}
+
+.result_plot_threads .box_booking input::-webkit-textfield-decoration-container {
+    max-width: 100%;
+    display: block !important;
+}
+
+.result_plot_threads .box_booking input::-webkit-inner-spin-button {
+    display: none !important;
+}
+
+.result_plot_threads .plot_total {
+    padding: 10px;
+    background: #ebebebeb;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.result_plot_threads .plot_total p {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: dashed 1px #ddd;
+}
+
+.result_plot_threads .plot_total p:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+.result_plot_threads .btn_all.book {
+    background: #d01c2d;
+}
+
+.result_plot_threads .btn_all {
+    width: 100%;
+    border: solid thin #ebebeb;
+    color: #fff;
+    padding: 12px 10px;
+    border-radius: 5px;
+}
+
+.result_plot_threads .item_number input {
+    display: none;
+}
+
+.result_plot_threads .item_number input:checked+span {
+    background: #cddc39;
+}
+
+.result_plot_threads .item_number span {
+    display: inline-block;
+    padding: 2.35px;
+    border: solid thin #fff;
+    background: #fff;
+    margin-bottom: 4.5px;
+}
+
+.result_plot_threads .ls_number {
+    margin-top: 5px;
+}
+
+.result_plot_threads .item_type_game * {
+    pointer-events: none;
+}
+
+.result_plot_threads .ls_lotto .no-result {
+    margin-top: 5px;
+}
+
+.result_plot_threads .game_types {
+    flex-wrap: wrap;
+}
+
+.result_plot_threads .group_number {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+    background: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 7.5px;
+}
+
+.result_plot_threads .group_number select {
+    border: solid thin #ebebeb;
+    border-radius: 5px;
+    flex: 1;
+    padding: 3px 7px;
+}
+
+.result_plot_threads .ls_number {
+    background: #c8c8c8;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.result_plot_threads .group_number .btn_xs {
+    border: solid thin #ebebeb;
+    padding: 4px 7px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.result_plot_threads .group_number .btn_xs {
+    flex: 1;
+    margin-left: 0;
+}
+
+.result_plot_threads .box_choose {
+    display: flex;
+    font-size: 14px;
+    padding: 0.16667rem !important;
+}
+
+.result_plot_threads .box_choose>.navv {
+    max-width: 92.5px;
+}
+
+.result_plot_threads .box_choose .navv {
+    flex: 1;
+    margin-right: 5px;
+}
+
+.result_plot_threads .group_number .group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.result_plot_threads .group_number .group label {
+    margin-right: 15px;
+}
+
+.result_plot_threads .question {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 1px;
+    z-index: 1;
+}
+
+.result_plot_threads .s-content {
+    display: none;
+}
+
+.result_plot_threads .box_choose>.tab_panel {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+
+.result_plot_threads .panel .s-content.active {
+    display: block;
+}
+
+/*
+         Bảng kết quả hàng ngày
+         */
+.plot_totay thead td {
+    padding: 5px;
+}
+
+.plot_totay table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.plot_totay .vietdam {
+    font-weight: 700;
+}
+
+.plot_totay .border-right {
+    border-right: 1px solid #dee2e6 !important;
+}
+
+.plot_totay .table-bordered>tbody>tr>td {
+    border: 1px solid #ccc;
+}
+
+.plot_totay table.table-kq-bold-border {
+    border: 3px solid #7e7e7e;
+    width: 100%;
+}
+
+.plot_totay .kqvertimarginw {
+    margin-bottom: 10px !important;
+}
+
+.plot_totay .kqcenter {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.plot_totay .kqbackground {
+    background-color: #fff;
+}
+
+.plot_totay table.table-kq-border tr:last-child td {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #7e7e7e;
+}
+
+.plot_totay table.table-kq-border tr td:last-child {
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: #7e7e7e;
+}
+
+.plot_totay table.table-kq-border tr td:first-child {
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-left-color: #7e7e7e;
+}
+
+.plot_totay .col-sm-10 {
+    width: 100%;
+}
+
+.plot_totay .gray {
+    color: #323232 !important;
+}
+
+.plot_totay .text-center {
+    text-align: center;
+}
+
+.plot_totay .table>tbody>tr>td {
+    padding: 3px;
+    border-top: 1px solid #ccc;
+}
+
+.plot_totay .chu16 {
+    font-size: 16px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plot_totay .viethoa {
+    text-transform: uppercase;
+}
+
+.plot_totay .dosam {
+    color: #900;
+}
+
+.plot_totay .maudo {
+    color: red !important;
+}
+
+.plot_totay .border-bottom {
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.plot_totay .table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.plot_totay .db {
+    font-size: 20px;
+}

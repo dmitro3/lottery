@@ -142,7 +142,22 @@
                             <a href="plinko" class="item m-b-20">
                                 <div class="info i4">
                                     <div class="name"> Plinko </div>
-                                    <div class="des"> Thả bi đẻ chiến thắng </div><img width="120px" height="85px" src="theme/frontend/images/plinko.png" class="img m-r-5">
+                                    <div class="des"> Thả bóng để chiến thắng </div><img width="120px" height="85px" src="theme/frontend/images/plinko.png" class="img m-r-5">
+                                </div>
+                                <div class="userList">
+                                    <div class="gomeList">
+                                        <div class="list">
+                                            <div class="swpier van-swipe">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="lotto" class="item m-b-20">
+                                <div class="info i4">
+                                    <div class="name"> Lotto </div>
+                                    <div class="des"> Chọn bộ số lô, đề để nhận thưởng </div><img width="120px" height="85px" src="theme/frontend/lotto/images/lotto.png" class="img m-r-5">
                                 </div>
                                 <div class="userList">
                                     <div class="gomeList">
@@ -157,6 +172,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="bonus-box">
