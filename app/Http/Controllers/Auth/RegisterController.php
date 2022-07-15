@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use vanhenry\manager\model\HUser;
+use App\Commissions\Tree;
 use Auth;
 
 class RegisterController extends Controller
@@ -68,7 +70,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'phone' => ['required','unique:users','regex:/^((\+)\d{2}|0)[1-9](\d{2}){4}$/'],
             'password' => ['required', 'min:8'],
-            'referral_code' => ['required', 'exists:users'],
+            'referral_code' => ['required'],
         ], [
             'required' => 'Vui lòng nhập :attribute',
             'min' => ':attribute tối thiểu :min kí tự',
@@ -92,13 +94,22 @@ class RegisterController extends Controller
             ]);
         }
 
+        $hUser = HUser::where('group',2)->where('code',$request->referral_code)->first();
+        $userReferral = User::where('referral_code',$request->referral_code)->first();
+        if (!isset($hUser) && !isset($userReferral)) {
+            return response()->json([
+                'code' => 100,
+                'message' => 'Mã giới thiệu không tồn tại',
+            ]);
+        }
+
         $phone = $request->phone;
         $user = $this->checkUser('phone', $phone);
 
         if(is_array($user)){
             return response($user);
         }
-        $user = $this->createUser($request->all());
+        $user = $this->createUser($request->all(),$hUser,$userReferral);
         Auth::login($user,true);
         $user->logLoginAction();
         return response()->json([
@@ -107,13 +118,20 @@ class RegisterController extends Controller
             'redirect_url' => url('/')
         ]);
     }
-    protected function createUser($data){
+    protected function createUser($data,$hUser,$userReferral){
+
         $user = new User;
         $user->phone = $data['phone'];
         $user->password = Hash::make($data['password']);
         $user->referral_code_enter = $data['referral_code'];
-        $userReferral = User::where('referral_code',$data['referral_code'])->first();
-        $user->introduce_user_id = isset($userReferral) ? $userReferral->id:-1;
+
+        if (isset($hUser)) {
+            $user->introduce_user_id = 0;
+            $user->h_user_id = $hUser->id;
+        }else{
+            $user->introduce_user_id = $userReferral->id;
+            $user->h_user_id = $userReferral->h_user_id;
+        }
         $referralCode = \Str::random(11);
         $userInDb = User::where('referral_code',$referralCode)->first();
         while (isset($userInDb)) {
@@ -121,9 +139,11 @@ class RegisterController extends Controller
         }
         $user->referral_code =$referralCode;
         $user->name = 'Member'.strtoupper(\Str::random(8));
+        $user->level = 0;
         $user->created_at = now();
         $user->updated_at = now();
         $user->save();
+        Tree::addNode($user->introduce_user_id,$user);
         return $user;
     }
 

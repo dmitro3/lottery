@@ -24,7 +24,17 @@
     $buildDataDefault = $buildDataDefault->toJson();
 
     if (isset($dataDefault['data']) && isset($dataDefault['data']['table']) && !$isAjax) {
-        $dataValues = DB::table($dataDefault['data']['table'])->select(explode(',', $dataDefault['data']['select']))->get();
+        if (isset($dataDefault['data']['where']) && count($dataDefault['data']['where']) > 0) {
+            $baseQuery = DB::table($dataDefault['data']['table'])->select(explode(',', $dataDefault['data']['select']));
+            foreach ($dataDefault['data']['where'] as $itemWhere) {
+                foreach ($itemWhere as $keyWhere => $valueWhere) {
+                    $baseQuery->where($keyWhere,$valueWhere);
+                }
+            }
+            $dataValues = $baseQuery->get();
+        }else{
+            $dataValues = DB::table($dataDefault['data']['table'])->select(explode(',', $dataDefault['data']['select']))->get();
+        }
     } elseif (isset($dataDefault['data']) && !$isAjax) {
         $dataValues = $dataDefault['data'];
     } else {

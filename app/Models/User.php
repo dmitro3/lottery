@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Helpers\Mobile_Detect;
+use vanhenry\manager\model\HUser;
 use App\Models\Games\Win\{
     GameWinUserBet
 };
@@ -48,7 +49,7 @@ class User extends Authenticatable
     }
     public function getWallet()
     {
-        $userWallet = Wallet::where('user_id', $this->id)->first();
+        $userWallet = Wallet::where('user_id', $this->id)->with('user')->first();
         if (!isset($userWallet)) {
             $userWallet = new Wallet;
             $userWallet->user_id = $this->id;
@@ -111,5 +112,13 @@ class User extends Authenticatable
     public function userIntroduce()
     {
         return $this->belongsTo(User::class,'introduce_user_id');
+    }
+    public function hUser()
+    {
+        return $this->belongsTo(HUser::class,'h_user_id');
+    }
+    public function buildIntroduceLink()
+    {
+        return url()->to('dang-ky').'?r_code='.$this->referral_code;
     }
 }

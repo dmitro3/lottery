@@ -20,7 +20,7 @@
                 <div class="txt p-r-5"> Tổng tiền : </div>
                 <div class="c-row c-row-middle">
                     <div class="money">
-                        <div class="user-money-preview"> {{number_format($user->getAmount(),0,',','.')}} đ</div>
+                        <div class="user-money-preview"> {{number_format((int)$user->getAmount(),0,',','.')}} đ</div>
                     </div>
                     <div class="van-image img m-l-10 profile-reload-user-money-btn" style="width: 18px; height: 18px;" onclick="BASE_GUI.reloadUserMoney(this)">
                         <img src="theme/frontend/images/tải xuống.png" class="van-image__img">

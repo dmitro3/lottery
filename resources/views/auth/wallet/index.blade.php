@@ -34,7 +34,7 @@
                         </div>
                         <div class="c-row balanceMoney c-row-middle-center">
                             <div class="money user-money-preview">
-                                <div> {{number_format($user->getAmount(),0,',','.')}} đ</div>
+                                <div> {{number_format((int)$user->getAmount(),0,',','.')}} đ</div>
                             </div>
                             <div class="profile-reload-user-money-btn" onclick="BASE_GUI.reloadUserMoney(this)">
                                 <div class="van-image img m-l-15" style="width: 25px; height: 25px;">

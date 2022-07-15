@@ -6,6 +6,22 @@ class Wallet extends BaseModel
     use HasFactory;
     public function changeMoney($amount,$reason,$type,$mapId)
     {
+        $listTypeCommissionAble = WalletTransactionType::getArrTypeTakeCommissionAble();
+        if (in_array($type,$listTypeCommissionAble)) {
+            $commissionIncurred = new CommissionIncurred;
+            $commissionIncurred->user_id = $this->user_id;
+            $commissionIncurred->amount = abs($amount);
+            $commissionIncurred->inited = 0;
+            $commissionIncurred->save();
+
+            $user = $this->user ?? null;
+            if (isset($user) && $user->introduce_user_id > 0) {
+                $currentWeekCommissionUserDirectChildStatisticsRecord = CommissionUserDirectChildStatistics::getCurrentWeekRecord($user->introduce_user_id);
+                $currentWeekCommissionUserDirectChildStatisticsRecord->total_amount = $currentWeekCommissionUserDirectChildStatisticsRecord->total_amount + abs($amount);
+                $currentWeekCommissionUserDirectChildStatisticsRecord->save();
+            }
+        }
+
         $amountBefore              = $this->amount;
         $amountAvailabilityBefore  = $this->amount_availability;
         $this->amount              = $this->amount + $amount;
@@ -55,5 +71,9 @@ class Wallet extends BaseModel
     public function walletHistory()
     {
         return $this->hasMany(WalletHistory::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
