@@ -168,6 +168,7 @@ class HUserAuthenticate
                     'insert'
                 ];
                 break;
+            case 'checkFieldDuplicated':
             case 'copy':
                 $_action = [
                     'copy'

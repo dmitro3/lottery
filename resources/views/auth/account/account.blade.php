@@ -60,7 +60,7 @@
                     </div>
                 </div>
             </div>
-            <a href="tai-khoan/tiep-thi" class="promote c-row c-row-middle-center">
+            <a href="tai-khoan/marketing" class="promote c-row c-row-middle-center">
                 <div class="c-row c-row-middle">
                     <div>QUẢNG BÁ ĐẠI LÝ</div>
                 </div>

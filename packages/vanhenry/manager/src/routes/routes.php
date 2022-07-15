@@ -93,5 +93,6 @@
 		Route::post('change-type-menu',array( 'uses'=>"SysController@changeTypeMenu"));
 
 		Route::post('checkFieldDuplicated/{table}', array('uses' => "Admin@checkFieldDuplicated"));
+		Route::get('game-info/{game}', array('uses' => "GameViewController@gameInfo"));
 	});
 ?>

@@ -734,7 +734,8 @@ html, body {
     width: 100%;
     color: #fff;
     box-shadow: 0 .02667rem .48rem 0 rgba(203, 202, 220, .56);
-    border-radius: .4rem
+    border-radius: .4rem;
+    display: inline-block;
 }
 
 .home .gameList .item.maskShow {
@@ -745,8 +746,8 @@ html, body {
 .home .gameList .item .info {
     width: 100%;
     padding: .66667rem .4rem;
-    border-radius: .4rem .4rem 0 0;
-    position: relative
+    border-radius: .4rem;
+    position: relative;
 }
 
 .home .gameList .item .info .img {
@@ -855,7 +856,8 @@ html, body {
     width: 92%;
     height: 80%;
     background: url('../images/adv-bonus.706b203a.png') no-repeat 50%;
-    background-size: cover
+    background-size: cover;
+    border-radius: .4rem;
 }
 
 .home .bonus-box .bonus-bg .inner {

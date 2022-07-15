@@ -43,20 +43,13 @@
         <div class="home-com">
             <div class="van-tabs van-tabs--line home-tab action">
                 <div class="van-tabs__wrap van-hairline--top-bottom">
-                    <div role="tablist" class="van-tabs__nav van-tabs__nav--line">
-                        <div role="tab" aria-selected="true" class="van-tab van-tab--active"><span class="van-tab__text van-tab__text--ellipsis">
-                                <div><img src="theme/frontend/images/CP.f775f9f6.png" class="img"></div>
-                            </span></div>
-                        <div role="tab" class="van-tab"><span class="van-tab__text van-tab__text--ellipsis">
-                                <div><img src="theme/frontend/images/DZ.85b5faf9.png" class="img"></div>
-                            </span></div>
-                        <div role="tab" class="van-tab"><span class="van-tab__text van-tab__text--ellipsis">
-                                <div><img src="theme/frontend/images/DC.bca66864.png" class="img"></div>
-                            </span></div>
-                        <div role="tab" class="van-tab"><span class="van-tab__text van-tab__text--ellipsis">
-                                <div><img src="theme/frontend/images/TY.d0792b10.png" class="img"></div>
-                            </span></div>
-                        <div class="van-tabs__line">
+                    <div role="tablist" class="van-tabs__nav van-tabs__nav--line" style="justify-content: center;">
+                        <div role="tab" aria-selected="true" class="van-tab van-tab--active">
+                            <span class="van-tab__text van-tab__text--ellipsis">
+                                <div>
+                                    <img src="theme/frontend/images/CP.f775f9f6.png" class="img">
+                                </div>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -68,90 +61,12 @@
                                     <div class="name"> WIN GO </div>
                                     <div class="des"> Đoán màu xanh lá cây/tím/đỏ để giành chiến thắng </div><img width="120px" height="85px" src="theme/frontend/images/logo-wingo.37b04b53.png" class="img m-r-5">
                                 </div>
-                                <div class="userList">
-                                    <div class="gomeList">
-                                        <div class="list">
-                                            <div class="swpier van-swipe">
-                                                <div class="van-swipe__track van-swipe__track--vertical">
-                                                    <div class="van-swipe-item">
-                                                        <div class="swiper-item">
-                                                            <div class="c-row c-row-between c-row-middle item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
-                                                                <div class="info c-row c-row-between">
-                                                                    <div class="m-l-10 name"> MemberNNG3AGVN</div>
-                                                                    <div class="c-row c-row-middle-center"><span class="u-p-r-10">Có</span>
-                                                                        <span class="price"> 17640.00 ₫</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="van-swipe-item">
-                                                        <div class="swiper-item">
-                                                            <div class="c-row c-row-between c-row-middle item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
-                                                                <div class="info c-row c-row-between">
-                                                                    <div class="m-l-10 name"> MỹHuyền</div>
-                                                                    <div class="c-row c-row-middle-center"><span class="u-p-r-10">Có</span>
-                                                                        <span class="price"> 1960.00 ₫</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="van-swipe-item">
-                                                        <div class="swiper-item">
-                                                            <div class="c-row c-row-between c-row-middle item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
-                                                                <div class="info c-row c-row-between">
-                                                                    <div class="m-l-10 name"> MemberNNGPDSRM</div>
-                                                                    <div class="c-row c-row-middle-center"><span class="u-p-r-10">Có</span>
-                                                                        <span class="price"> 1960.00 ₫</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="van-swipe-item">
-                                                        <div class="swiper-item">
-                                                            <div class="c-row c-row-between c-row-middle item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
-                                                                <div class="info c-row c-row-between">
-                                                                    <div class="m-l-10 name"> MemberNNGIKJOZ</div>
-                                                                    <div class="c-row c-row-middle-center"><span class="u-p-r-10">Có</span>
-                                                                        <span class="price"> 98000.00 ₫</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="van-swipe-item">
-                                                        <div class="swiper-item">
-                                                            <div class="c-row c-row-between c-row-middle item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
-                                                                <div class="info c-row c-row-between">
-                                                                    <div class="m-l-10 name"> MemberNNGNTJXQ</div>
-                                                                    <div class="c-row c-row-middle-center"><span class="u-p-r-10">Có</span>
-                                                                        <span class="price"> 73500.00 ₫</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </a>
                             <a href="plinko" class="item m-b-20">
                                 <div class="info i4">
                                     <div class="name"> Plinko </div>
                                     <div class="des"> Thả bi đẻ chiến thắng </div><img width="120px" height="85px" src="theme/frontend/images/plinko.png" class="img m-r-5">
-                                </div>
-                                <div class="userList">
-                                    <div class="gomeList">
-                                        <div class="list">
-                                            <div class="swpier van-swipe">
-
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </a>
                         </div>
@@ -238,54 +153,22 @@
         <div class="rank-box">
             <div class="rank-tit"> BẢNG XẾP HẠNG RÚT TIỀN </div>
             <div class="RankList">
-                <div class="van-swipe">
-                    <div class="van-swipe__track van-swipe__track--vertical">
-                        <div class="item van-swipe-item">
-                            <div class="swiper-item">
-                                <div class="c-row c-row-between item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
+                <div style="width: 100%;height: 100%;" class="swiper-container slider-home-top-with-drawl">
+                    <div class="swiper-wrapper" style="flex-direction: column;">
+                        @foreach ($listTopWitdraw as $item)
+                            <div class="swiper-slide">
+                                <div class="c-row c-row-between item">
+                                    <img src="theme/frontend/images/avatar.cfa8dd9d.svg" class="img">
                                     <div class="info c-row c-row-between">
-                                        <div class="m-l-10 name">MemberNNGU5HM0</div>
+                                        <div class="m-l-10 name">{{$item['name']}}</div>
                                         <div class="price">
-                                            <span> 622023.00 ₫</span>
+                                            <span>{{number_format($item['money'],0,',','.')}} đ</span>
                                         </div>
-                                        <div class="time">09:29</div>
+                                        <div class="time">{{$item['time']}}</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="swiper-item">
-                                <div class="c-row c-row-between item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
-                                    <div class="info c-row c-row-between">
-                                        <div class="m-l-10 name">MemberNNGBCODW</div>
-                                        <div class="price">
-                                            <span> 1500000.00 ₫</span>
-                                        </div>
-                                        <div class="time">09:29</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-item">
-                                <div class="c-row c-row-between item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
-                                    <div class="info c-row c-row-between">
-                                        <div class="m-l-10 name">NguyễnDuy</div>
-                                        <div class="price">
-                                            <span> 100000.00 ₫</span>
-                                        </div>
-                                        <div class="time">09:29</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-item">
-                                <div class="c-row c-row-between item"><img src="https://api.lightspacecdn.com/img/avatar.cfa8dd9d.svg" class="img">
-                                    <div class="info c-row c-row-between">
-                                        <div class="m-l-10 name">MemberNNG7LIX8</div>
-                                        <div class="price">
-                                            <span> 300000.00 ₫</span>
-                                        </div>
-                                        <div class="time">09:29</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -329,6 +212,40 @@
                         </div>
                         <div>
                             <div class="van-image" style="width: 35px; height: 35px;"><img src="data:image/png;base64,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" class="van-image__img"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="how-list m-t-20">
+                <div class="swiper-container home-how-list-slider">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" data-index="0" style="width: 288px;">
+                            <div class="c-tc m-b-15 van-ellipsis">Chọn một trò chơi bạn yêu thích</div>
+                            <div class="van-multi-ellipsis--l2">Bạn có thể chọn chơi các trò chơi xổ số 1 phút, 3 phút, 5 phút và 10 phút</div>
+                        </div>
+                        <div class="swiper-slide" data-index="1" style="width: 288px;">
+                            <div class="c-tc m-b-15 van-ellipsis">Chọn con số may mắn của bạn</div>
+                            <div class="van-multi-ellipsis--l2">Chọn con số hoặc màu sắc may mắn của bạn</div>
+                        </div>
+                        <div class="swiper-slide" data-index="2" style="width: 288px;">
+                            <div class="c-tc m-b-15 van-ellipsis">Đặt cược</div>
+                            <div class="van-multi-ellipsis--l2">Chọn số tiền bạn muốn đặt cược và xác nhận。</div>
+                        </div>
+                        <div class="swiper-slide" data-index="3" style="width: 288px;">
+                            <div class="c-tc m-b-15 van-ellipsis">Giành giải thưởng</div>
+                            <div class="van-multi-ellipsis--l2">Khi bạn chọn con số may mắn cho kỳ hiện tại, hệ thống sẽ tự động cộng tiền thưởng vào số dư của bạn</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="arrow">
+                    <div class="item left">
+                        <div class="arr c-row c-row-middle-center action">
+                            <i class="van-icon van-icon-arrow-left" style="color: rgb(251, 78, 78); font-size: 20px;"></i>
+                        </div>
+                    </div>
+                    <div class="item right">
+                        <div class="arr c-row c-row-middle-center action">
+                            <i class="van-icon van-icon-arrow" style="color: rgb(251, 78, 78); font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>

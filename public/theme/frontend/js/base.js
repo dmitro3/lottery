@@ -341,6 +341,8 @@ BASE_GUI_HOME = {
     },
     init: function () {
         BASE_GUI_HOME.sliderBanerHome();
+        BASE_GUI_HOME.sliderTopWithdrawl();
+        BASE_GUI_HOME.sliderHomeHowListSlider();
         BASE_GUI_HOME.initHomeTimeBox();
     },
     sliderBanerHome() {
@@ -355,6 +357,70 @@ BASE_GUI_HOME = {
                 el: ".pagination-banner-home",
                 clickable: true,
             },
+        });
+    },
+    sliderHomeHowListSlider() {
+        if (!BASE_GUI_HOME.elelemtExist(".home-how-list-slider")) return;
+        const swiperHomeHowListSlider = new Swiper(".home-how-list-slider", {
+            slidesPerView: 1,
+            loop: true,
+            disableOnInteraction: true,
+            speed: 100,
+            spaceBetween: 0,
+            navigation: {
+                prevEl: ".how-list .arrow .left",
+                nextEl: ".how-list .arrow .right",
+            },
+        });
+        var homeHowListItemInfo = document.querySelectorAll(
+            ".home-how .info .item "
+        );
+        homeHowListItemInfo.forEach((element, index) => {
+            element.addEventListener("click", function () {
+                homeHowListItemInfo.forEach((elm) => {
+                    elm.classList.remove("action");
+                });
+                this.classList.add("action");
+                swiperHomeHowListSlider.slideTo(index + 1);
+            });
+        });
+        swiperHomeHowListSlider.on(
+            "slideChange",
+            function (swiperHomeHowListSlider) {
+                const currentSlide =
+                    swiperHomeHowListSlider.slides[
+                        swiperHomeHowListSlider.activeIndex
+                    ];
+                if (currentSlide) {
+                    homeHowListItemInfo.forEach((element) => {
+                        element.classList.remove("action");
+                    });
+                    if (
+                        homeHowListItemInfo[
+                            parseInt(currentSlide.dataset.index)
+                        ]
+                    ) {
+                        homeHowListItemInfo[
+                            parseInt(currentSlide.dataset.index)
+                        ].classList.add("action");
+                    }
+                }
+            }
+        );
+    },
+    sliderTopWithdrawl() {
+        if (!BASE_GUI_HOME.elelemtExist(".slider-home-top-with-drawl")) return;
+        const swiperBannerHome = new Swiper(".slider-home-top-with-drawl", {
+            direction: "vertical",
+            slidesPerView: 4,
+            slidesPerGroup: 4,
+            loop: true,
+            speed: 800,
+            autoplay: {
+                delay: 5000,
+            },
+            allowTouchMove: false,
+            noSwiping: true,
         });
     },
     initHomeTimeBox: function () {
