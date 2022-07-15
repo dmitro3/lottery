@@ -200,6 +200,9 @@ __webpack_require__.r(__webpack_exports__);
 var Selector = /** @class */ (function () {
     function Selector() {
     }
+    Selector.all = function (selector) {
+        return document.querySelectorAll(selector);
+    };
     Selector._ = function (selector) {
         return document.querySelector(selector);
     };
@@ -208,6 +211,16 @@ var Selector = /** @class */ (function () {
     };
     Selector.none = function (item) {
         item.style.display = "none";
+    };
+    Selector.on = function (eventName, elementSelector, callback) {
+        document.addEventListener(eventName, function (e) {
+            for (var target = (e.target); target && target != this; target = target.parentNode) {
+                if (target.matches(elementSelector)) {
+                    callback(e);
+                    break;
+                }
+            }
+        }, false);
     };
     return Selector;
 }());

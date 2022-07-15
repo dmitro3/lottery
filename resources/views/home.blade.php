@@ -155,7 +155,7 @@
                                 </div>
                             </a>
                             <a href="lotto" class="item m-b-20">
-                                <div class="info i4">
+                                <div class="info i5">
                                     <div class="name"> Lotto </div>
                                     <div class="des"> Chọn bộ số lô, đề để nhận thưởng </div><img width="120px" height="85px" src="theme/frontend/lotto/images/lotto.png" class="img m-r-5">
                                 </div>
