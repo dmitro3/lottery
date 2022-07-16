@@ -40,8 +40,8 @@
                             <div class="des u-m-b-15"> Số tiền </div>
                             <div class="c-row c-row-middle c-row-center p-t-5">
                                 <div class="money">
-                                    <div >
-                                        <span  class="txt user-money-preview"> {{number_format((int)$user->getAmount(),0,',','.')}} đ</span>
+                                    <div>
+                                        <span class="txt user-money-preview"> {{number_format((int)$user->getAmount(),0,',','.')}} đ</span>
                                     </div>
                                 </div>
                                 <div class="profile-reload-user-money-btn" onclick="BASE_GUI.reloadUserMoney(this)">

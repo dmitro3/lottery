@@ -14,6 +14,10 @@ class GameWinController extends BaseGameController
 {
     public function index($request)
     {
+        // foreach (GameWinRecord::get() as $item) {
+        //     $item->win_number = rand(0,9);
+        //     $item->save();
+        // }
         $user = \Auth::user();
         $showBaseLoading = true;
         $activeAudio = isset($_COOKIE['switch_audio']) && $_COOKIE['switch_audio'] == 'true';

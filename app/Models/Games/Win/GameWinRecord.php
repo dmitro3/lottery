@@ -125,4 +125,16 @@ class GameWinRecord extends BaseModel
         $this->is_end = 1;
         $this->save();
     }
+
+    public function buildAdminHistoryData()
+    {
+        $gameWinUserBets = $this->gameWinUserBet()->select('select_value',\DB::raw('sum(amount) as total_amount_bet'))
+                                                ->groupBy('select_value')
+                                                ->get();
+        $ret = [];
+        foreach ($gameWinUserBets as $item) {
+            $ret[$item->select_value] = $item->total_amount_bet;
+        }
+        return $ret;
+    }
 }
