@@ -39,6 +39,36 @@ var Ajax = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/Base/BaseGui.ts":
+/*!*****************************!*\
+  !*** ./src/Base/BaseGui.ts ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var BaseGui = /** @class */ (function () {
+    function BaseGui() {
+    }
+    BaseGui.showLoading = function () {
+        BASE_GUI.showLoading();
+    };
+    BaseGui.createFlashNotify = function (message, autoHide) {
+        if (autoHide === void 0) { autoHide = true; }
+        BASE_GUI.createFlashNotify(message, autoHide);
+    };
+    BaseGui.hideLoading = function () {
+        BASE_GUI.hideLoading();
+    };
+    return BaseGui;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BaseGui);
+
+
+/***/ }),
+
 /***/ "./src/Base/Selector.ts":
 /*!******************************!*\
   !*** ./src/Base/Selector.ts ***!
@@ -81,6 +111,172 @@ var Selector = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/Lotto/Games/BaseGame.ts":
+/*!*************************************!*\
+  !*** ./src/Lotto/Games/BaseGame.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var BaseGame = /** @class */ (function () {
+    function BaseGame(formbet) {
+        this.formbet = formbet;
+    }
+    return BaseGame;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BaseGame);
+
+
+/***/ }),
+
+/***/ "./src/Lotto/Games/FormBet.ts":
+/*!************************************!*\
+  !*** ./src/Lotto/Games/FormBet.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Base/Selector */ "./src/Base/Selector.ts");
+/* harmony import */ var _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../LottoGlobal */ "./src/Lotto/LottoGlobal.ts");
+
+
+var FormBet = /** @class */ (function () {
+    function FormBet() {
+        this.totalMinBet = 0;
+        this.betPerNumber = 0;
+        this.betWin = 0;
+        this.initEvents();
+        this.initSubmit();
+        this.changeHtmlPreview();
+    }
+    FormBet.prototype.initEvents = function () {
+        var self = this;
+        var input = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._('.box_booking input[name="bet"]');
+        input.addEventListener("change", function (e) {
+            var _this = e.target;
+            self.validateMoney(_this);
+            self.changeHtmlPreview();
+        });
+    };
+    FormBet.prototype.initSubmit = function () {
+        var self = this;
+        var button = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".btn_all.book");
+        button.addEventListener("click", function (e) {
+            var _this = e.target;
+            self.validateSubmit();
+        });
+    };
+    FormBet.prototype.validateSubmit = function () {
+        var currentConfig = _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentGameConfig();
+        if (currentConfig) {
+            var chooseMin = parseInt(currentConfig.choose_min);
+            var num = this.getNumberChoosen().length;
+            if (num < chooseMin) {
+                alert("Ch\u1ECDn t\u1ED1i thi\u1EC3u ".concat(chooseMin, " s\u1ED1!"));
+            }
+        }
+    };
+    FormBet.prototype.validateMoney = function (input) {
+        var value = input.value;
+        value = Math.abs(value);
+        if (value > 999999999999) {
+            value = 999999999999;
+        }
+        if (value < 1) {
+            value = 1;
+        }
+        input.value = value;
+    };
+    FormBet.prototype.changeHtmlPreview = function () {
+        this.changeHtmlMinBet();
+        this.changeHtmlBetPerNumber();
+        this.changeHtmlWinBet();
+    };
+    FormBet.prototype.changeHtmlMinBet = function () {
+        var text = "-";
+        var currentConfig = _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentGameConfig();
+        if (currentConfig) {
+            var minBet = parseInt(currentConfig.min_bet);
+            var chooseMin = parseInt(currentConfig.choose_min);
+            if (!this.hasChoosen()) {
+                this.totalMinBet = minBet;
+            }
+            else {
+                var numbers = this.getNumberChoosen();
+                var numChoosen = numbers.length / chooseMin;
+                numChoosen = numChoosen < 1 ? 1 : numChoosen;
+                this.totalMinBet = minBet * numChoosen;
+            }
+            text = String(this.totalMinBet);
+        }
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".plot_total .min span").innerText = text;
+    };
+    FormBet.prototype.changeHtmlBetPerNumber = function () {
+        var text = "";
+        if (!this.hasChoosen()) {
+            text = "-";
+        }
+        else {
+            var total = this.getTotalMoney();
+            this.betPerNumber = total / this.totalMinBet;
+            this.betPerNumber = Math.round(this.betPerNumber * 100) / 100;
+            text = String(this.betPerNumber);
+        }
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".plot_total .money span").innerText = text;
+    };
+    FormBet.prototype.changeHtmlWinBet = function () {
+        var text = "";
+        if (!this.hasChoosen()) {
+            text = "-";
+        }
+        else {
+            var currentConfig = _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentGameConfig();
+            if (currentConfig) {
+                var win = parseInt(currentConfig.win);
+                this.betWin = this.betPerNumber * win;
+                text = String(this.betWin);
+            }
+        }
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".plot_total .money_win span").innerText = text;
+    };
+    FormBet.prototype.hasChoosen = function () {
+        var items = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].all(".ls_lotto span.lotto");
+        return items.length > 0;
+    };
+    FormBet.prototype.getNumberChoosen = function () {
+        var items = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].all(".ls_lotto span.lotto");
+        var numbers = [];
+        for (var i = 0; i < items.length; i++) {
+            var element = items[i];
+            numbers.push(element.innerText);
+        }
+        return numbers;
+    };
+    FormBet.prototype.getTotalMoney = function () {
+        var input = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._('.box_booking input[name="bet"]');
+        var value = 1;
+        if (input) {
+            value = parseInt(input.value);
+        }
+        return value;
+    };
+    FormBet.prototype.updateBoxTitle = function () {
+        _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].updateListLotto();
+        _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].changeGameTitle();
+    };
+    return FormBet;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FormBet);
+
+
+/***/ }),
+
 /***/ "./src/Lotto/Games/GameChoose.ts":
 /*!***************************************!*\
   !*** ./src/Lotto/Games/GameChoose.ts ***!
@@ -92,35 +288,62 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Base/Selector */ "./src/Base/Selector.ts");
+/* harmony import */ var _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../LottoGlobal */ "./src/Lotto/LottoGlobal.ts");
+/* harmony import */ var _BaseGame__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BaseGame */ "./src/Lotto/Games/BaseGame.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 
-var GameChoose = /** @class */ (function () {
-    function GameChoose() {
-        this.initEvents();
+
+
+var GameChoose = /** @class */ (function (_super) {
+    __extends(GameChoose, _super);
+    function GameChoose(formbet) {
+        var _this_1 = _super.call(this, formbet) || this;
+        _this_1.initEvents();
+        return _this_1;
     }
     GameChoose.prototype.initEvents = function () {
         var self = this;
-        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].on('click', '.ls_number .item_number span', function (e) {
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].on("click", ".ls_number .item_number span", function (e) {
             var _this = e.target;
             var currentTab = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._('.panel .type_js.nav-item[data-state="true"]');
             var targetId = currentTab.dataset.target;
             var currentGame = currentTab.id;
             var currentConfig = LOTTO_TYPES[currentGame];
-            if (_this.classList.contains('choosen')) {
-                _this.classList.remove('choosen');
+            if (_this.classList.contains("choosen")) {
+                _this.classList.remove("choosen");
             }
             else {
                 if (self.validate(targetId, currentConfig)) {
-                    _this.classList.add('choosen');
+                    _this.classList.add("choosen");
                 }
                 else {
                     alert("B\u1EA1n ch\u1EC9 \u0111\u01B0\u1EE3c \u0111\u00E1nh ".concat(currentConfig.choose_max, " s\u1ED1!"));
                 }
             }
+            self.updateListLotto();
         });
+    };
+    GameChoose.prototype.updateListLotto = function () {
+        _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].updateListLotto();
+        this.formbet.changeHtmlPreview();
     };
     GameChoose.prototype.validate = function (targetId, currentConfig) {
         var currentPanel = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(targetId);
-        var checkedItems = currentPanel.querySelectorAll(':scope .item_number span.choosen');
+        var checkedItems = currentPanel.querySelectorAll(":scope .item_number span.choosen");
         if (!currentConfig)
             return false;
         if (checkedItems.length >= currentConfig.choose_max) {
@@ -128,8 +351,14 @@ var GameChoose = /** @class */ (function () {
         }
         return true;
     };
+    GameChoose.prototype.removeChoosen = function () {
+        var items = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].all(".item_number span.choosen");
+        items.forEach(function (e, i) {
+            e.classList.remove("choosen");
+        });
+    };
     return GameChoose;
-}());
+}(_BaseGame__WEBPACK_IMPORTED_MODULE_2__["default"]));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GameChoose);
 
 
@@ -146,14 +375,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Base/Selector */ "./src/Base/Selector.ts");
+/* harmony import */ var _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../LottoGlobal */ "./src/Lotto/LottoGlobal.ts");
+/* harmony import */ var _BaseGame__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BaseGame */ "./src/Lotto/Games/BaseGame.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 
-var GameSelect = /** @class */ (function () {
-    function GameSelect() {
-        this.initEvents();
+
+
+var GameSelect = /** @class */ (function (_super) {
+    __extends(GameSelect, _super);
+    function GameSelect(formbet) {
+        var _this_1 = _super.call(this, formbet) || this;
+        _this_1.initEvents();
+        return _this_1;
     }
     GameSelect.prototype.initEvents = function () {
         var self = this;
-        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].on('click', '.ls_number .group_number button.btn_xs', function (e) {
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].on("click", ".ls_number .group_number button.btn_xs", function (e) {
             var _this = e.target;
             var currentTab = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._('.panel .type_js.nav-item[data-state="true"]');
             var targetId = currentTab.dataset.target;
@@ -163,8 +414,9 @@ var GameSelect = /** @class */ (function () {
             var panel = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(targetId);
             var number = self.getChooseNumber(panel);
             self.addNumber(panel, number);
+            self.updateListLotto();
         });
-        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].on('click', '.ls_number .item_number_select span', function (e) {
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].on("click", ".ls_number .item_number_select span", function (e) {
             var _this = e.target;
             var text = _this.innerHTML;
             if (confirm("B\u1EA1n mu\u1ED1n x\u00F3a s\u1ED1 ".concat(text, "?"))) {
@@ -172,9 +424,13 @@ var GameSelect = /** @class */ (function () {
             }
         });
     };
+    GameSelect.prototype.updateListLotto = function () {
+        _LottoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].updateListLotto();
+        this.formbet.changeHtmlPreview();
+    };
     GameSelect.prototype.getChooseNumber = function (panel) {
-        var selects = panel.querySelectorAll('.ls_number .group_number select');
-        var number = '';
+        var selects = panel.querySelectorAll(".ls_number .group_number select");
+        var number = "";
         for (var i = 0; i < selects.length; i++) {
             var element = selects[i];
             number += element.value;
@@ -182,19 +438,90 @@ var GameSelect = /** @class */ (function () {
         return number;
     };
     GameSelect.prototype.addNumber = function (panel, number) {
-        var listChoosen = panel.querySelector('.ls_number .ls_number.list_choosen');
+        var listChoosen = panel.querySelector(".ls_number .ls_number.list_choosen");
         var item = listChoosen.querySelector("span[data-number=\"".concat(number, "\"]"));
         if (item) {
             alert("B\u1EA1n \u0111\u00E3 ch\u1ECDn s\u1ED1 ".concat(number, " tr\u01B0\u1EDBc \u0111\u00F3!"));
         }
         else {
-            var str = "<label class=\"item_number_select\">\n            <span type=\"checkbox\" data-number=\"".concat(number, "\">").concat(number, "</span>\n        </label>");
-            listChoosen.insertAdjacentHTML('beforeend', str);
+            var str = "<label class=\"item_number_select\">\n            <span type=\"checkbox\" class=\"choosen\" data-number=\"".concat(number, "\">").concat(number, "</span>\n        </label>");
+            listChoosen.insertAdjacentHTML("beforeend", str);
         }
     };
+    GameSelect.prototype.removeChoosen = function () {
+        var itemSelects = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].all(".list_choosen .item_number_select span.choosen");
+        itemSelects.forEach(function (e, i) {
+            e.parentElement.remove();
+        });
+    };
     return GameSelect;
-}());
+}(_BaseGame__WEBPACK_IMPORTED_MODULE_2__["default"]));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GameSelect);
+
+
+/***/ }),
+
+/***/ "./src/Lotto/LottoGlobal.ts":
+/*!**********************************!*\
+  !*** ./src/Lotto/LottoGlobal.ts ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Base/Selector */ "./src/Base/Selector.ts");
+
+var LottoGlobal = /** @class */ (function () {
+    function LottoGlobal() {
+    }
+    LottoGlobal.changeGameTitle = function () {
+        var html = "<span class=\"domain xs\">Mi\u1EC1n B\u1EAFc</span> / ";
+        var title = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".box_booking .box_mini .types");
+        var category = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".item_type_game.nav-item input[name=category]:checked");
+        var categoryParent = category.parentElement;
+        if (categoryParent) {
+            html += "<span class=\"lotto xs\">".concat(categoryParent.innerText, "</span> / ");
+        }
+        var type = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._('.type_js.nav-item input[name="type"]:checked');
+        var typeParent = type.parentElement;
+        if (typeParent) {
+            html += "<span class=\"type xs\">".concat(typeParent.innerText, "</span>");
+        }
+        title.innerHTML = html;
+    };
+    LottoGlobal.updateListLotto = function () {
+        var lottos = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".ls_lotto");
+        var html = "";
+        var items = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].all(".item_number span.choosen");
+        var itemSelects = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].all(".list_choosen .item_number_select span.choosen");
+        if (items.length > 0) {
+            items.forEach(function (e, i) {
+                html += "<span class=\"lotto\">".concat(e.innerText, "</span>");
+            });
+        }
+        else if (itemSelects.length > 0) {
+            itemSelects.forEach(function (e, i) {
+                html += "<span class=\"lotto\">".concat(e.innerText, "</span>");
+            });
+        }
+        else {
+            html = "<span class=\"no-result\">Ch\u01B0a ch\u1ECDn s\u1ED1</span>";
+        }
+        lottos.innerHTML = html;
+    };
+    LottoGlobal.getCurrentGameConfig = function () {
+        var currentTab = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._('.panel .type_js.nav-item[data-state="true"]');
+        if (!currentTab)
+            return;
+        var currentGame = currentTab.id;
+        var currentConfig = LOTTO_TYPES[currentGame];
+        return currentConfig;
+    };
+    return LottoGlobal;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LottoGlobal);
 
 
 /***/ }),
@@ -210,7 +537,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Base_Ajax__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Base/Ajax */ "./src/Base/Ajax.ts");
-/* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Base/Selector */ "./src/Base/Selector.ts");
+/* harmony import */ var _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Base/BaseGui */ "./src/Base/BaseGui.ts");
+/* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Base/Selector */ "./src/Base/Selector.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -249,36 +577,46 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 };
 
 
+
 var LottoUi = /** @class */ (function () {
-    function LottoUi() {
+    function LottoUi(formbet, gameChoose, gameSelect) {
+        this.formbet = formbet;
+        this.gameChoose = gameChoose;
+        this.gameSelect = gameSelect;
     }
     LottoUi.prototype.init = function () {
         this.initEvents();
         this.showQuestion();
     };
     LottoUi.prototype.initEvents = function () {
+        this.initEventCategoryChange();
+        this.initEventTypeChange();
+    };
+    LottoUi.prototype.initEventCategoryChange = function () {
         var self = this;
-        var typeGames = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"].all('.item_type_game input');
+        var typeGames = _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"].all(".item_type_game input");
         typeGames.forEach(function (typeGame) {
-            typeGame.addEventListener('change', function (e) {
+            typeGame.addEventListener("change", function (e) {
                 return __awaiter(this, void 0, void 0, function () {
                     var input, parent, type, content, target, otherpanels;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
                                 input = this;
-                                ;
                                 parent = this.parentElement;
                                 type = input ? input.value : 0;
+                                _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].showLoading();
                                 return [4 /*yield*/, self.getGameContent(type)];
                             case 1:
                                 content = _a.sent();
-                                target = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(parent.getAttribute('data-target'));
-                                otherpanels = target.parentElement.querySelectorAll(':scope > .panel');
+                                _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].hideLoading();
+                                target = _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"]._(parent.getAttribute("data-target"));
+                                otherpanels = target.parentElement.querySelectorAll(":scope > .panel");
                                 otherpanels.forEach(function (otherpanel, i) {
-                                    otherpanel.innerHTML = '';
+                                    otherpanel.innerHTML = "";
                                 });
                                 target.innerHTML = content.html;
+                                self.updateAfterGetGameContent();
                                 return [2 /*return*/];
                         }
                     });
@@ -291,11 +629,26 @@ var LottoUi = /** @class */ (function () {
             input.dispatchEvent(eventInit);
         }
     };
+    LottoUi.prototype.updateAfterGetGameContent = function () {
+        this.formbet.updateBoxTitle();
+        this.formbet.changeHtmlPreview();
+    };
+    LottoUi.prototype.initEventTypeChange = function () {
+        var self = this;
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"].on("change", ".type_js.nav-item input[name=type]", function (e) {
+            self.clearChoosenItem();
+            self.formbet.updateBoxTitle();
+        });
+    };
+    LottoUi.prototype.clearChoosenItem = function () {
+        this.gameChoose.removeChoosen();
+        this.gameSelect.removeChoosen();
+    };
     LottoUi.prototype.getGameContent = function (typeGame) {
         return _Base_Ajax__WEBPACK_IMPORTED_MODULE_0__["default"].get("get-game-lotto-content", { typeGame: typeGame });
     };
     LottoUi.prototype.showQuestion = function () {
-        _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"].on('click', 'span.question', function (e) {
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"].on("click", "span.question", function (e) {
             var _this = e.target;
             var next = _this.nextElementSibling;
             if (!next) {
@@ -428,19 +781,22 @@ var __webpack_exports__ = {};
   !*** ./src/lotto.ts ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Lotto_Games_GameChoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Lotto/Games/GameChoose */ "./src/Lotto/Games/GameChoose.ts");
-/* harmony import */ var _Lotto_Games_GameSelect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Lotto/Games/GameSelect */ "./src/Lotto/Games/GameSelect.ts");
-/* harmony import */ var _Lotto_LottoUi__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Lotto/LottoUi */ "./src/Lotto/LottoUi.ts");
-/* harmony import */ var _Lotto_TabPanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Lotto/TabPanel */ "./src/Lotto/TabPanel.ts");
+/* harmony import */ var _Lotto_Games_FormBet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Lotto/Games/FormBet */ "./src/Lotto/Games/FormBet.ts");
+/* harmony import */ var _Lotto_Games_GameChoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Lotto/Games/GameChoose */ "./src/Lotto/Games/GameChoose.ts");
+/* harmony import */ var _Lotto_Games_GameSelect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Lotto/Games/GameSelect */ "./src/Lotto/Games/GameSelect.ts");
+/* harmony import */ var _Lotto_LottoUi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Lotto/LottoUi */ "./src/Lotto/LottoUi.ts");
+/* harmony import */ var _Lotto_TabPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Lotto/TabPanel */ "./src/Lotto/TabPanel.ts");
 
 
 
 
-var tabPanel = new _Lotto_TabPanel__WEBPACK_IMPORTED_MODULE_3__["default"]();
-var lottoUi = new _Lotto_LottoUi__WEBPACK_IMPORTED_MODULE_2__["default"]();
+
+var tabPanel = new _Lotto_TabPanel__WEBPACK_IMPORTED_MODULE_4__["default"]();
+var formBet = new _Lotto_Games_FormBet__WEBPACK_IMPORTED_MODULE_0__["default"]();
+var gameChoose = new _Lotto_Games_GameChoose__WEBPACK_IMPORTED_MODULE_1__["default"](formBet);
+var gameSelect = new _Lotto_Games_GameSelect__WEBPACK_IMPORTED_MODULE_2__["default"](formBet);
+var lottoUi = new _Lotto_LottoUi__WEBPACK_IMPORTED_MODULE_3__["default"](formBet, gameChoose, gameSelect);
 lottoUi.init();
-var gameChoose = new _Lotto_Games_GameChoose__WEBPACK_IMPORTED_MODULE_0__["default"]();
-var gameSelect = new _Lotto_Games_GameSelect__WEBPACK_IMPORTED_MODULE_1__["default"]();
 
 })();
 

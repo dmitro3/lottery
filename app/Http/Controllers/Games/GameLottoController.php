@@ -22,7 +22,7 @@ class GameLottoController extends BaseGameController
         $showBaseLoading = false;
         $user = \Auth::user();
         $categories = GameLottoCategory::select('name', 'id')->act()->get();
-        $types = GameLottoType::select('code', 'choose_min', 'choose_max', 'bet', 'win')->act()->get()->keyBy('code');
+        $types = GameLottoType::select('code', 'choose_min', 'choose_max', 'bet', 'win', 'min_bet')->act()->get()->keyBy('code');
         return view('games.lotto.index', compact('user', 'showBaseLoading', 'categories', 'types'));
     }
     public function getGameContent($request)

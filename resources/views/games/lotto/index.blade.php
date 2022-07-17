@@ -37,30 +37,30 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                         <div class="box box_choose">
                             <div class="game_types navv">
                                 @foreach($categories as $k=> $category)
-                                    <label for="type-{{$category->id}}" class="item_type_game nav-item"  id="lb-type-{{$category->id}}" data-target="#game-type-{{$category->id}}">
-                                        <input type="radio" id="type-{{$category->id}}" {{$k==0?'checked':''}} value="{{$category->id}}" name="category">
-                                        <span class="name">{{Support::show($category,'name')}}</span>
-                                    </label>
+                                <label for="type-{{$category->id}}" class="item_type_game nav-item" id="lb-type-{{$category->id}}" data-target="#game-type-{{$category->id}}">
+                                    <input type="radio" id="type-{{$category->id}}" {{$k==0?'checked':''}} value="{{$category->id}}" name="category">
+                                    <span class="name">{{Support::show($category,'name')}}</span>
+                                </label>
                                 @endforeach
                             </div>
                             <div class="tab_panel">
                                 <div class="panel" data-state="show" id="game-type-1">
-                                   
+
                                 </div>
                                 <div class="panel" data-state="hide" id="game-type-2">
-                                    
+
                                 </div>
                                 <div class="panel" data-state="hide" id="game-type-3">
-                                   
+
                                 </div>
                                 <div class="panel" data-state="hide" id="game-type-4">
-                                    
+
                                 </div>
                                 <div class="panel" data-state="hide" id="game-type-5">
-                                    
+
                                 </div>
                                 <div class="panel" data-state="hide" id="game-type-6">
-                                   
+
                                 </div>
                             </div>
                         </div>
