@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Win;
 
+use App\Models\Games\Win\GameWinType;
 use Illuminate\Console\Command;
 
 class CalculateResult extends Command
@@ -46,10 +47,14 @@ class CalculateResult extends Command
             $minute = $now->minute;
             $second = $now->second;
 
-            if ($second > 60) {
+            if ($second >= 55) {
                 if (!$gameEnded) {
-                    // $this->generateGameResult();
-                    //code here
+                    $listGameWinType = GameWinType::get();
+                    foreach ($listGameWinType as $itemGameWinType) {
+                        $currentGame = $itemGameWinType->getCurrentGameRecord();
+                        $currentGame->initWinNumber();
+                        $currentGame->end();
+                    }
                     $gameEnded = true;
                 }
             } else {

@@ -38,7 +38,9 @@ class Wallet extends BaseModel
             'amount_freeze_after'        => $this->amount_freeze,
             'amount_availability_before' => $amountAvailabilityBefore,
             'amount_availability_after'  => $this->amount_availability,
-            'reason'                     => $reason
+            'reason'                     => $reason,
+            'created_at'                 => now(),
+            'updated_at'                 => now(),
         );
         $this->createHistory($dataHistory);
     }
@@ -60,7 +62,9 @@ class Wallet extends BaseModel
             'amount_freeze_after'        => $this->amount_freeze,
             'amount_availability_before' => $amountAvailabilityBefore,
             'amount_availability_after'  => $this->amount_availability,
-            'reason'                     => $reason
+            'reason'                     => $reason,
+            'created_at'                 => now(),
+            'updated_at'                 => now(),
         );
         $this->createHistory($dataHistory);
     }

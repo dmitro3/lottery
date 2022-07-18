@@ -66,18 +66,5 @@ Route::group([
     });
     Route::get('/', 'HomeController@index')->name('home');
     
-    /* Cron router */
-
-    // Chạy 1 tuần 1 lần vào lúc 00:01
-    Route::get('update-user-agency-level', 'Auth\MarketingController@updateUserAgencyLevel');
-
-    // Chạy 1 ngày 1 lần
-    Route::get('render-game-win-record', 'Games\GameWinController@renderGameWinRecord');
-
-    // Chạy 1 phút 1 lần
-    Route::get('init-user-commission-incurred', 'Auth\MarketingController@initUserCommissionIncurred');
-    
-    /* End Cron router */
-
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');
 });
