@@ -62,6 +62,7 @@ Route::group([
         Route::get('/marketing/lich-su-gioi-thieu', 'MarketingController@introductionHistory');
         Route::get('/marketing/huong-dan', 'MarketingController@guide');
         Route::get('/marketing/doi-cua-toi', 'MarketingController@myTeam');
+        Route::get('/marketing/lich-su-nhan', 'MarketingController@receiptHistory');
     });
     Route::get('/', 'HomeController@index')->name('home');
     

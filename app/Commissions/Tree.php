@@ -1,9 +1,7 @@
 <?php
 namespace App\Commissions;
 use App\Models\{
-    CommissionTree,
-    CommissionStatistics,
-    CommissionLevelConfig
+    CommissionTree
 };
 class Tree
 {

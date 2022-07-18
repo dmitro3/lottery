@@ -54,4 +54,15 @@ class GamePlinkoRecord extends BaseModel
         $this->is_end = 1;
         $this->save();
     }
+    public function buildAdminHistoryData()
+    {
+        $gameWinUserBets = $this->gamePlinkoUserBets()->select('mode',\DB::raw('sum(amount) as total_amount_bet'))
+                                                ->groupBy('mode')
+                                                ->get();
+        $ret = [];
+        foreach ($gameWinUserBets as $item) {
+            $ret[$item->mode] = $item->total_amount_bet;
+        }
+        return $ret;
+    }
 }

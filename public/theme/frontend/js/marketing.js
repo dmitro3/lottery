@@ -58,11 +58,51 @@ var MARKETING_GUI = (function () {
             }
         }
     };
+    var initQrcode = function () {
+        var qrcodeBox = document.querySelector("#qrcode");
+        if (qrcodeBox) {
+            var qrCode = new QRCode(qrcodeBox, qrcodeBox.dataset.link);
+            qrCode.makeCode(qrcodeBox.dataset.link);
+        }
+    };
+    var initClickShowItemMyteamInfo = function () {
+        var listItemMyteamInfo = document.querySelectorAll(".item-myteam-info");
+        listItemMyteamInfo.forEach((element) => {
+            var btnShowBdshow = element.querySelector(".btn-show-bdshow");
+            var bdshow = element.querySelector(".bdshow");
+            if (btnShowBdshow && bdshow) {
+                btnShowBdshow.onclick = function () {
+                    if (this.classList.contains("action")) {
+                        this.classList.remove("action");
+                        bdshow.style.display = "none";
+                    } else {
+                        listItemMyteamInfo.forEach((elm) => {
+                            var btnShowBdshowElm =
+                                elm.querySelector(".btn-show-bdshow");
+                            var bdshowElm = elm.querySelector(".bdshow");
+                            if (btnShowBdshowElm) {
+                                btnShowBdshowElm.classList.remove("action");
+                            }
+                            if (bdshowElm) {
+                                bdshowElm.style.display = "none";
+                            }
+                        });
+                        this.classList.add("action");
+                        bdshow.style.display = "block";
+                    }
+                };
+            }
+        });
+    };
     return {
         _: function () {
             initDateMarketingPicker();
             initFormFillterMyteam();
+            initQrcode();
             BASE_GUI.initCopyTextbtn();
+        },
+        initClickShowItemMyteamInfo() {
+            initClickShowItemMyteamInfo();
         },
     };
 })();

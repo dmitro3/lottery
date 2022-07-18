@@ -28,4 +28,12 @@ class CommissionStatistics extends BaseModel
         $newCurrentDayRecord->save();
         return $newCurrentDayRecord;
     }
+    public static function getTotalAmountWeek($userId)
+    {
+        return self::where('user_id',$userId)->where('created_at','>=',now()->startOfWeek())->sum('total_amount');
+    }
+    public static function getTotalAmount($userId)
+    {
+        return self::where('user_id',$userId)->sum('total_amount');
+    }
 }

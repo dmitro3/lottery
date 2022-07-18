@@ -61,21 +61,11 @@
                                     <div class="name"> WIN GO </div>
                                     <div class="des"> Đoán màu xanh lá cây/tím/đỏ để giành chiến thắng </div><img width="120px" height="85px" src="theme/frontend/images/logo-wingo.37b04b53.png" class="img m-r-5">
                                 </div>
-                                
                             </a>
                             <a href="plinko" class="item m-b-20">
                                 <div class="info i4">
                                     <div class="name"> Plinko </div>
                                     <div class="des"> Thả bóng để chiến thắng </div><img width="120px" height="85px" src="theme/frontend/images/plinko.png" class="img m-r-5">
-                                </div>
-                                <div class="userList">
-                                    <div class="gomeList">
-                                        <div class="list">
-                                            <div class="swpier van-swipe">
-
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </a>
                             <a href="lotto" class="item m-b-20">

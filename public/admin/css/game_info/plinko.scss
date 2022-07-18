@@ -8,32 +8,7 @@
     font-weight: bold;
 }
 
-.form-list-wingo-type .item{
-    margin: 5px;
-    cursor: pointer;
-}
-.form-list-wingo-type .item .preview-name{
-    display: inline-block;
-    transition: .3s ;
-    min-width: 100px;
-    border: solid 1px #e1e1e1;
-    text-align: center;
-    color: #909090;
-    background-color: #f9f9f9;
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 3px;
-}
-.form-list-wingo-type .item:hover .preview-name{
-    border: solid 1px #17a2b8;
-    color: #17a2b8;
-}
-.form-list-wingo-type .item input:checked ~ .preview-name{
-    background: #17a2b8;
-    border: solid 1px #17a2b8;
-    color: #fff;
-}
-.wingo-history-list-item{
+.plinko-history-list-item{
     .item{
         border: solid 1px #e1e1e1;
         margin-top: 10px;
@@ -80,30 +55,6 @@
     .title-box{
         background: rgba(249, 249, 249, 0.5);
     }
-    .color-green,.color-small,.color-1,.color-3,.color-7,.color-9{
-        background: #5cba47;
-        color: #fff;
-    }
-    .color-violet{
-        background: #db5fd1;
-        color: #fff;
-    }
-    .color-red,.color-2,.color-4,.color-6,.color-8{
-        background: #fb4e4e;
-        color: #fff;
-    }
-    .color-big{
-        background: #ffc511;
-        color: #fff;
-    }
-    .color-0{
-        background-image: linear-gradient(-45deg , #db5fd1 50%, #fb4e4e 50%);
-        color: #fff;
-    }
-    .color-5{
-        background-image: linear-gradient(-45deg , #db5fd1 50%, #5cba47 50%);
-        color: #fff;
-    }
 }
 .current-game-countdown-timebox{
     justify-content: center;
@@ -123,7 +74,7 @@
         border-radius: 5px;
     }
 }
-.wingo-current-item-wrapper{
+.plinko-current-item-wrapper{
     position: relative;
     &.in-loadding{
         &::before{
