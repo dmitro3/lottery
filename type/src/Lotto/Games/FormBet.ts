@@ -1,11 +1,12 @@
 import Selector from "../../Base/Selector";
 import LottoGlobal from "../LottoGlobal";
+import LottoSocket from "../LottoSocket";
 
 export default class FormBet {
     private totalMinBet: number = 0;
     private betPerNumber: number = 0;
     private betWin: number = 0;
-    constructor() {
+    constructor(private lottoSocket: LottoSocket) {
         this.initEvents();
         this.initSubmit();
         this.changeHtmlPreview();
@@ -21,21 +22,47 @@ export default class FormBet {
     }
     protected initSubmit() {
         let self = this;
-        let button = Selector._(".btn_all.book");
+        let button = Selector._('#lotto_bet');
+
         button.addEventListener("click", function (e: any) {
             let _this = e.target;
-            self.validateSubmit();
+            if (self.validateBetting()) {
+                self.sendPlayRequest();
+            }
         });
     }
-    validateSubmit() {
-        let currentConfig = LottoGlobal.getCurrentGameConfig();
-        if (currentConfig) {
-            let chooseMin = parseInt(currentConfig.choose_min);
-            let num = this.getNumberChoosen().length;
-            if (num < chooseMin) {
-                alert(`Chọn tối thiểu ${chooseMin} số!`);
+    private sendPlayRequest() {
+        let inputMoney = Selector._('input[name=bet]');
+        let money = parseInt(inputMoney.value) || 0;
+        let numbers = this.getNumberChoosen();
+        let currentGameConfig = LottoGlobal.getCurrentGameConfig();
+        let type = currentGameConfig.id;
+        this.lottoSocket.sendPlayRequest(type, money, numbers);
+
+    }
+    private validateBetting() {
+        let currentGameConfig = LottoGlobal.getCurrentGameConfig();
+        let inputMoney = Selector._('input[name=bet]');
+        if (!inputMoney || !currentGameConfig) return false;
+        let money = parseInt(inputMoney.value) || 0;
+        let numberLotto = this.getNumberChoosen().length;
+        let minMoney = numberLotto * currentGameConfig.min_bet;
+        let minChoose = currentGameConfig.choose_min;
+        let maxChoose = currentGameConfig.choose_max;
+        if (numberLotto < minChoose || numberLotto > maxChoose) {
+            if (minChoose == maxChoose) {
+                alert(`Bạn cần chọn ${minChoose} số!`)
             }
+            else {
+                alert(`Bạn cần chọn tối thiểu ${minChoose} số và tối đa ${maxChoose} số!`)
+            }
+            return false;
         }
+        if (money < minMoney) {
+            alert(`Số tiền tối thiểu là ${minMoney}k!`);
+            return false;
+        }
+        return true;
     }
     private validateMoney(input: any) {
         let value = input.value;
@@ -95,6 +122,7 @@ export default class FormBet {
             if (currentConfig) {
                 let win = parseInt(currentConfig.win);
                 this.betWin = this.betPerNumber * win;
+                this.betWin = Math.round(this.betWin * 100) / 100
                 text = String(this.betWin);
             }
         }

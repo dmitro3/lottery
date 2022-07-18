@@ -5,8 +5,10 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @section('css')
 <link href="theme/frontend/lotto/css/style.css" rel="stylesheet">
 <script type="text/javascript">
-    var connectionGameType = '{{PushServerHelper::generateHash(2)}}';
+    var connectionGameType = '{{PushServerHelper::generateHash(\realtimemodule\pushserver\PushServerProvider::TYPE_GAME_LOTTO)}}';
     var LOTTO_TYPES = <?php echo json_encode($types) ?>;
+    var LOTTO_STATUS = <?php echo json_encode(\realtimemodule\pushserver\Enums\Lotto\Status::getConstList()) ?>;
+    var LOTTO_CONFIG = <?php echo json_encode(\App\Games\Lotto\Enums\Config::getConstList()) ?>;
 </script>
 @endsection
 @section('content')
@@ -22,11 +24,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                     <div class="out">
                         <div class="txt"> Thời gian còn lại để mua </div>
                         <div class="number c-row c-row-middle c-flew-end">
-                            <div class="item">0</div>
-                            <div class="item">0</div>
-                            <div class="item c-row c-row-middle">:</div>
-                            <div class="item">1</div>
-                            <div class="item">9</div>
+                           
                         </div>
                     </div>
                 </div>
@@ -84,7 +82,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                                 <p class="block_total money_win">Tiền thắng / 1 con<span class="total">198</span>
                                 </p>
                             </div>
-                            <button type="submit" class="btn_all book">ĐẶT CƯỢC</button>
+                            <button type="button" id="lotto_bet" class="btn_all book">ĐẶT CƯỢC</button>
                         </div>
                     </div>
                 </section>

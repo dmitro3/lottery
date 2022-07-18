@@ -4,7 +4,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @extends('index')
 @section('css')
     <script type="text/javascript">
-        var connectionGameType = '{{PushServerHelper::generateHash(1)}}';
+        var connectionGameType = '{{PushServerHelper::generateHash(\realtimemodule\pushserver\PushServerProvider::TYPE_GAME_WIN)}}';
     </script>
 @endsection
 @section('content')

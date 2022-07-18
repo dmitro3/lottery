@@ -2,11 +2,7 @@
 
 namespace App\Console\Commands\Plinko;
 
-use App\Games\Plinko\Enums\BallType;
-use App\Games\Plinko\Enums\Config as PlinkoConfig;
-use App\Games\Plinko\Prize;
-use App\Models\Games\Plinko\GamePlinkoType;
-use App\Models\Games\Plinko\GamePlinkoUserBet;
+use App\Models\Games\Lotto\GameLottoPlayType;
 use Illuminate\Console\Command;
 
 class GenerateGameRercords extends Command
@@ -16,14 +12,14 @@ class GenerateGameRercords extends Command
      *
      * @var string
      */
-    protected $signature = 'plinko:generate-records';
+    protected $signature = 'lotto:generate-records';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate Game Plinko Records';
+    protected $description = 'Generate Game Lotto Records';
 
     /**
      * Create a new command instance.
@@ -44,7 +40,7 @@ class GenerateGameRercords extends Command
     {
 
         $this->info("Start " . $this->description);
-        GamePlinkoType::find(1)->generateGameRecords();
+        GameLottoPlayType::find(1)->generateGameRecords();
         $this->info("End " . $this->description);
     }
 }
