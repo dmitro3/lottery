@@ -22,10 +22,8 @@
                 <div class="info">
                     <div class="info-data c-row c-row-between m-b-20">
                         <div class="left">
-                            <h5 class="all">Hoa hồng ngày hôm qua</h5>
+                            <h5 class="all">Hoa hồng ngày hôm nay</h5>
                             <p class="num">0</p>
-                            <p class="txt">Hoa hồng trực tiếp:0</p>
-                            <p class="txt">Hoa hồng đội:0</p>
                         </div>
                         <div class="right">
                             <p class="txt">Cấp dưới trực tiếp:<span
