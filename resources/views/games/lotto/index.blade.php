@@ -3,19 +3,92 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @endphp
 @extends('index')
 @section('css')
-<link href="theme/frontend/plinko/css/style.css" rel="stylesheet">
+<link href="theme/frontend/lotto/css/style.css" rel="stylesheet">
 <script type="text/javascript">
     var connectionGameType = '{{PushServerHelper::generateHash(2)}}';
-    var PLINKO_STATUS = <?php echo json_encode(\realtimemodule\pushserver\Enums\Plinko\Status::getConstList()) ?>;
-    var PLINKO_CONFIG = <?php echo json_encode(\App\Games\Plinko\Enums\Config::getConstList()) ?>;
+    var LOTTO_TYPES = <?php echo json_encode($types) ?>;
 </script>
 @endsection
 @section('content')
 <div id="app">
     <div class="mian game">
-        @include('games.base_game_bar',['gameName'=>'plinko'])
+        @include('games.base_game_bar',['gameName'=>'lotto'])
         <div class="game-betting">
-           
+            <div class="content">
+                <div class="time-box c-row c-row-between m-b-10" id="game-lotto-time-box">
+                    <div class="info" style="display: flex;align-items:center">
+                        <div class="number">2022071411425</div>
+                    </div>
+                    <div class="out">
+                        <div class="txt"> Thời gian còn lại để mua </div>
+                        <div class="number c-row c-row-middle c-flew-end">
+                            <div class="item">0</div>
+                            <div class="item">0</div>
+                            <div class="item c-row c-row-middle">:</div>
+                            <div class="item">1</div>
+                            <div class="item">9</div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="result_plot_threads">
+                    @include('games.lotto.result_table')
+                    <div class="container">
+                        <div class="box box_choose">
+                            <div class="game_types navv">
+                                @foreach($categories as $k=> $category)
+                                <label for="type-{{$category->id}}" class="item_type_game nav-item" id="lb-type-{{$category->id}}" data-target="#game-type-{{$category->id}}">
+                                    <input type="radio" id="type-{{$category->id}}" {{$k==0?'checked':''}} value="{{$category->id}}" name="category">
+                                    <span class="name">{{Support::show($category,'name')}}</span>
+                                </label>
+                                @endforeach
+                            </div>
+                            <div class="tab_panel">
+                                <div class="panel" data-state="show" id="game-type-1">
+
+                                </div>
+                                <div class="panel" data-state="hide" id="game-type-2">
+
+                                </div>
+                                <div class="panel" data-state="hide" id="game-type-3">
+
+                                </div>
+                                <div class="panel" data-state="hide" id="game-type-4">
+
+                                </div>
+                                <div class="panel" data-state="hide" id="game-type-5">
+
+                                </div>
+                                <div class="panel" data-state="hide" id="game-type-6">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box_booking">
+                            <p class="title_lg" id="current-game">Đánh đề</p>
+                            <div class="box_mini">
+                                <div class="types">
+                                    <span class="domain xs">Miền Bắc</span> / <span class="lotto xs">Đánh lô</span> / <span class="type xs">Lô 2 số</span>
+                                </div>
+                                <div class="ls_lotto" id="ls_lotto">
+                                    <span class="no-result">Chưa chọn số</span>
+                                </div>
+                            </div>
+                            <p class="xs lb_total">Tổng tiền đánh (K)</p>
+                            <input type="number" value="1" class="ip" name="bet">
+                            <div class="plot_total">
+                                <p class="block_total min">Cược tối thiểu<span class="total">198</span>
+                                </p>
+                                <p class="block_total money">Tiền đánh / 1 con<span class="total">198</span>
+                                </p>
+                                <p class="block_total money_win">Tiền thắng / 1 con<span class="total">198</span>
+                                </p>
+                            </div>
+                            <button type="submit" class="btn_all book">ĐẶT CƯỢC</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
         <div class="game-list p-b-20">
             @include('games.plinko.game_history')
@@ -25,8 +98,6 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 
 @endsection
 @section('js')
-<script src="theme/frontend/plinko/js/gui.js" defer></script>
-<script src="theme/frontend/plinko/js/lib.js" defer></script>
-<script src="theme/frontend/plinko/js/main.bundle.js" defer></script>
-<script src="theme/frontend/game/ts/plinko.js" defer></script>
+{{-- <script src="theme/frontend/lotto/js/gui.js" defer></script> --}}
+<script src="theme/frontend/game/ts/lotto.js" defer></script>
 @endsection

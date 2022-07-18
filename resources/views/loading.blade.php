@@ -1,4 +1,4 @@
-<div class="Loading c-row c-row-middle-center" style="display: {{isset($showBaseLoading) ? 'flex':'none'}}">
+<div class="Loading c-row c-row-middle-center" style="display: {{isset($showBaseLoading) && $showBaseLoading ? 'flex':'none'}}">
     <div class="van-loading van-loading--circular">
         <span class="van-loading__spinner van-loading__spinner--circular" style="color: rgb(242, 65, 59);">
             <svg viewBox="25 25 50 50" class="van-loading__circular">
