@@ -1,6 +1,16 @@
 import Selector from "../Base/Selector";
 
 export default class LottoGlobal {
+
+    private static _currentGameInfo: any = {};
+    public static get currentGameInfo(): any {
+        return LottoGlobal._currentGameInfo;
+    }
+    public static set currentGameInfo(value: any) {
+        LottoGlobal._currentGameInfo = value;
+    }
+
+
     public static changeGameTitle() {
         let html = `<span class="domain xs">Miền Bắc</span> / `;
         let title = Selector._(".box_booking .box_mini .types");
@@ -40,13 +50,18 @@ export default class LottoGlobal {
 
         lottos.innerHTML = html;
     }
-    public static getCurrentGameConfig() {
+    public static getCurrentTypeGame() {
         let currentTab = Selector._(
             '.panel .type_js.nav-item[data-state="true"]'
         );
-        if (!currentTab) return;
-        let currentGame = currentTab.id;
-        let currentConfig = LOTTO_TYPES[currentGame];
+        if (!currentTab) return 0;
+        return currentTab.id;
+    }
+
+    public static getCurrentGameConfig() {
+        let currentGame = this.getCurrentTypeGame();
+        let currentConfig = LOTTO_TYPES[currentGame] || {};
         return currentConfig;
     }
+
 }

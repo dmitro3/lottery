@@ -11,11 +11,13 @@ export default class LottoUi {
         private formbet: FormBet,
         private gameChoose: GameChoose,
         private gameSelect: GameSelect
-    ) {}
+    ) { }
     init() {
         this.initEvents();
         this.showQuestion();
     }
+
+
     initEvents() {
         this.initEventCategoryChange();
         this.initEventTypeChange();

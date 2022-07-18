@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class WalletTransactionType extends BaseModel
 {
     use HasFactory;
@@ -16,7 +19,12 @@ class WalletTransactionType extends BaseModel
     const MINUS_MONEY_BET_GAME_PLINKO = 10;
     const PLUS_MONEY_BET_GAME_PLINKO = 11;
 
-    public static function getArrTypeTakeCommissionAble(){
-        return [self::MINUS_MONEY_BET_GAME_GOWIN,self::MINUS_MONEY_BET_GAME_PLINKO];
+
+    const MINUS_MONEY_BET_GAME_LOTTO = 20;
+    const PLUS_MONEY_BET_GAME_LOTTO = 21;
+
+    public static function getArrTypeTakeCommissionAble()
+    {
+        return [self::MINUS_MONEY_BET_GAME_GOWIN, self::MINUS_MONEY_BET_GAME_PLINKO];
     }
 }

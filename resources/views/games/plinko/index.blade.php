@@ -5,7 +5,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @section('css')
 <link href="theme/frontend/plinko/css/style.css" rel="stylesheet">
 <script type="text/javascript">
-    var connectionGameType = '{{PushServerHelper::generateHash(2)}}';
+    var connectionGameType = '{{PushServerHelper::generateHash(\realtimemodule\pushserver\PushServerProvider::TYPE_GAME_PLINKO)}}';
     var PLINKO_STATUS = <?php echo json_encode(\realtimemodule\pushserver\Enums\Plinko\Status::getConstList()) ?>;
     var PLINKO_CONFIG = <?php echo json_encode(\App\Games\Plinko\Enums\Config::getConstList()) ?>;
 </script>
