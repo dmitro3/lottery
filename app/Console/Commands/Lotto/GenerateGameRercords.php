@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Plinko;
+namespace App\Console\Commands\Lotto;
 
 use App\Models\Games\Lotto\GameLottoPlayType;
 use Illuminate\Console\Command;

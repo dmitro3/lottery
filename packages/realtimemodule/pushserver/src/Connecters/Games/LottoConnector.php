@@ -114,7 +114,7 @@ class LottoConnector implements ConnecterInterface
         $numbers = array_unique($numbers);
 
         $money = (int) $gameData['money'];
-        $gameType = GameLottoType::find($type)->act();
+        $gameType = GameLottoType::find($type);
         if (!$gameType) {
             $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_CURRENT_GAME_INVALID, false, 'Xảy ra lỗi.'));
         }

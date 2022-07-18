@@ -18,8 +18,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
             <div class="content">
                 <div class="time-box c-row c-row-between m-b-10" id="game-plinko-time-box"></div>
                 <div class="box">
-                    <div class="mark-box c-row c-row-middle-center" style="display: none;">
-                        </div>
+                    <div class="mark-box c-row c-row-middle-center" style="display: none;"></div>
                     <div class="box-plinko c-row">
                         <div>
                             <div id="game" class="relative">

@@ -46,7 +46,7 @@ export default class LottoGameTimer {
                     `;
             }
         }
-        // this.showTimeChecker();
+        this.showTimeChecker();
         this.timeRemaining--;
 
     }
@@ -57,7 +57,7 @@ export default class LottoGameTimer {
         }
     }
     public showTimeChecker() {
-        var mark = Selector._(".game-betting .mark-box");
+        var mark = Selector._(".result_plot_threads .mark-box");
         let lastPoint = parseInt(LOTTO_CONFIG.LAST_POINT_TO_BET);
         let duration = parseInt(LOTTO_CONFIG.NUMBER_TIME_TO_CHECK);
         let showCountDownCalculate =

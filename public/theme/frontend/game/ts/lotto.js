@@ -706,7 +706,7 @@ var LottoGameTimer = /** @class */ (function () {
                 countDownTimeBox.innerHTML = "\n                        <div class=\"item\">".concat(minutes.substr(0, 1), "</div>\n                        <div class=\"item\">").concat(minutes.substr(1, 1), "</div>\n                        <div class=\"item c-row c-row-middle\">:</div>\n                        <div class=\"item\">").concat(seconds.substr(0, 1), "</div>\n                        <div class=\"item\">").concat(seconds.substr(1, 1), "</div>\n                    ");
             }
         }
-        // this.showTimeChecker();
+        this.showTimeChecker();
         this.timeRemaining--;
     };
     LottoGameTimer.prototype.refreshGame = function () {
@@ -715,7 +715,7 @@ var LottoGameTimer = /** @class */ (function () {
         }
     };
     LottoGameTimer.prototype.showTimeChecker = function () {
-        var mark = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".game-betting .mark-box");
+        var mark = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".result_plot_threads .mark-box");
         var lastPoint = parseInt(LOTTO_CONFIG.LAST_POINT_TO_BET);
         var duration = parseInt(LOTTO_CONFIG.NUMBER_TIME_TO_CHECK);
         var showCountDownCalculate = this.timeRemaining <= lastPoint &&
@@ -898,6 +898,7 @@ var LottoSocket = /** @class */ (function (_super) {
     };
     LottoSocket.prototype.betSuccess = function (data) {
         _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].createFlashNotify("Bet thành công.");
+        window.location.href = window.location.href;
     };
     LottoSocket.prototype.processMessageData = function (data) {
         var _a;
@@ -911,6 +912,7 @@ var LottoSocket = /** @class */ (function (_super) {
                 }
                 break;
             case LOTTO_STATUS.GAME_ACTION_DO_BET:
+                this.betSuccess(data.data);
                 break;
             case LOTTO_STATUS.GAME_ACTION_RETRIEVE_RESULT:
                 break;
