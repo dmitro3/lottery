@@ -26,13 +26,6 @@ class GameWinController extends BaseGameController
         $listGameWinMoneyItem = GameWinMoneyItem::where('act',1)->orderBy('ord','asc')->get();
         return view('games.win.index',compact('listGameWinType','listGameWinMultiple','listGameWinMoneyItem','activeAudio','user','showBaseLoading'));
     }
-    public function renderGameWinRecord()
-    {
-        $listGameWinType = GameWinType::get();
-        foreach ($listGameWinType as $itemGameWinType) {
-            $itemGameWinType->renderGameRecord();
-        }
-    }
     public function getGameHistory($request)
     {
         $gameWinTypeId = PushServerHelper::unHash($request->game_type ?? '');
