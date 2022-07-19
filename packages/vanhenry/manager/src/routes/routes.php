@@ -93,6 +93,12 @@
 		Route::post('change-type-menu',array( 'uses'=>"SysController@changeTypeMenu"));
 
 		Route::post('checkFieldDuplicated/{table}', array('uses' => "Admin@checkFieldDuplicated"));
+		
+		// Thông tin game
 		Route::get('game-info/{game}', array('uses' => "GameViewController@gameInfo"));
+
+		// Thông tin người dùng
+		Route::get('user-manage/user-info', array('uses' => "UserManageController@userInfo"));
+		Route::get('user-manage/load-user-withdraw-request', array('uses' => "UserManageController@loadUserWithdrawRequest"));
 	});
 ?>

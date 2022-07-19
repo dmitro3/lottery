@@ -3,7 +3,10 @@ namespace vanhenry\manager\controller;
 use vanhenry\manager\helpers\CT;
 use App\Models\Games\Win\{
     GameWinType,
-    GameWinRecord,
+};
+use App\Models\Games\Plinko\{
+    GamePlinkoType,
+    GamePlinkoRecord
 };
 class GameViewController extends Admin
 {
@@ -24,6 +27,9 @@ class GameViewController extends Admin
         switch ($game) {
             case 'wingo':
                 return $this->gameInfoWinfo();
+                break;
+            case 'plinko':
+                return $this->gameInfoPlinko();
                 break;
             default:
                 abort(404);
@@ -68,5 +74,40 @@ class GameViewController extends Admin
             'time_remaining' => $currentGame->getTimeRemaining(),
             'html' => view('vh::game_infos.wingo_current_game_result',compact('currentGame'))->render()
         ]);
+    }
+
+    private function gameInfoPlinko()
+    {
+        $action = request()->action;
+        switch ($action) {
+            case 'load_current_game_type_history':
+                return $this->loadCurrentGamePlinkoTypeHistory();
+                break;
+            case 'load_current_game':
+                return $this->loadCurrentGamePlinko();
+                break;
+            default:
+                break;
+        }
+        return view('vh::game_infos.plinko');
+    }
+
+    private function loadCurrentGamePlinko(){
+        $gamePlinkoType = GamePlinkoType::find(1);
+        if (!isset($gamePlinkoType)) {
+            return 'Game tạm thời không khả dụng';
+        }
+        $currentGame = $gamePlinkoType->getCurrentGameRecord();
+        return response()->json([
+            'current_game_idx' => $currentGame->id,
+            'time_remaining' => $currentGame->getTimeRemaining(),
+            'html' => view('vh::game_infos.plinko_current_game_result',compact('currentGame'))->render()
+        ]);
+    }
+    private function loadCurrentGamePlinkoTypeHistory(){
+        $listItems = GamePlinkoRecord::orderBy('id','desc')
+                                ->where('end_time','<=',now()->timestamp)
+                                ->paginate(10);
+        return view('vh::game_infos.plinko_history_result',compact('listItems'))->render();
     }
 }

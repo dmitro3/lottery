@@ -1,0 +1,108 @@
+.big-title {
+  font-size: 20px;
+  text-transform: uppercase;
+  font-size: 18px;
+  color: white !important;
+  background-color: #087990 !important;
+  padding: 6px 12px;
+  font-weight: bold;
+}
+
+.plinko-history-list-item .item {
+  border: solid 1px #e1e1e1;
+  margin-top: 10px;
+}
+
+.plinko-history-list-item .item .header-item {
+  padding: 6px;
+  background: #f9f9ff;
+  color: #3d405c;
+}
+
+.plinko-history-list-item .item .item-more-detail {
+  border-top: solid 1px #e1e1e1;
+}
+
+.plinko-history-list-item .item .item-more-detail .title-box {
+  width: 80px;
+  padding: 6px;
+  color: #3d405c;
+}
+
+.plinko-history-list-item .item .item-more-detail .inner-item {
+  width: calc(100% - 80px);
+}
+
+.plinko-history-list-item .item .item-more-detail .item-content {
+  padding: 6px;
+  text-align: center;
+  border-left: solid 1px #e1e1e1;
+}
+
+.plinko-history-list-item .item .item-more-detail.number .item-content {
+  width: 10%;
+  max-width: 10%;
+}
+
+.plinko-history-list-item .item .item-more-detail.color .item-content {
+  width: 33.33333333%;
+  max-width: 33.33333333%;
+}
+
+.plinko-history-list-item .item .item-more-detail.size .item-content {
+  width: 50%;
+  max-width: 50%;
+}
+
+.plinko-history-list-item .title-box {
+  background: rgba(249, 249, 249, 0.5);
+}
+
+.current-game-countdown-timebox {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 5px;
+}
+
+.current-game-countdown-timebox .item {
+  margin: 5px;
+  background: #428bca;
+  display: block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.plinko-current-item-wrapper {
+  position: relative;
+}
+
+.plinko-current-item-wrapper.in-loadding::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.plinko-current-item-wrapper.in-loadding::after {
+  content: "\f110";
+  font-family: 'FontAwesome';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 1s infinite linear;
+  font-size: 30px;
+}

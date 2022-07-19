@@ -1,3 +1,6 @@
+@php
+    use App\Models\WalletTransactionType;
+@endphp
 @extends('index')
 @section('css')
     <link rel="stylesheet" href="theme/frontend/css/pikaday.css">
@@ -20,47 +23,84 @@
         <div class="promotion">
             @include('auth.marketing.action_tab',['activeTab'=>'doi-cua-toi'])
             <div class="box">
-                <div class="tit c-row c-row-between">Đội trực tiếp 1 người</div>
+                <div class="tit c-row c-row-between">Đội của tôi ({{$listItems->total()}} người)</div>
                 <form action="tai-khoan/marketing/doi-cua-toi" id="form-fillter-myteam" method="get" accept-charset="utf8">
-                    <div class="date m-t-5 c-row c-row-middle-center">
-                        <span class="action c-row c-row-middle-center"> 
-                            <label for="date-marketing-picker">
-                                <input name="time" type="text" id="date-marketing-picker" style="width: 1px;height: 1px;opacity: 0;">
-                                <span id="date-marketing-picker-preview">Ngày 13 Tháng 7 Năm 2022</span>
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAAGXLeQ2AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAF6ADAAQAAAABAAAAFwAAAACm59GpAAABvElEQVRIDbWUO0sDQRSF4yM+UFIKChbaiaidnVj5I0xjKYi/xD8gooWFIDbpg03ETm0s/Ac+QBREUHzH8607cfZm1lkIXjjszLlnzty5s7ul0m/UejRuChPCKzyT9ugStdtOp4xdcwrf68mtoPTpJduGNct0p8S4STTzylrxhWzuCnBPP5+Mm24Pm/mCqArOJvasUhSiMaFIXCPKLSzgkFtrQPtDhQ7HwfyzZK6Ey5sVIEOLRSc8BhihbcV2a5QdtHg6xMvWl80HZ29s3xBYVE+fjH04vgHZEJaFWOwjvhIOY0rll9CwTZGo25YtapXfa8ZTzsn/UOCOBEoLhnUOihxpxfNK2DImnZgyym6i54mQV0YZ54pg3ULzinMZ1YJpwZW1lZoUuixpH4VVgeCluxBuKPtSGBQ2hA+BGBDIzTCJBDr0TksbDoRnITmivfh+8UMkCwQ69H7gl/y86Ne/Bea28k43SyqnX38FvVwTeEPy4k6JTSHz20EcM+eCb4UXxDlxLz75cdt8EfM9u6joPGY+IqMdIdaWFWme7KYxc1qyLgzbhd78QeM2Y/J8oWfCnHAsvAudBh/RgnD+DV40a9gtbFjqAAAAAElFTkSuQmCC" class="img m-l-5">
-                            </label>
-                        </span>
-                    </div>
                     <div class="c-row c-row-between p-l-15 p-r-15 m-t-5">
                         <div class="p-r-10">
-                            <input type="text" placeholder="UID" oninput="value=value.replace(/\D/g,'')" class="ipt">
+                            <input name="uid" type="text" placeholder="UID" oninput="value=value.replace(/\D/g,'')" class="ipt" value="{{request()->uid ?? ''}}">
                         </div>
                         <div class="p-r-10">
                             <div class="fd-select-box" style="padding: 0!important;border: none!important;">
-                                <select class="select-level-marketing">
-                                    <option value="">111</option>
-                                    <option value="">111</option>
-                                    <option value="">111</option>
-                                    <option value="">111</option>
+                                <select class="select-level-marketing" name="child_level">
+                                    <option value="">Tất cả</option>
+                                    @foreach ($listCommissionLevelConfig as $item)
+                                        <option value="{{Support::show($item,'id')}}" {{isset(request()->child_level) && request()->child_level == $item->level ? 'selected':''}}>F{{Support::show($item,'level')}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <button type="submit" class="btn c-tc" style="border: none;">Tìm kiếm</button>
                     </div>
                 </form>
-                <div class="c-row number c-flex-warp">
-                    <div class="item">Tổng số tiền đặt cược:0</div>
-                    <div class="item">Tổng số tiền hoa hồng:0</div>
-                </div>
                 <div class="table">
                     <div class="hd van-row">
                         <div class="c-tc van-col van-col--4">UID</div>
-                        <div class="c-tc van-ellipsis van-col van-col--8">Tên</div>
-                        <div class="c-tc van-ellipsis van-col van-col--6">Doanh thu</div>
+                        <div class="c-tc van-ellipsis van-col van-col--6">Tên</div>
+                        <div class="c-tc van-ellipsis van-col van-col--8">Tổng cược</div>
                         <div class="c-tc van-ellipsis van-col van-col--6">Chi tiết</div>
                     </div>
                     <div class="list">
-                        
+                        <div role="feed" class="van-list infinite-load-item-module" data-init="MARKETING_GUI.initClickShowItemMyteamInfo" data-success="MARKETING_GUI.initClickShowItemMyteamInfo">
+                            @if (count($listItems) > 0)
+                                @foreach ($listItems as $item)
+                                    @php
+                                        $itemUser = $item->user;
+                                        $itemUserWallet = $itemUser->wallet;
+                                        $totalBet = $itemUserWallet->walletHistory()
+                                                                    ->whereIn('type',WalletTransactionType::getArrTypeTakeCommissionAble())
+                                                                    ->sum('amount');
+                                        $totalPersonalRecharge = $itemUserWallet->walletHistory()
+                                                                    ->where('type',WalletTransactionType::RECHARGE_MONEY)
+                                                                    ->sum('amount');
+                                    @endphp
+                                    <div class="item item-myteam-info">
+                                        <div class="bd van-row">
+                                            <div class="c-tc van-col van-col--4">
+                                                {{Support::show($item,'user_id')}}
+                                            </div>
+                                            <div class="c-tc van-ellipsis van-col van-col--6">
+                                                {{Support::show($item->user,'name')}}
+                                            </div>
+                                            <div class="c-tc red van-col van-col--8" style="white-space: nowrap;">
+                                                <strong>{{number_format((int)abs($totalBet),0,',','.')}} đ</strong>
+                                            </div>
+                                            <div class="van-col van-col--6 c-tc btn-show-bdshow">Chi tiết</div>
+                                        </div>
+                                        <div class="bdshow" style="display: none">
+                                            <div>Tổng cược: <strong>{{number_format((int)abs($totalBet),0,',','.')}} đ</strong></div>
+                                            <div>Nạp tiền: <strong>{{number_format((int)$totalPersonalRecharge,0,',','.')}} đ</strong></div>
+                                            <div>Thời gian đăng ký: {{Support::showDateTime($itemUser->created_at,'Y/m/d H:i:s')}}</div>
+                                            <div>Thành viên cấp dưới trực tiếp: {{count($item->directChild)}}</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                <div class="pagination-hidden-box" style="display: none">
+                                    {{$listItems->withQueryString()->links('vendors.pagination')}}
+                                </div>
+                                @if (count($listItems) < 20)
+                                    <div class="van-list__finished-text">Không còn nữa</div>
+                                @endif
+                            @else
+                                <div class="p-t-5 p-b-5">
+                                    <div class="van-empty">
+                                        <div class="van-empty__image">
+                                            <img src="theme/frontend/img/empty-image-default.png">
+                                        </div>
+                                        <p class="van-empty__description">Không có dữ liệu</p>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

@@ -29,6 +29,9 @@
 #game.inactive canvas {
     filter: blur(10px);
 }
+#game-control,.box-plinko{
+    background: #f9f9f9;
+}
 .box_game::after {
     background-image: url(../images/ground.png);
     background-position: bottom center;
@@ -45,7 +48,7 @@
 }
 
 .box_game {
-    max-width: 450px;
+    padding-top: .3rem;
     width: 100%;
     margin: auto;
     font-family: "Roboto";
@@ -70,6 +73,7 @@
     z-index: 1;
     display: block;
     cursor: pointer;
+    margin: auto;
 }
 .box_game .play:disabled{
     filter:grayscale(1);
@@ -105,7 +109,7 @@
     right: 0;
     bottom: 0;
     z-index: 1;
-    font-size: 34px;
+    font-size: 0.65rem;
     font-weight: 600;
     text-transform: uppercase;
     color: #feb200;
@@ -128,21 +132,24 @@
     background: #6244a0;
     border-top-left-radius: 7.5px;
     border-top-right-radius: 7.5px;
-    padding: 0 10px;
     position: relative;
     z-index: 1;
-    padding-bottom: 70px;
+    min-height: 4.5rem;
 }
-.bet_modes{
-    padding-bottom: 60px;
+.bet_box{
+    width: 3rem;
+    padding-top: 5px!important;
+    border-radius: .4rem 0 0 0!important;
+}
+.risk_box{
+    width: 3rem;
+    padding-top: 5px!important;
+    border-radius: 0 .4rem 0 0!important;
 }
 input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-inner-spin-button {
     display: none;
 }
 
-.risk_level {
-    padding-bottom: 68px;
-}
 
 .box_name {
     color: #a594c8;
@@ -169,6 +176,7 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-inner-spin-button 
     padding: 6px 8.5px;
     align-items: center;
     font-weight: bold;
+    font-size: 0.33rem;
 }
 
 .label_choose:not(:last-child) {
@@ -195,7 +203,8 @@ input:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-inner-spin-button 
 .game_play {
     position: relative;
     z-index: 1;
-    margin-bottom: 30px;
+    width: calc(100% - 6.5rem);
+    min-height: 4.5rem;
 }
 
 .qty_bet .btn_bet {
@@ -275,37 +284,12 @@ input[type=number] {
     height: 15px;
 }
 
-@media(max-width:480px) {
-    .game_play {
-        margin-bottom: 40px;
-    }
-
-    .risk_level,
-    .bet_modes {
-        padding-bottom: 55px;
-    }
-
-    .box_game .play {
-        max-width: 80%;
-        width: auto;
-        margin: auto;
-    }
-
-    .box_game .play .text {
-        font-size: 22px;
-        transform: translate(0px, -1px);
-    }
-}
-
 #game {
     max-width: 100%;
 }
 #game canvas{
     max-width: 100% !important;
     height: auto  !important;
-}
-.box-plinko{
-    padding-top:15px;
 }
 .game-betting .tab .box:after{
     display: none;
@@ -332,4 +316,9 @@ input[type=number] {
     margin: 0;
     background: #eb383f;
     padding: 3px 5px;
+}
+
+.game-betting .content > .box{
+    padding: 0px!important;
+    overflow: hidden;
 }
