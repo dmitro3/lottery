@@ -31,7 +31,7 @@ return [
         [
             'label' => 'Chi tiết người dùng',
             'url' => url('esystem/user-manage/user-info'),
-            'icon' => 'fa fa-eye',
+            'icon' => 'fa fa-user',
             'class' => '',
             'query' => [
                 'id' => [

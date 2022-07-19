@@ -13,6 +13,10 @@ class RechargeRequest extends BaseModel
     {
         return $this->belongsTo(RechargeStatus::class);
     }
+    public function rechargeMethod()
+    {
+        return $this->belongsTo(RechargeMethod::class);
+    }
     public function user()
     {
         return $this->belongsTo(User::class);
