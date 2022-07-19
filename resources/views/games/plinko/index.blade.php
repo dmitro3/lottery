@@ -121,6 +121,8 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @section('js')
 <script src="theme/frontend/plinko/js/gui.js" defer></script>
 <script src="theme/frontend/plinko/js/lib.js" defer></script>
-<script src="theme/frontend/plinko/js/main.bundle.js" defer></script>
+<script src="theme/frontend/plinko/js//p5.min.js" defer></script>
+<script src="theme/frontend/plinko/js/p5.sound.min.js" defer></script>
+<script src="theme/frontend/plinko/js/main.js" defer></script>
 <script src="theme/frontend/game/ts/plinko.js" defer></script>
 @endsection
