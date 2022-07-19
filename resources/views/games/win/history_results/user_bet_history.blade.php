@@ -40,7 +40,7 @@
                                 @endif
                                 @if ($item->game_win_user_bet_status_id == GameWinUserBetStatus::STATUS_WIN)
                                     <span class="success">
-                                        + {{number_format($item->amount, 0, ',', '.')}} đ
+                                        + {{number_format($item->return_amount, 0, ',', '.')}} đ
                                     </span>
                                 @endif
                             @endif

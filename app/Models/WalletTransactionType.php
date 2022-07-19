@@ -15,6 +15,9 @@ class WalletTransactionType extends BaseModel
     const REFUND_CANCEL_WITHDRAWAL_REQUEST = 5;
     const PLUS_COMMISSION_TEAM = 6;
 
+    const ADMIN_PLUS_MONEY = 7;
+    const ADMIN_MINUS_MONEY = 8;
+
 
     const MINUS_MONEY_BET_GAME_PLINKO = 10;
     const PLUS_MONEY_BET_GAME_PLINKO = 11;
@@ -25,6 +28,6 @@ class WalletTransactionType extends BaseModel
 
     public static function getArrTypeTakeCommissionAble()
     {
-        return [self::MINUS_MONEY_BET_GAME_GOWIN, self::MINUS_MONEY_BET_GAME_PLINKO];
+        return [self::MINUS_MONEY_BET_GAME_GOWIN, self::MINUS_MONEY_BET_GAME_PLINKO, self::MINUS_MONEY_BET_GAME_LOTTO];
     }
 }

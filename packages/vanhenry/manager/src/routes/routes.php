@@ -100,5 +100,14 @@
 		// Thông tin người dùng
 		Route::get('user-manage/user-info', array('uses' => "UserManageController@userInfo"));
 		Route::get('user-manage/load-user-withdraw-request', array('uses' => "UserManageController@loadUserWithdrawRequest"));
+		Route::post('user-manage/change-user-withdraw-request', array('uses' => "UserManageController@changeUserWithdrawRequest"));
+		Route::get('user-manage/load-user-recharge-request', array('uses' => "UserManageController@loadUserRechargeRequest"));
+		Route::post('user-manage/change-user-recharge-request', array('uses' => "UserManageController@changeUserRechargeRequest"));
+		Route::post('user-manage/edit-user-info', array('uses' => "UserManageController@editUserInfo"));
+		Route::post('user-manage/user-change-status', array('uses' => "UserManageController@userChangeStatus"));
+		Route::post('user-manage/edit-user-bank-info', array('uses' => "UserManageController@editUserBankInfo"));
+		Route::post('user-manage/plus-user-money', array('uses' => "UserManageController@plusUserMoney"));
+		Route::post('user-manage/minus-user-money', array('uses' => "UserManageController@minusUserMoney"));
+		Route::post('user-manage/load-user-statical-money', array('uses' => "UserManageController@loadUserStaticalMoney"));
 	});
 ?>
