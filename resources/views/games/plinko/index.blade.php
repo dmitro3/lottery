@@ -33,9 +33,6 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                     </div>
                     <div id="game-control" class="relative">
                         <div class="ready" style="display:none">
-                            <p class="time">
-                            </p>
-                            <p>Vui lòng đợi ván game mới!</p>
                         </div>
                         <div class="box_game">
                             <div class="risk_box box">

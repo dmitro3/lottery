@@ -96,8 +96,9 @@ var BaseGameSocket = /** @class */ (function () {
             }
         }
     };
-    BaseGameSocket.prototype.sendData = function (data) {
-        this.psocket.sendData(data);
+    BaseGameSocket.prototype.sendData = function (data, showLoading) {
+        if (showLoading === void 0) { showLoading = true; }
+        this.psocket.sendData(data, showLoading);
     };
     return BaseGameSocket;
 }());
@@ -223,8 +224,11 @@ var Socket = /** @class */ (function () {
             this.errorListeners.push(callback);
         }
     };
-    Socket.prototype.sendData = function (data) {
-        _BaseGui__WEBPACK_IMPORTED_MODULE_0__["default"].showLoading();
+    Socket.prototype.sendData = function (data, showLoading) {
+        if (showLoading === void 0) { showLoading = true; }
+        if (showLoading) {
+            _BaseGui__WEBPACK_IMPORTED_MODULE_0__["default"].showLoading();
+        }
         if (this.wsReady) {
             this.connecter.send(data);
         }

@@ -45,8 +45,8 @@ export default abstract class BaseGameSocket {
             }
         }
     }
-    public sendData(data: any) {
-        this.psocket.sendData(data);
+    public sendData(data: any, showLoading: boolean = true) {
+        this.psocket.sendData(data, showLoading);
     }
     public abstract processMessageData(data: any): void;
 
