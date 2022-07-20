@@ -7,7 +7,7 @@
 <td data-title="{{$show->note}}">
     @if ($realItem->recharge_method_id == RechargeMethod::DIRECT_TRANSFER_METHOD)
         @if ($realItem->recharged == 1)
-            <p style="min-width: 110px;" class="btn py-1 btn-{{$realItem->recharge_status_id == RechargeStatus::STATUS_CONFIRMED ? 'success':''}}{{$realItem->recharge_status_id == RechargeStatus::STATUS_CANCEL ? 'danger':''}}">{{Support::show($realItem->rechargeStatus,'name')}}</p>
+            <p style="min-width: 110px;pointer-events: none;" class="btn py-1 btn-{{$realItem->recharge_status_id == RechargeStatus::STATUS_CONFIRMED ? 'success':''}}{{$realItem->recharge_status_id == RechargeStatus::STATUS_CANCEL ? 'danger':''}}">{{Support::show($realItem->rechargeStatus,'name')}}</p>
         @else
             <?php 
                 $defaultData = FCHelper::ep($show,"default_data"); 
@@ -72,6 +72,9 @@
                     @endif
                 @endforeach
             @endif
+        @endif
+        @if ($realItem->is_marketing == 1)
+            <p class="mt-2" style="color:#a94442">(* Yêu cầu từ tài khoản Marketing)</p>
         @endif
     @endif
 </td>

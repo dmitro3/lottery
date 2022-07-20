@@ -14,11 +14,14 @@
 @php
     $realItem = RechargeRequest::with('rechargeStatus')->find(FCHelper::ep($dataItem,'id'));
 @endphp
+@if ($realItem->is_marketing == 1)
+    <p class="mt-2" style="color:#a94442">(* Yêu cầu từ tài khoản Marketing)</p>
+@endif
 @if ($realItem->recharge_method_id == RechargeMethod::DIRECT_TRANSFER_METHOD)
-    @if ($dataItem->recharged == 1)
+    @if ($realItem->recharged == 1)
         <div class="form-group">
             <p class="form-title">{{FCHelper::er($table,'note')}} <span class="count"></span></p>
-            <p style="width: 100%" class="btn py-1 btn-{{$realItem->recharge_status_id == RechargeStatus::STATUS_CONFIRMED ? 'success':''}}{{$realItem->recharge_status_id == RechargeStatus::STATUS_CANCEL ? 'danger':''}}">{{Support::show($realItem->rechargeStatus,'name')}}</p>
+            <p style="width: 100%;pointer-events: none;" class="btn py-1 btn-{{$realItem->recharge_status_id == RechargeStatus::STATUS_CONFIRMED ? 'success':''}}{{$realItem->recharge_status_id == RechargeStatus::STATUS_CANCEL ? 'danger':''}}">{{Support::show($realItem->rechargeStatus,'name')}}</p>
         </div>
         @else
         @if(View::exists('tv::ctedit.select.'.$source) && ($default_code === null || !isset($default_code['no_edit']) || (isset($default_code['no_edit']) && !$default_code['no_edit'])))

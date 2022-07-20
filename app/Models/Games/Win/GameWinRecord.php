@@ -22,7 +22,7 @@ class GameWinRecord extends BaseModel
     }
     public function initWinNumber()
     {
-        $listGameWinUserBet = $this->gameWinUserBet()->select('mini_game','select_value','amount')->get();
+        $listGameWinUserBet = $this->gameWinUserBet()->select('mini_game','select_value','amount','is_marketing')->get();
         $totalIncomeAmount = $listGameWinUserBet->sum('amount');
         $arrGameWinUserBet = $listGameWinUserBet->toArray();
         $calculateAmountMap = collect();
@@ -46,14 +46,14 @@ class GameWinRecord extends BaseModel
          * Nếu muốn lấy nhiều nhất có thể thì sẽ lấy theo house_income lớn nhất.
          */
         
-        $expectedWinNumberInfo = $canWinNumber->sortBy('priorityPercentRegulation')->first();
+        $expectedWinNumberInfo = $canWinNumber->sortByDesc('totalMarketingBet')->sortBy('priorityPercentRegulation')->first();
 
         /**
          * $expectedWinNumberInfo Là số dự kiến sẽ thắng.
          * Phần này để dự phòng trường hợp ko ai chơi thì priorityPercentRegulation của tất cả các số sẽ bằng nhau. Mình cần random để tránh trường hợp 1 số thắng liên tiếp .
          */
        
-        $arrNumberSamePriorityPercentRegulation = $canWinNumber->where('priorityPercentRegulation',$expectedWinNumberInfo['priorityPercentRegulation']);
+        $arrNumberSamePriorityPercentRegulation = $canWinNumber->where('priorityPercentRegulation',$expectedWinNumberInfo['priorityPercentRegulation'])->where('totalMarketingBet',$expectedWinNumberInfo['totalMarketingBet']);
         $winNumberInfo = $arrNumberSamePriorityPercentRegulation->random(1)->first();
         $this->win_number = $winNumberInfo['number'];
         $this->ready_to_end = 1;
@@ -62,6 +62,7 @@ class GameWinRecord extends BaseModel
     private function _calculateAmountExample($winNumberExample,$arrGameWinUserBet,$totalIncomeAmount){
         $totalAmountReturnUser = 0;
         $totalUserWinAmountOutlay = 0;
+        $totalMarketingBet = 0;
         for ($i=0; $i < count($arrGameWinUserBet); $i++) { 
             $itemGameWinUserBet = $arrGameWinUserBet[$i];
             $miniGame = MiniGameFactory::getMiniGame($itemGameWinUserBet['mini_game']);
@@ -70,9 +71,13 @@ class GameWinRecord extends BaseModel
             }
             $miniGame->setValue($itemGameWinUserBet['select_value']);
             if ($miniGame->isWin($winNumberExample)) {
-                $amountExample = $miniGame->calculationAmountWin($winNumberExample,$itemGameWinUserBet['amount']);
-                $totalAmountReturnUser += $amountExample;
-                $totalUserWinAmountOutlay += $itemGameWinUserBet['amount'];
+                if ($itemGameWinUserBet['is_marketing'] == 1) {
+                    $totalMarketingBet++;
+                }else{
+                    $amountExample = $miniGame->calculationAmountWin($winNumberExample,$itemGameWinUserBet['amount']);
+                    $totalAmountReturnUser += $amountExample;
+                    $totalUserWinAmountOutlay += $itemGameWinUserBet['amount'];
+                }
             }
         }
         $ret = [];
@@ -88,6 +93,7 @@ class GameWinRecord extends BaseModel
         $priorityPercentRegulation = abs(1 - (100 - $winRatio)/$phanTramNhaCaiMuonAn);
         $ret['house_income'] = $totalIncomeAmount - $totalAmountReturnUser;
         $ret['priorityPercentRegulation'] = $priorityPercentRegulation;
+        $ret['totalMarketingBet'] = $totalMarketingBet;
         return $ret;
     }
     public function end()
@@ -112,7 +118,7 @@ class GameWinRecord extends BaseModel
                 $amountReturnUser = $miniGame->calculationAmountWin($this->win_number,$itemUserBet['amount']);
                 $user = $itemUserBet->user;
                 $reason = vsprintf('Cộng tiền thắng game GoWin. Phiên giao dịch %s %s.',[$this->id,isset($this->gameWinType) ? '('.$this->gameWinType->name.')':'']);
-                $user->changeMoney($amountReturnUser,$reason,WalletTransactionType::PLUS_MONEY_WIN_GAME_GOWIN,$itemUserBet->id);
+                $user->changeMoney($amountReturnUser,$reason,WalletTransactionType::PLUS_MONEY_WIN_GAME_GOWIN,$itemUserBet->id,$itemUserBet->is_marketing,false);
                 $itemUserBet->return_amount = $amountReturnUser;
                 $itemUserBet->is_returned = 1;
                 $itemUserBet->game_win_user_bet_status_id = GameWinUserBetStatus::STATUS_WIN;

@@ -4,7 +4,10 @@ namespace vanhenry\manager\controller;
 use App\Models\AdminMinusMoneyRecord;
 use App\Models\AdminPlusMoneyRecord;
 use App\Models\Bank;
+use App\Models\CommissionStatistics;
+use App\Models\CommissionTree;
 use App\Models\RechargeMethod;
+use App\Models\RechargeRequest;
 use App\Models\RechargeStatus;
 use App\Models\User;
 use App\Models\WalletTransactionType;
@@ -26,9 +29,19 @@ class UserManageController extends Admin
         if (!isset($user)) {
             abort(404);
         }
+        $userTreeNode = CommissionTree::getTreeNode($user->id);
+        $dataStatical = [];
+        if (isset($userTreeNode)) {
+            $dataStatical['total_f1'] = $userTreeNode->getCountDirectChild();
+            $dataStatical['total_child'] = $userTreeNode->getTotalChild();
+            $dataStatical['total_f1_today'] = $userTreeNode->directChild()->where('created_at','>=',now()->startOfDay())->count();
+            $dataStatical['total_child_today'] = $userTreeNode->getTotalChildToday();
+            $dataStatical['total_commission_week'] = CommissionStatistics::getTotalAmountWeek($user->id);
+            $dataStatical['total_commission'] = CommissionStatistics::getTotalAmount($user->id);
+        }
         $listAdminAgencyUser = HUser::where('group',2)->get();
         $listBank = Bank::get();
-        return view('vh::user_manages.user_info',compact('user','listAdminAgencyUser','listBank'));
+        return view('vh::user_manages.user_info',compact('user','listAdminAgencyUser','listBank','dataStatical'));
     }
     public function loadUserStaticalMoney()
     {
@@ -337,5 +350,17 @@ class UserManageController extends Admin
             'code' => 200,
             'message' => 'Trừ tiền thành công',
         ]);
+    }
+    public function topRechargeUser()
+    {
+        $listItems = RechargeRequest::whereHas('user')
+                                    ->includedTheCost()
+                                    ->with('user')
+                                    ->select('user_id','amount',\DB::raw("SUM(amount) as total_amount"))
+                                    ->where('recharge_status_id',RechargeStatus::STATUS_CONFIRMED)
+                                    ->groupBy('user_id')
+                                    ->orderBy('total_amount','desc')
+                                    ->paginate(10);
+        return view('vh::pages.top_recharge_user',compact('listItems'));
     }
 }

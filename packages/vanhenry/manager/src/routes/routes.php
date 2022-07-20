@@ -109,5 +109,10 @@
 		Route::post('user-manage/plus-user-money', array('uses' => "UserManageController@plusUserMoney"));
 		Route::post('user-manage/minus-user-money', array('uses' => "UserManageController@minusUserMoney"));
 		Route::post('user-manage/load-user-statical-money', array('uses' => "UserManageController@loadUserStaticalMoney"));
+		Route::get('user-manage/top-recharge-user', array('uses' => "UserManageController@topRechargeUser"));
+
+		// Thống kê hệ thống
+
+		Route::get('system-statical/all-revenue-cost', array('uses' => "SystemStaticalController@allRevenueCost"));
 	});
 ?>

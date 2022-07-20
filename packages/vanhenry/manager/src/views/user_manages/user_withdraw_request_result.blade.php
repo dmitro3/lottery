@@ -51,10 +51,10 @@
                             </select>
                         @else
                             @if ($item->withdrawal_request_status_id == WithdrawalRequestStatus::STATUS_CONFIRMED)
-                                <p class="btn btn-success d-block">{{Support::show($item->withdrawalRequestStatus,'name')}}</p>
+                                <p class="btn btn-success d-block" style="pointer-events: none;">{{Support::show($item->withdrawalRequestStatus,'name')}}</p>
                             @endif
                             @if ($item->withdrawal_request_status_id == WithdrawalRequestStatus::STATUS_CANCEL)
-                                <p class="btn btn-danger d-block">{{Support::show($item->withdrawalRequestStatus,'name')}}</p>
+                                <p class="btn btn-danger d-block" style="pointer-events: none;">{{Support::show($item->withdrawalRequestStatus,'name')}}</p>
                             @endif
                         @endif
                     </td>

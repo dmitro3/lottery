@@ -22,6 +22,7 @@ class MiniGame implements GoWinMiniGameInterface
     }
     public function toDatabase($gameWinType,$currentGame,$user,$qty,$amoutItem)
     {
+        $user->fresh();
         $itemGameWinUserBet = new GameWinUserBet;
         $itemGameWinUserBet->user_id = $user->id;
         $itemGameWinUserBet->game_win_type_id = $gameWinType->id;
@@ -34,6 +35,7 @@ class MiniGame implements GoWinMiniGameInterface
         $itemGameWinUserBet->return_amount = 0;
         $itemGameWinUserBet->game_win_user_bet_status_id = GameWinUserBetStatus::STATUS_WAIT_RESULT;
         $itemGameWinUserBet->is_returned = 0;
+        $itemGameWinUserBet->is_marketing = $user->is_marketing_account;
         $itemGameWinUserBet->created_at = now();
         $itemGameWinUserBet->updated_at = now();
         $itemGameWinUserBet->save();

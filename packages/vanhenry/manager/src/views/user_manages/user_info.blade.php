@@ -28,6 +28,16 @@
                     <span class="item-value">: {{Support::show($user,'name')}}</span>
                 </div>
                 <div class="item-user-info">
+                    <span class="item-title"><strong>Loại tài khoản</strong></span>
+                    <span class="item-value">: 
+                        @if ($user->is_marketing_account)
+                            <span class="btn btn-primary" style="pointer-events: none;">Tài khoản Marketing</span>
+                        @else
+                            <span class="btn btn-default" style="pointer-events: none;">Tài khoản thường</span>
+                        @endif
+                    </span>
+                </div>
+                <div class="item-user-info">
                     <span class="item-title"><strong>Mã giới thiệu</strong></span>
                     <span class="item-value">: {{Support::show($user,'referral_code')}}</span>
                 </div>
@@ -56,9 +66,9 @@
                     <span class="item-title"><strong>Trạng thái</strong></span>
                     <span class="item-value">: 
                         @if ($user->act == 0)
-                            <span class="btn btn-danger">Đang bị khóa</span>
+                            <span class="btn btn-danger" style="pointer-events: none;">Đang bị khóa</span>
                         @else
-                            <span class="btn btn-success">Đang hoạt động</span>
+                            <span class="btn btn-success" style="pointer-events: none;">Đang hoạt động</span>
                         @endif
                     </span>
                 </div>
@@ -70,6 +80,37 @@
                 @else
                     <button type="button" data-action="esystem/user-manage/user-change-status?user={{$user->id}}" data-text="Bạn có muốn mở khóa tài khoản này ?" class="btn btn-success btn-lock-account-user mt-3"><i class="fa fa-unlock-alt me-2" aria-hidden="true"></i> Mở khóa tài khoản</button>
                 @endif
+            </div>
+            <p class="big-title mt-5">THÔNG TIN TIẾP THỊ</p>
+            <div class="base-info-box">
+                <div class="item-user-info">
+                    <span class="item-title"><strong>Cấp bậc</strong></span>
+                    <span class="item-value">: <strong>{{Support::show($user,'level')}}</strong></span>
+                </div>
+                <div class="item-user-info">
+                    <span class="item-title"><strong>Tổng F1</strong></span>
+                    <span class="item-value">: <strong>{{$dataStatical['total_f1'] ?? ''}}</strong></span>
+                </div>
+                <div class="item-user-info">
+                    <span class="item-title"><strong>Tổng cấp dưới</strong></span>
+                    <span class="item-value">: <strong>{{$dataStatical['total_child'] ?? ''}}</strong></span>
+                </div>
+                <div class="item-user-info">
+                    <span class="item-title"><strong>Tổng F1 hôm nay</strong></span>
+                    <span class="item-value">: <strong>{{$dataStatical['total_f1_today'] ?? ''}}</strong></span>
+                </div>
+                <div class="item-user-info">
+                    <span class="item-title"><strong>Tổng thành viên <br> cấp dưới hôm nay</strong></span>
+                    <span class="item-value">: <strong>{{$dataStatical['total_child_today'] ?? ''}}</strong></span>
+                </div>
+                <div class="item-user-info">
+                    <span class="item-title"><strong>Tổng hoa hồng <br> tuần này</strong></span>
+                    <span class="item-value">: <strong>{{isset($dataStatical['total_commission_week']) ? Currency::showMoney($dataStatical['total_commission_week']):''}}</strong></span>
+                </div>
+                <div class="item-user-info">
+                    <span class="item-title"><strong>Tổng hoa hồng</strong></span>
+                    <span class="item-value">: <strong>{{isset($dataStatical['total_commission_week']) ? Currency::showMoney($dataStatical['total_commission']):''}}</strong></span>
+                </div>
             </div>
             <p class="big-title mt-5"><strong>Thông tin tài khoản ngân hàng</strong></p>
             @php
@@ -153,6 +194,5 @@
 @include('vh::user_manages.user_model')
 @stop
 @section('js')
-    <script type="text/javascript" src="theme/frontend/js/sweetalert.min.js" defer></script>
     <script type="text/javascript" src="admin/js/user_manages/user_info.js" defer></script>
 @endsection

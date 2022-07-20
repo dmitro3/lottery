@@ -100,6 +100,7 @@ class WithdrawController extends Controller
         $withdrawalRequest->account_number = $userBank->account_number;
         $withdrawalRequest->account_branch = $userBank->account_branch;
         $withdrawalRequest->status_changed = 0;
+        $withdrawalRequest->is_marketing = $user->is_marketing_account;
         $withdrawalRequest->save();
 
         $withdrawalRequestCode = $now->year.$now->month.$now->day.time().sprintf('%s%05s','',$withdrawalRequest->id);
@@ -107,7 +108,7 @@ class WithdrawController extends Controller
         $withdrawalRequest->save();
 
         $reason = 'Gửi yêu cầu rút tiền';
-        $user->changeMoney(0 - $amount,$reason,WalletTransactionType::WITHDRAW_MONEY,$withdrawalRequest->id);
+        $user->changeMoney(0 - $amount,$reason,WalletTransactionType::WITHDRAW_MONEY,$withdrawalRequest->id,$withdrawalRequest->is_marketing,false);
 
         return response()->json([
             'code' => 200,

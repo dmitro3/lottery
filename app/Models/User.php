@@ -69,15 +69,10 @@ class User extends Authenticatable
         $userWallet = $this->getWallet();
         return $userWallet->amount;
     }
-    public function changeMoney($amount,$reason,$type,$mapId)
+    public function changeMoney($amount,$reason,$type,$mapId,$isMarketing = 0,$chechAgain = true)
     {
         $userWallet = $this->getWallet();
-        return $userWallet->changeMoney($amount,$reason,$type,$mapId);
-    }
-    public function changeMoneyFreeze($amount,$reason,$type,$mapId)
-    {
-        $userWallet = $this->getWallet();
-        return $userWallet->changeMoneyFreeze($amount,$reason,$type,$mapId);
+        return $userWallet->changeMoney($amount,$reason,$type,$mapId,$isMarketing,$chechAgain);
     }
     public function logLoginAction()
     {
@@ -124,5 +119,9 @@ class User extends Authenticatable
     public function buildIntroduceLink()
     {
         return url()->to('dang-ky').'?r_code='.$this->referral_code;
+    }
+    public static function getTotalRecordToday()
+    {
+        return self::where('created_at',now()->startOfDay())->count();
     }
 }

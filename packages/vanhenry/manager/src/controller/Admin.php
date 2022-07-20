@@ -35,7 +35,6 @@ class Admin extends BaseAdminController
     }
 
 	public function index(){
-		// return view('vh::index');
 		$gaViewKey = SettingHelper::getSetting('ga_view_key');
 		return view('vh::dashboard', compact('gaViewKey'));
 	}
