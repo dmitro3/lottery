@@ -31,7 +31,7 @@ class PushServer extends Command
                         new PushServerProvider()
                     )
                 ),
-                8888
+                8081
             );
             $server->run();
         } catch (\Exception $e) {

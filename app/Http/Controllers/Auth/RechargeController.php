@@ -104,6 +104,7 @@ class RechargeController extends Controller
         $rechargeRequest->recharge_status_id = RechargeStatus::STATUS_WAIT_CONFIRM;
         $rechargeRequest->amount = $request->amount;
         $rechargeRequest->recharged = 0;
+        $rechargeRequest->is_marketing = $user->is_marketing_account;
         $rechargeRequest->save();
         $rechargeRequestCode = $now->year.$now->month.$now->day.time().sprintf('%s%05s','',$rechargeRequest->id);
         $rechargeRequest->code = $rechargeRequestCode;

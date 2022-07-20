@@ -593,9 +593,11 @@ var WINDLOAD = (function () {
         var userTokenIp = document.querySelector("input[name=auth_token]");
         if (!userTokenIp) return;
         var userToken = userTokenIp.value;
-        connecter = new WebSocket(
-            `wss://vinlott.net/wss/?auth_token=${userToken}`
-        );
+        var urlConncet = "wss://vinlott.net/wss/?auth_token=";
+        if (window.location.host == "doanso.test") {
+            var urlConncet = "ws://localhost:8081/?auth_token=";
+        }
+        connecter = new WebSocket(`${urlConncet}${userToken}`);
         connecter.onopen = function (e) {
             wsReady = true;
             BASE_GUI.hideLoading();

@@ -37,10 +37,10 @@
                             </select>
                         @else
                             @if ($item->recharge_status_id == RechargeStatus::STATUS_CONFIRMED)
-                                <p class="btn btn-success d-block">{{Support::show($item->rechargeStatus,'name')}}</p>
+                                <p class="btn btn-success d-block" style="pointer-events: none;">{{Support::show($item->rechargeStatus,'name')}}</p>
                             @endif
                             @if ($item->recharge_status_id == RechargeStatus::STATUS_CANCEL)
-                                <p class="btn btn-danger d-block">{{Support::show($item->rechargeStatus,'name')}}</p>
+                                <p class="btn btn-danger d-block" style="pointer-events: none;">{{Support::show($item->rechargeStatus,'name')}}</p>
                             @endif
                         @endif
                     </td>

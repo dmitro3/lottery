@@ -40,7 +40,7 @@ class SubscribeListener
                 if ($data['recharge_status_id'] == RechargeStatus::STATUS_CONFIRMED) {
                     $user = $itemRechargeRequest->user;
                     $reason = 'Cộng tiền chuyển khoản trực tiếp';
-                    $user->changeMoney($itemRechargeRequest->amount,$reason,WalletTransactionType::RECHARGE_MONEY,$itemRechargeRequest->id);
+                    $user->changeMoney($itemRechargeRequest->amount,$reason,WalletTransactionType::RECHARGE_MONEY,$itemRechargeRequest->id,$itemRechargeRequest->is_marketing,false);
                 }
                 $itemRechargeRequest->recharged = 1;
                 $itemRechargeRequest->recharged_at = now();
@@ -65,7 +65,7 @@ class SubscribeListener
             if ($data['withdrawal_request_status_id'] == WithdrawalRequestStatus::STATUS_CANCEL) {
                 $user = $itemWithdrawalRequest->user;
                 $reason = 'Hoàn tiền khi hủy yêu cầu rút tiền';
-                $user->changeMoney($itemWithdrawalRequest->amount,$reason,WalletTransactionType::REFUND_CANCEL_WITHDRAWAL_REQUEST,$itemWithdrawalRequest->id);
+                $user->changeMoney($itemWithdrawalRequest->amount,$reason,WalletTransactionType::REFUND_CANCEL_WITHDRAWAL_REQUEST,$itemWithdrawalRequest->id,$itemWithdrawalRequest->is_marketing,false);
             }
             $itemWithdrawalRequest->status_changed = 1;
             $itemWithdrawalRequest->status_changed_at = now();
