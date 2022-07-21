@@ -114,5 +114,7 @@
 		// Thống kê hệ thống
 
 		Route::get('system-statical/all-revenue-cost', array('uses' => "SystemStaticalController@allRevenueCost"));
+		Route::get('system-statical/total-receipts', array('uses' => "SystemStaticalController@totalReceipt"));
+		Route::get('system-statical/total-amount-spent', array('uses' => "SystemStaticalController@totalAmountSpent"));
 	});
 ?>

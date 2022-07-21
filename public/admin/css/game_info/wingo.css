@@ -146,7 +146,11 @@
   position: relative;
 }
 
-.wingo-current-item-wrapper.in-loadding::before {
+.in-loading-item {
+  position: relative;
+}
+
+.in-loading-item::before {
   content: '';
   position: absolute;
   top: 0;
@@ -154,9 +158,10 @@
   width: 100%;
   height: 100%;
   background: rgba(255, 255, 255, 0.9);
+  z-index: 2;
 }
 
-.wingo-current-item-wrapper.in-loadding::after {
+.in-loading-item::after {
   content: "\f110";
   font-family: 'FontAwesome';
   position: absolute;
@@ -165,6 +170,7 @@
   -webkit-animation: fa-spin 2s infinite linear;
   animation: fa-spin 1s infinite linear;
   font-size: 30px;
+  z-index: 3;
   margin-left: -25px;
   margin-top: -25px;
 }

@@ -58,6 +58,7 @@ class GameWinRecord extends BaseModel
         $this->win_number = $winNumberInfo['number'];
         $this->ready_to_end = 1;
         $this->save();
+        return $this->win_number;
     }
     private function _calculateAmountExample($winNumberExample,$arrGameWinUserBet,$totalIncomeAmount){
         $totalAmountReturnUser = 0;
@@ -99,7 +100,7 @@ class GameWinRecord extends BaseModel
     public function end()
     {
         $this->fresh();
-        if ($this->win_number == '' || $this->is_end == 1) {
+        if ($this->ready_to_end != 1 || $this->is_end == 1) {
             return false;
         }
         $listUserBet = $this->gameWinUserBet()
@@ -141,6 +142,7 @@ class GameWinRecord extends BaseModel
         foreach ($gameWinUserBets as $item) {
             $ret[$item->select_value] = $item->total_amount_bet;
         }
+        $ret['total_bet'] = $gameWinUserBets->sum('total_amount_bet');
         return $ret;
     }
 }

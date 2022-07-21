@@ -28,12 +28,12 @@ class SimpleStaticalBox {
         if (this.dateRangePickerBox.length == 0) return;
         var self = this;
         var dateRangePickerBox = this.dateRangePickerBox;
-        var startTime = moment().startOf("month");
-        var endTime = moment().endOf("month");
+        var startTime = moment("2022-1-1", "YYYY-MM-DD");
+        var endTime = moment();
         function callBackDateRange(
             startTime,
             endTime,
-            titleTime = "Tháng này"
+            titleTime = "Tất cả thời gian"
         ) {
             var htmlShow =
                 startTime.format("D/M/YYYY") + "-" + endTime.format("D/M/YYYY");

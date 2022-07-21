@@ -13,7 +13,7 @@ var GAMEINFO_PLINKO = (function () {
             minutes = minutes < 10 ? "0" + minutes : String(minutes);
             seconds = seconds < 10 ? "0" + seconds : String(seconds);
             if (anchorTime <= 0) {
-                $(".plinko-current-item-wrapper").addClass("in-loadding");
+                $(".plinko-current-item-wrapper").addClass("in-loading-item");
                 if (timeIntevalCurrentGame) {
                     clearInterval(timeIntevalCurrentGame);
                 }
@@ -51,13 +51,14 @@ var GAMEINFO_PLINKO = (function () {
             currentGameInfo.current_game_idx = data.current_game_idx;
             currentGameInfo.time_remaining = data.time_remaining;
             $(".plinko-current-item-result").html(data.html);
-            $(".plinko-current-item-wrapper").removeClass("in-loadding");
+            $(".plinko-current-item-wrapper").removeClass("in-loading-item");
             timeOutInitCurrentGame = setTimeout(() => {
                 initCurrentGame();
             }, 2000);
         });
     };
     var initCurrentGameTypeHistory = function () {
+        $(".plinko-history-list-item-result").addClass("in-loading-item");
         $.ajax({
             url: "esystem/game-info/plinko?action=load_current_game_type_history",
             method: "get",
@@ -65,6 +66,9 @@ var GAMEINFO_PLINKO = (function () {
             dataType: "html",
         }).done(function (data) {
             $(".plinko-history-list-item-result").html(data);
+            $(".plinko-history-list-item-result").removeClass(
+                "in-loading-item"
+            );
         });
     };
     var initCurrentGameTypeHistoryPaginate = function () {
@@ -73,6 +77,9 @@ var GAMEINFO_PLINKO = (function () {
             ".plinko-history-list-item-result .pagination a",
             function (e) {
                 e.preventDefault();
+                $(".plinko-history-list-item-result").addClass(
+                    "in-loading-item"
+                );
                 $.ajax({
                     url: $(this).attr("href"),
                     method: "get",
@@ -80,6 +87,9 @@ var GAMEINFO_PLINKO = (function () {
                     dataType: "html",
                 }).done(function (data) {
                     $(".plinko-history-list-item-result").html(data);
+                    $(".plinko-history-list-item-result").removeClass(
+                        "in-loading-item"
+                    );
                 });
             }
         );
