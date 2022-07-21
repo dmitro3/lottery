@@ -63,6 +63,7 @@ class GamePlinkoRecord extends BaseModel
         foreach ($gameWinUserBets as $item) {
             $ret[$item->mode] = $item->total_amount_bet;
         }
+        $ret['total_bet'] = $gameWinUserBets->sum('total_amount_bet');
         return $ret;
     }
 }

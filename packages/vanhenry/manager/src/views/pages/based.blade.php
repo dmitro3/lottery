@@ -143,7 +143,7 @@
 	</div>
 	<div class="revenue-statistics mt-4">
 		<p class="big-title">Doanh thu</p>
-		<div class="module-admin-statical-box" data-action="esystem/system-statical/all-revenue-cost" data-success="SHOP_CHART.initChartShop">
+		<div class="module-admin-statical-box" data-action="esystem/system-statical/all-revenue-cost" data-success="DASHBOARD_STATICAL.initModulePaginateAjax">
 			<div class="header-box d-flex align-items-center" style="font-size: 16px;">
 				<div>
 					<input type="hidden" class="date-range-value">

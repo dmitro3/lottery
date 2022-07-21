@@ -8,4 +8,8 @@ class WalletHistory extends BaseModel
     {
         return $this->belongsTo(WalletTransactionType::class,'type');
     }
+    public function wallet()
+    {
+        return $this->belongsTo(Wallet::class,'type');
+    }
 }

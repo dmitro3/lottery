@@ -27,14 +27,14 @@
     <div class="row d-flex flex-wrap justify-content-center">
         <div class="col-xs-12 col-lg-8 mx-auto mt-4">
             <p class="big-title">Game hiện tại</p>
-            <div class="wingo-current-item-wrapper">
+            <div class="wingo-current-item-wrapper in-loading-item" style="min-height: 100px;">
                 <div class="current-game-countdown-timebox"></div>
                 <div class="wingo-current-item-result"></div>
             </div>
         </div>
         <div class="col-xs-12 col-lg-8 mx-auto mt-4">
             <p class="big-title">Game gần đây</p>
-            <div class="wingo-history-list-item-result"></div>
+            <div class="wingo-history-list-item-result in-loading-item" style="min-height: 100px;"></div>
         </div>
     </div>
 </div>

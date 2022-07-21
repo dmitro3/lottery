@@ -8,6 +8,7 @@ var GAMEINFO_WINGO = (function () {
             if (timeOutInitCurrentGame) {
                 clearTimeout(timeOutInitCurrentGame);
             }
+            $(".wingo-current-item-wrapper").addClass("in-loading-item");
             initCurrentGame();
         });
     };
@@ -22,7 +23,7 @@ var GAMEINFO_WINGO = (function () {
             minutes = minutes < 10 ? "0" + minutes : String(minutes);
             seconds = seconds < 10 ? "0" + seconds : String(seconds);
             if (anchorTime <= 0) {
-                $(".wingo-current-item-wrapper").addClass("in-loadding");
+                $(".wingo-current-item-wrapper").addClass("in-loading-item");
                 if (timeIntevalCurrentGame) {
                     clearInterval(timeIntevalCurrentGame);
                 }
@@ -64,13 +65,14 @@ var GAMEINFO_WINGO = (function () {
             currentGameInfo.current_game_idx = data.current_game_idx;
             currentGameInfo.time_remaining = data.time_remaining;
             $(".wingo-current-item-result").html(data.html);
-            $(".wingo-current-item-wrapper").removeClass("in-loadding");
+            $(".wingo-current-item-wrapper").removeClass("in-loading-item");
             timeOutInitCurrentGame = setTimeout(() => {
                 initCurrentGame();
             }, 2000);
         });
     };
     var initCurrentGameTypeHistory = function (gameType) {
+        $(".wingo-history-list-item-result").addClass("in-loading-item");
         $.ajax({
             url: "esystem/game-info/wingo?action=load_current_game_type_history",
             method: "get",
@@ -81,6 +83,7 @@ var GAMEINFO_WINGO = (function () {
             dataType: "html",
         }).done(function (data) {
             $(".wingo-history-list-item-result").html(data);
+            $(".wingo-history-list-item-result").removeClass("in-loading-item");
         });
     };
     var initCurrentGameTypeHistoryPaginate = function () {
@@ -89,6 +92,9 @@ var GAMEINFO_WINGO = (function () {
             ".wingo-history-list-item-result .pagination a",
             function (e) {
                 e.preventDefault();
+                $(".wingo-history-list-item-result").addClass(
+                    "in-loading-item"
+                );
                 $.ajax({
                     url: $(this).attr("href"),
                     method: "get",
@@ -96,6 +102,9 @@ var GAMEINFO_WINGO = (function () {
                     dataType: "html",
                 }).done(function (data) {
                     $(".wingo-history-list-item-result").html(data);
+                    $(".wingo-history-list-item-result").removeClass(
+                        "in-loading-item"
+                    );
                 });
             }
         );

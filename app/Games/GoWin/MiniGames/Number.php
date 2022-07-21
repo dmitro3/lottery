@@ -25,7 +25,7 @@ class Number extends MiniGame implements GoWinMiniGameInterface
     }
     public function calculationAmountWin($number,$amountBet)
     {
-        return $amountBet*10;
+        return $amountBet*(float)\SettingHelper::getSetting('wingo_percent_number_refund',1);
     }
     public function getHistoryHtml($winNumber)
     {

@@ -1,11 +1,17 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Models\Games\Win\GameWinRecord;
 use \App\Models\Slider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index(){
+        $gameWinRecord = GameWinRecord::find(2022072110991);
+        $gameWinRecord->initWinNumber();
+        dd($gameWinRecord->end());
+        // var_dump(1);die();
         $listTopWitdraw = \Cache::remember('listTopWitdrawHome', 120, function () {
             $ret = [];
             for ($i=0; $i < 16; $i++) { 

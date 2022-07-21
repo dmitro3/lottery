@@ -2,6 +2,8 @@
 namespace vanhenry\manager\statisticals;
 
 use App\Models\WalletTransactionType;
+use App\Models\WithdrawalRequest;
+use App\Models\WithdrawalRequestStatus;
 
 class UserStatical
 {
@@ -12,9 +14,8 @@ class UserStatical
     }
     public static function getUserTotalSpend($user)
     {
-        $arrTypeSpend = [WalletTransactionType::WITHDRAW_MONEY,WalletTransactionType::REFUND_CANCEL_WITHDRAWAL_REQUEST];
-        $userWallet = $user->getWallet();
-        $total = $userWallet->walletHistory()->includedTheCost()->whereIn('type',$arrTypeSpend)->sum('amount');
-        return abs($total);
+        return WithdrawalRequest::where('withdrawal_request_status_id',WithdrawalRequestStatus::STATUS_CONFIRMED)
+                                    ->includedTheCost()
+                                    ->sum('amount_final');
     }
 }
