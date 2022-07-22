@@ -122,7 +122,6 @@ class PlinkoConnector implements ConnecterInterface
             return $this->connection;
         }
 
-        // kiểm tra tiền và trừ tiền user. A hưng chưa code !! Siêu quan trọng !! <<<<
         $qty = (int) $gameData['qty'];
         $type = (int) $gameData['type'];
         $mode = $gameData['mode'];
@@ -146,28 +145,41 @@ class PlinkoConnector implements ConnecterInterface
         $reason = vsprintf('Trừ tiền cược game Plinko. Phiên giao dịch %s.', [$currentGameRecord->id]);
         $user->changeMoney(0 - $totalMoney, $reason, WalletTransactionType::MINUS_MONEY_BET_GAME_PLINKO, $itemUserBet->id);
 
-        $this->from->send($this->buildResponse(200, true, 'Đặt hàng thành công!', [], $action));
-        return $this->connection;
-    }
-    private function retrieveResult($action)
-    {
-        $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
-        if (!isset($currentGameClientInfo)) {
-            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
-        }
+        $games = $this->retrieveResult($user, $currentGameRecord, $itemUserBet, $type);
 
-        $user = $this->connection['userTargetMessage'];
-
-        $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
-        $userBet = $currentGameRecord->gamePlinkoUserBets()->where('user_id', $user->id)->where('is_returned', 0)->orderBy('id', 'desc')->first();
-        $games = [];
-        if ($userBet) {
-            $games = $userBet->gamePlinkoUserBetDetails()->select('path', 'type')->orderBy('zigzag', 'desc')->get()->toArray();
-            $userBet->is_returned = 1;
-            $userBet->save();
-        }
         $this->from->send($this->buildResponse(200, true, 'Lấy kết quả thành công!', compact('games'), $action));
         return $this->connection;
+    }
+    private function retrieveResult($user, $currentGameRecord, $userBet, $ballType)
+    {
+        $count = GamePlinkoUserBetDetail::where('game_plinko_record_id', $currentGameRecord->id)->where('type', $ballType)->count();
+        if ($count > 0) {
+            $game = GamePlinkoUserBetDetail::select('path', 'type')->where('game_plinko_record_id', $currentGameRecord->id)->where('type', $ballType)->inRandomOrder()->first();
+        } else {
+            $bag = Bag::BAG9();
+            $path = GamePlinkoPath::select('id', 'start', 'dest', 'path', 'zigzag')->whereIn('start', [16, 18])->whereIn('dest', [$bag->getBagIndexs()])->inRandomOrder()->limit(1)->get();
+            $dataInserts[] = [
+                'game_plinko_type_id' => 1,
+                'game_plinko_record_id' => $currentGameRecord->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'type' => $ballType,
+                'path' => $path->path,
+                'start' => $path->start,
+                'dest' => $path->dest,
+                'game_plinko_path_id' => $path->id,
+                'bag_name' => $bag->getName(),
+                'bag_value' => $bag->getValue(),
+                'zigzag' => $path->zigzag
+            ];
+            $game = GamePlinkoUserBetDetail::insert($dataInserts);
+        }
+
+        $userBet->is_returned = 1;
+        $userBet->game_plinko_user_bet_id = $userBet->id;
+        $userBet->user_id = $user->id;
+        $userBet->save();
+        return $game;
     }
     private function buildResponse($code, $status, $message, $data = [], $action = null)
     {
