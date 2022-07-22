@@ -717,17 +717,17 @@ var LottoGameTimer = /** @class */ (function () {
         if (this.interValGameTime) {
             clearInterval(this.interValGameTime);
         }
+        window.location.href = window.location.href;
     };
     LottoGameTimer.prototype.showTimeChecker = function () {
         var mark = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".result_plot_threads .mark-box");
         var lastPoint = parseInt(LOTTO_CONFIG.LAST_POINT_TO_BET);
-        var duration = parseInt(LOTTO_CONFIG.NUMBER_TIME_TO_CHECK);
-        var showCountDownCalculate = this.timeRemaining <= lastPoint &&
-            this.timeRemaining >= lastPoint - duration;
+        var timeToRetreive = parseInt(LOTTO_CONFIG.NUMBER_TIME_TO_CHECK);
+        var showCountDownCalculate = this.timeRemaining <= lastPoint;
         if (showCountDownCalculate) {
             _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].flex(mark);
             var time = lastPoint - this.timeRemaining;
-            time = Math.abs(time - duration);
+            time = Math.abs(time - timeToRetreive);
             time = time < 10 ? "0" + time : "" + time;
             var html = "";
             for (var i = 0; i < time.length; i++) {
@@ -738,11 +738,11 @@ var LottoGameTimer = /** @class */ (function () {
         else {
             _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].none(mark);
         }
-        if (this.timeRemaining < lastPoint - duration) {
+        if (this.timeRemaining < timeToRetreive) {
             if (!this.needRetreiveResult)
                 return;
             this.needRetreiveResult = false;
-            // this.plinkoSocket.retrieveResult();
+            this.gameSocket.retrieveResult();
         }
     };
     return LottoGameTimer;

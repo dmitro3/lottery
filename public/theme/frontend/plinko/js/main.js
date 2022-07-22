@@ -12,42 +12,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 var Loader = /** @class */ (function () {
     function Loader(P5) {
         this._images = {
@@ -57,101 +21,21 @@ var Loader = /** @class */ (function () {
             light: "theme/frontend/plinko/assets/images/light.png",
             bg: "theme/frontend/plinko/assets/images/bg.jpg",
             hole: "theme/frontend/plinko/assets/images/hole.png",
-            win_panel: "theme/frontend/plinko/assets/images/win-panel.png",
             panel: "theme/frontend/plinko/assets/images/panel.png",
-        };
-        this._sounds = {
-            bg: "theme/frontend/plinko/assets/sounds/bg.ogg",
-            big_win: "theme/frontend/plinko/assets/sounds/big_win.ogg",
-            click: "theme/frontend/plinko/assets/sounds/click.ogg",
-            over: "theme/frontend/plinko/assets/sounds/over.ogg",
-            play: "theme/frontend/plinko/assets/sounds/play.ogg",
-            win_sound: "theme/frontend/plinko/assets/sounds/win_sound.ogg",
-            col: "theme/frontend/plinko/assets/sounds/col.ogg",
         };
         this.P5 = P5;
     }
-    Loader.prototype.loadImage = function (url) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            _this.P5.loadImage(url, function (img) {
-                resolve(img);
-            });
-        });
-    };
-    Loader.prototype.loadSound = function (url) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            _this.P5.loadSound(url, function (sound) {
-                resolve(sound);
-            });
-        });
-    };
     Loader.prototype.loadImages = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _i, _a, _b, key, value, tmp;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _i = 0, _a = Object.entries(this._images);
-                        _c.label = 1;
-                    case 1:
-                        if (!(_i < _a.length)) return [3 /*break*/, 4];
-                        _b = _a[_i], key = _b[0], value = _b[1];
-                        return [4 /*yield*/, this.loadImage(value)];
-                    case 2:
-                        tmp = _c.sent();
-                        Loader.images[key] = tmp;
-                        _c.label = 3;
-                    case 3:
-                        _i++;
-                        return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Loader.prototype.loadSounds = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _i, _a, _b, key, value, tmp;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _i = 0, _a = Object.entries(this._sounds);
-                        _c.label = 1;
-                    case 1:
-                        if (!(_i < _a.length)) return [3 /*break*/, 4];
-                        _b = _a[_i], key = _b[0], value = _b[1];
-                        return [4 /*yield*/, this.loadSound(value)];
-                    case 2:
-                        tmp = _c.sent();
-                        Loader.sounds[key] = tmp;
-                        _c.label = 3;
-                    case 3:
-                        _i++;
-                        return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Loader.prototype.isImagesLoaded = function () {
-        return Object.entries(this._images).length == Object.entries(Loader.images).length;
-    };
-    Loader.prototype.isSoundsLoaded = function () {
-        return Object.entries(this._sounds).length == Object.entries(Loader.sounds).length;
-    };
-    Loader.prototype.isLoaded = function () {
-        return this.isImagesLoaded() && this.isSoundsLoaded();
+        for (var _i = 0, _a = Object.entries(this._images); _i < _a.length; _i++) {
+            var _b = _a[_i], key = _b[0], value = _b[1];
+            var tmp = this.P5.loadImage(value);
+            Loader.images[key] = tmp;
+        }
     };
     Loader.getImage = function (key) {
         return Loader.images[key];
     };
-    Loader.getSound = function (key) {
-        return Loader.sounds[key];
-    };
     Loader.images = {};
-    Loader.sounds = {};
     return Loader;
 }());
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Loader);
@@ -309,19 +193,14 @@ var P5Wrapper = /** @class */ (function () {
     }
     P5Wrapper.prototype.preload = function () {
         this.loader.loadImages();
-        this.loader.loadSounds();
-        console.log('preload');
     };
     P5Wrapper.prototype.setup = function () {
         this.mCanvas = this.P5.createCanvas(_configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].APP.WIDTH, _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].APP.HEIGHT);
         this.mCanvas.parent(this.options.parent);
         this.P5.background("#ccc");
         this.matterWrapper.init();
-        console.log('setup');
     };
     P5Wrapper.prototype.draw = function () {
-        if (!this.loader.isLoaded())
-            return;
         var background = _Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("bg");
         if (background)
             this.P5.background(background);
@@ -378,8 +257,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var matter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! matter-js */ "./node_modules/matter-js/build/matter.js");
 /* harmony import */ var matter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(matter_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _configs_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../configs/app */ "./src/configs/app.ts");
-/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Loader */ "./src/Loader.ts");
-/* harmony import */ var _sounds_SoundManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../sounds/SoundManager */ "./src/sounds/SoundManager.ts");
+/* harmony import */ var _sounds_SoundManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sounds/SoundManager */ "./src/sounds/SoundManager.ts");
+/* harmony import */ var _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../sounds/SoundProvider */ "./src/sounds/SoundProvider.ts");
 /* harmony import */ var _sprites_Broken__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../sprites/Broken */ "./src/sprites/Broken.ts");
 /* harmony import */ var _BaseComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./BaseComponent */ "./src/components/BaseComponent.ts");
 /* harmony import */ var _WinPanel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./WinPanel */ "./src/components/WinPanel.ts");
@@ -436,10 +315,10 @@ var Bag = /** @class */ (function (_super) {
         matter_js__WEBPACK_IMPORTED_MODULE_0__.Composite.add(world, _this.body);
         _this.brokenEffect = new _sprites_Broken__WEBPACK_IMPORTED_MODULE_4__["default"](P5, nx, _this.y + h * 0.5);
         if (_configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].BAG.texts[index] > 1) {
-            _this.sound = _Loader__WEBPACK_IMPORTED_MODULE_2__["default"].getSound('big_win');
+            _this.sound = _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getSound("big_win");
         }
         else {
-            _this.sound = _Loader__WEBPACK_IMPORTED_MODULE_2__["default"].getSound('win_sound');
+            _this.sound = _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getSound("win_sound");
         }
         return _this;
     }
@@ -495,10 +374,11 @@ var Bag = /** @class */ (function (_super) {
         }
     };
     Bag.prototype._playSound = function () {
-        if (_sounds_SoundManager__WEBPACK_IMPORTED_MODULE_3__["default"].exists(this.sound)) {
-            if (!this.sound.isPlaying()) {
-                this.sound.play();
+        if (_sounds_SoundManager__WEBPACK_IMPORTED_MODULE_2__["default"].exists(this.sound)) {
+            if (this.sound.isPlaying()) {
+                this.sound.stop();
             }
+            this.sound.play();
         }
     };
     Bag.prototype.showWinPanel = function () {
@@ -800,7 +680,10 @@ var Hole = /** @class */ (function (_super) {
         this.P5.noStroke();
         this.P5.translate(this.x, this.y);
         this.P5.imageMode(this.P5.CENTER);
-        this.P5.image(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("hole"), 0, 0, this.width, this.height);
+        var image = _Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("hole");
+        if (image) {
+            this.P5.image(image, 0, 0, this.width, this.height);
+        }
     };
     return Hole;
 }(_BaseComponent__WEBPACK_IMPORTED_MODULE_2__["default"]));
@@ -937,22 +820,28 @@ var WinPanel = /** @class */ (function () {
         this.effectY = 0;
         this.state = WinPanelState.UP;
         this.index_bag = -1;
+        this.currentBallPrice = 0;
     }
     WinPanel.prototype.init = function (index) {
         this.scale = 1;
         this.state = WinPanelState.UP;
         this.index_bag = index;
+        var element = document.querySelector('[name="risk"]:checked');
+        var value = element.value;
+        var price = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].DISC.prices[value];
+        price = price !== null && price !== void 0 ? price : 100000;
+        this.currentBallPrice = price;
     };
     WinPanel.prototype.drawPanel = function (text) {
-        if (text === void 0) { text = 'Win + 100.000 VNĐ'; }
+        if (text === void 0) { text = "Win + 100.000 VNĐ"; }
         this.P5.push();
         this.P5.imageMode(this.P5.CENTER);
         var x = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].APP.WIDTH / 2;
         var y = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].APP.HEIGHT - this.imageHeight - 10 + this.effectY;
-        var t = (150 - (1 - this.scale) * 255);
-        t = Math.max(0, t);
-        this.P5.tint(255, t);
-        this.P5.image(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage('panel'), x, y, this.imageWidth * this.scale, this.imageHeight * this.scale);
+        // let t = 150 - (1 - this.scale) * 255;
+        // t = Math.max(0, t);
+        // this.P5.tint(255, t);
+        this.P5.image(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("panel"), x, y, this.imageWidth * this.scale, this.imageHeight * this.scale);
         this.P5.textAlign(this.P5.CENTER, this.P5.CENTER);
         this.P5.textSize(22 * this.scale);
         this.P5.textStyle(this.P5.BOLD);
@@ -981,20 +870,16 @@ var WinPanel = /** @class */ (function () {
         this.drawPanel(this.getCurrentText(this.index_bag));
     };
     WinPanel.prototype.getCurrentText = function (index) {
-        var element = document.querySelector('[name="risk"]:checked');
-        var value = element.value;
-        var price = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].DISC.prices[value];
-        price = price !== null && price !== void 0 ? price : 100000;
-        var text = price * _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].BAG.texts[index];
-        return 'Win +' + this.formatMoney(text) + ' VNĐ';
+        var text = this.currentBallPrice * _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].BAG.texts[index];
+        return "Win +" + this.formatMoney(text) + " VNĐ";
     };
     WinPanel.prototype.formatMoney = function (number) {
-        var pieces = parseFloat(number).toFixed(2).split('');
+        var pieces = parseFloat(number).toFixed(2).split("");
         var ii = pieces.length - 3;
         while ((ii -= 3) > 0) {
-            pieces.splice(ii, 0, ',');
+            pieces.splice(ii, 0, ",");
         }
-        return pieces.join('').replace('.00', '').replace(/,/g, '.');
+        return pieces.join("").replace(".00", "").replace(/,/g, ".");
     };
     WinPanel.getInstance = function (P5) {
         if (!this.instance) {
@@ -1834,6 +1719,7 @@ __webpack_require__.r(__webpack_exports__);
 var AppConfig = /** @class */ (function () {
     function AppConfig() {
     }
+    AppConfig.P5 = null;
     AppConfig.APP = {
         WIDTH: 550,
         HEIGHT: 580,
@@ -1856,7 +1742,7 @@ var AppConfig = /** @class */ (function () {
         prices: {
             "0": 1000,
             "1": 10000,
-            "2": 100000
+            "2": 100000,
         },
         tolerance: 1,
         radius: (AppConfig.PEG.spacing - 2 * AppConfig.PEG.radius - 3) / 2,
@@ -1891,8 +1777,8 @@ var AppConfig = /** @class */ (function () {
         topBufferFromPeg: 30,
         heightBody: 10,
         texts: [
-            1000, 500, 100, 10, 5, 1.1, 1, 0.5, 0.1, 0.5, 1, 1.1, 5,
-            10, 100, 500, 1000,
+            1000, 500, 100, 10, 5, 1.1, 1, 0.5, 0.1, 0.5, 1, 1.1, 5, 10, 100,
+            500, 1000,
         ],
         colors: [
             [255, 50, 0],
@@ -2224,21 +2110,25 @@ var PegDiscCollision = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Loader */ "./src/Loader.ts");
 /* harmony import */ var _P5Wrapper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./P5Wrapper */ "./src/P5Wrapper.ts");
-/* harmony import */ var _sounds_SoundManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sounds/SoundManager */ "./src/sounds/SoundManager.ts");
+/* harmony import */ var _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sounds/SoundProvider */ "./src/sounds/SoundProvider.ts");
 
 
 
 var currentGame;
 function makeGame() {
     var tmp = function (p) {
+        _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_2__["default"].getInstance();
         var p5w = (currentGame = new _P5Wrapper__WEBPACK_IMPORTED_MODULE_1__.P5Wrapper(p));
         p.preload = function () {
+            console.log("preload");
             p5w.preload();
         };
         p.setup = function () {
+            console.log("setup");
             p5w.setup();
         };
         p.draw = function () {
+            console.log("draw");
             p5w.draw();
         };
         p.mousePressed = function () {
@@ -2248,18 +2138,20 @@ function makeGame() {
     return new p5(tmp);
 }
 var hostname = window.location.hostname;
-// if (hostname != "localhost" && hostname != "127.0.0.1" && hostname != "vinlott.net") {
-//     var content = document.createElement("span");
-//     content.style.color = "red";
-//     content.innerHTML = "Licence không hợp lệ!";
-//     document.body.innerHTML = '';
-//     document.body.appendChild(content);
-// } else {
-makeGame();
-// }
+if (hostname != "localhost" &&
+    hostname != "127.0.0.1" &&
+    hostname != "vinlott.net") {
+    var content = document.createElement("span");
+    content.style.color = "red";
+    content.innerHTML = "Licence không hợp lệ!";
+    document.body.innerHTML = "";
+    document.body.appendChild(content);
+}
+else {
+    makeGame();
+}
 window["ShortPlinko"] = {
-    blurWhenInactive: function () {
-    },
+    blurWhenInactive: function () { },
     getGame: function () {
         return currentGame;
     },
@@ -2267,7 +2159,7 @@ window["ShortPlinko"] = {
         return this.getGame().matterWrapper.discContainer.createDisc(path, type);
     },
     sound: function () {
-        return _sounds_SoundManager__WEBPACK_IMPORTED_MODULE_2__["default"];
+        return _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_2__["default"];
     },
     loader: function () {
         return _Loader__WEBPACK_IMPORTED_MODULE_0__["default"];
@@ -2291,15 +2183,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Loader */ "./src/Loader.ts");
-/* harmony import */ var _SoundManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SoundManager */ "./src/sounds/SoundManager.ts");
+/* harmony import */ var _SoundManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SoundManager */ "./src/sounds/SoundManager.ts");
+/* harmony import */ var _SoundProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SoundProvider */ "./src/sounds/SoundProvider.ts");
 
 
 var PegSound = /** @class */ (function () {
     function PegSound() {
         this.bornTime = 0;
         this.duration = 300;
-        this.sound = _Loader__WEBPACK_IMPORTED_MODULE_0__["default"].getSound('col');
+        this.sound = _SoundProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getInstance().getSound("col");
         this.duration = this.sound.duration() * 1000;
         this.sound.setVolume(0.2);
         this.bornTime = new Date().getTime();
@@ -2313,7 +2205,7 @@ var PegSound = /** @class */ (function () {
         }
     };
     PegSound.prototype.soundExists = function () {
-        return !_SoundManager__WEBPACK_IMPORTED_MODULE_1__["default"].isTurnOff() && this.sound && this.sound.isLoaded();
+        return !_SoundManager__WEBPACK_IMPORTED_MODULE_0__["default"].isTurnOff() && this.sound && this.sound.isLoaded();
     };
     PegSound.prototype.needRemove = function (time) {
         return time - this.bornTime > this.duration;
@@ -2349,6 +2241,56 @@ var PegSoundCollection = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/sounds/Sound.ts":
+/*!*****************************!*\
+  !*** ./src/sounds/Sound.ts ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var Sound = /** @class */ (function () {
+    function Sound(audio) {
+        this.audio = audio;
+    }
+    Sound.prototype.play = function () {
+        if (this.audio) {
+            this.audio.play();
+        }
+    };
+    Sound.prototype.stop = function () {
+        if (this.audio) {
+            this.audio.pause();
+            this.audio.currentTime = 0;
+        }
+    };
+    Sound.prototype.isPlaying = function () {
+        return (this.audio &&
+            this.audio.currentTime > 0 &&
+            !this.audio.paused &&
+            !this.audio.ended &&
+            this.audio.readyState > 2);
+    };
+    Sound.prototype.isLoaded = function () {
+        return this.audio && this.audio.readyState == 4;
+    };
+    Sound.prototype.setVolume = function (value) {
+        if (this.audio) {
+            this.audio.volume = value;
+        }
+    };
+    Sound.prototype.duration = function () {
+        return this.audio.duration;
+    };
+    return Sound;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Sound);
+
+
+/***/ }),
+
 /***/ "./src/sounds/SoundManager.ts":
 /*!************************************!*\
   !*** ./src/sounds/SoundManager.ts ***!
@@ -2359,30 +2301,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Loader */ "./src/Loader.ts");
+/* harmony import */ var _SoundProvider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SoundProvider */ "./src/sounds/SoundProvider.ts");
 
 var SoundManager = /** @class */ (function () {
     function SoundManager() {
     }
     SoundManager.mute = function () {
-        localStorage.setItem('plinko_mute', "1");
+        localStorage.setItem("plinko_mute", "1");
     };
     SoundManager.unmute = function () {
-        localStorage.setItem('plinko_mute', "0");
+        localStorage.setItem("plinko_mute", "0");
     };
     SoundManager.getSoundStatus = function () {
-        var status = localStorage.getItem('plinko_mute');
+        var status = localStorage.getItem("plinko_mute");
         if (!status) {
             status = "1";
         }
         return status == "0";
     };
     SoundManager.playBackgroundSound = function () {
-        this.playSound('bg', true);
+        this.playSound("bg", true);
     };
     SoundManager.playSound = function (name, loop) {
         if (loop === void 0) { loop = false; }
-        var sound = _Loader__WEBPACK_IMPORTED_MODULE_0__["default"].getSound(name);
+        var sound = _SoundProvider__WEBPACK_IMPORTED_MODULE_0__["default"].getInstance().getSound(name);
         if (this.needPlaySound(sound)) {
             if (loop)
                 sound.loop();
@@ -2393,15 +2335,64 @@ var SoundManager = /** @class */ (function () {
         return !this.isTurnOff() && sound && sound.isLoaded();
     };
     SoundManager.needPlaySound = function (sound) {
-        return !this.isTurnOff() && sound && sound.isLoaded() && !sound.isPlaying();
+        return (!this.isTurnOff() && sound && sound.isLoaded() && !sound.isPlaying());
     };
     SoundManager.isTurnOff = function () {
-        return this.turnoff = this.getSoundStatus();
+        return (this.turnoff = this.getSoundStatus());
     };
     SoundManager.turnoff = false;
     return SoundManager;
 }());
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SoundManager);
+
+
+/***/ }),
+
+/***/ "./src/sounds/SoundProvider.ts":
+/*!*************************************!*\
+  !*** ./src/sounds/SoundProvider.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Sound__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sound */ "./src/sounds/Sound.ts");
+
+var SoundProvider = /** @class */ (function () {
+    function SoundProvider() {
+        this._sounds = {
+            bg: "theme/frontend/plinko/assets/sounds/bg.ogg",
+            big_win: "theme/frontend/plinko/assets/sounds/big_win.ogg",
+            click: "theme/frontend/plinko/assets/sounds/click.ogg",
+            over: "theme/frontend/plinko/assets/sounds/over.ogg",
+            play: "theme/frontend/plinko/assets/sounds/play.ogg",
+            win_sound: "theme/frontend/plinko/assets/sounds/win_sound.ogg",
+            col: "theme/frontend/plinko/assets/sounds/col.ogg",
+        };
+        this.audios = {};
+        this.initAudio();
+    }
+    SoundProvider.prototype.initAudio = function () {
+        for (var _i = 0, _a = Object.entries(this._sounds); _i < _a.length; _i++) {
+            var _b = _a[_i], key = _b[0], value = _b[1];
+            this.audios[key] = new _Sound__WEBPACK_IMPORTED_MODULE_0__["default"](new Audio(value));
+        }
+    };
+    SoundProvider.prototype.getSound = function (key) {
+        return this.audios[key];
+    };
+    SoundProvider.getInstance = function () {
+        if (!this.instance) {
+            this.instance = new SoundProvider();
+        }
+        return this.instance;
+    };
+    SoundProvider.instance = null;
+    return SoundProvider;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SoundProvider);
 
 
 /***/ }),

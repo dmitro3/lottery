@@ -43,24 +43,4 @@ export default class PlinkoStorage {
             mode
         );
     }
-
-    public static isGameBetted() {
-        try {
-
-            let obj = JSON.parse(sessionStorage.getItem(PlinkoStorage.KEY_PLINKO_BETTED));
-            let game_index = PlinkoGlobal.currentGameInfo.current_game_idx;
-            let state = obj[game_index];
-            return state != undefined && state == 1;
-        } catch (error) { }
-        return false;
-    }
-    public static setGameStateBet(value: any) {
-        try {
-            let game_index = PlinkoGlobal.currentGameInfo.current_game_idx;
-            let obj: any = {};
-            obj[game_index] = value;
-            sessionStorage.setItem(PlinkoStorage.KEY_PLINKO_BETTED, JSON.stringify(obj));
-        } catch (error) {
-        }
-    }
 }

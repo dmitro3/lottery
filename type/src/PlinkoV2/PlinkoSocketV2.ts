@@ -7,13 +7,11 @@ import PlinkoGlobal from "./PlinkoGlobal";
 import PlinkoStorage from "./PlinkoStorage";
 
 export default class PlinkoSocketV2 extends PlinkoSocket {
-
-
     public retrieveResult() {
         return;
     }
     public sendPlayRequest(showLoading: boolean = true) {
-        PlinkoStorage.setGameStateBet(1);
+        PlinkoGlobal.setTimeBet();
         let data: any = {};
         data.type = connectionGameType;
         data.action = PLINKO_STATUS.GAME_ACTION_DO_BET;
@@ -28,7 +26,12 @@ export default class PlinkoSocketV2 extends PlinkoSocket {
     }
 
     public betSuccess(data: any) {
-        BaseGui.createFlashNotify("Bet thành công.");
+        let game = data.games;
+        if (game) {
+            this.renderBall(game);
+        }
+        // BaseGui.createFlashNotify("Bet thành công.");
+        console.log("bet thanh cong");
     }
     public processMessageData(data: any) {
         switch (data.action) {
@@ -47,14 +50,9 @@ export default class PlinkoSocketV2 extends PlinkoSocket {
                 break;
         }
     }
-    public async renderBall(data: any) {
-        let games = data.games;
-        if (!games) return;
-        for (let index = 0; index < games.length; index++) {
-            const item = games[index];
-            ShortPlinko.createDisc(item.path, item.type);
-            await this.sleep(400);
-        }
+    public async renderBall(game: any) {
+        ShortPlinko.createDisc(game.path, game.type);
+        await this.sleep(500);
     }
     public sleep(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));

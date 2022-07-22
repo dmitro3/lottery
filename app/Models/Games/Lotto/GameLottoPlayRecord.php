@@ -4,9 +4,6 @@ namespace App\Models\Games\Lotto;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\BaseModel;
-use App\Models\WalletTransactionType;
-use App\Games\GoWin\Factories\MiniGameFactory;
-use App\Games\Plinko\Enums\BallType;
 use Exception;
 
 class GameLottoPlayRecord extends BaseModel
@@ -15,9 +12,9 @@ class GameLottoPlayRecord extends BaseModel
     {
         return $this->end_time - now()->timestamp;
     }
-    public function gamePlinkoUserBets()
+    public function gameLottoPlayUserBets()
     {
-        return $this->hasMany(GamePlinkoUserBet::class);
+        return $this->hasMany(GameLottoPlayUserBet::class);
     }
     public function end()
     {

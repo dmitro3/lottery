@@ -6,9 +6,7 @@ export default class LottoGameTimer {
     private timeRemaining: number = 0;
     private gamePlinkoTimeBox: any;
     private needRetreiveResult: boolean = false;
-    public constructor(
-        private gameSocket: LottoSocket
-    ) {
+    public constructor(private gameSocket: LottoSocket) {
         this.gamePlinkoTimeBox = Selector._("#game-lotto-time-box");
     }
     public initInfo(data: any) {
@@ -48,25 +46,23 @@ export default class LottoGameTimer {
         }
         this.showTimeChecker();
         this.timeRemaining--;
-
     }
 
     public refreshGame() {
         if (this.interValGameTime) {
             clearInterval(this.interValGameTime);
         }
+        window.location.href = window.location.href;
     }
     public showTimeChecker() {
         var mark = Selector._(".result_plot_threads .mark-box");
         let lastPoint = parseInt(LOTTO_CONFIG.LAST_POINT_TO_BET);
-        let duration = parseInt(LOTTO_CONFIG.NUMBER_TIME_TO_CHECK);
-        let showCountDownCalculate =
-            this.timeRemaining <= lastPoint &&
-            this.timeRemaining >= lastPoint - duration;
+        let timeToRetreive = parseInt(LOTTO_CONFIG.NUMBER_TIME_TO_CHECK);
+        let showCountDownCalculate = this.timeRemaining <= lastPoint;
         if (showCountDownCalculate) {
             Selector.flex(mark);
             let time: any = lastPoint - this.timeRemaining;
-            time = Math.abs(time - duration);
+            time = Math.abs(time - timeToRetreive);
             time = time < 10 ? "0" + time : "" + time;
             let html = ``;
             for (var i = 0; i < time.length; i++) {
@@ -76,10 +72,10 @@ export default class LottoGameTimer {
         } else {
             Selector.none(mark);
         }
-        if (this.timeRemaining < lastPoint - duration) {
+        if (this.timeRemaining < timeToRetreive) {
             if (!this.needRetreiveResult) return;
             this.needRetreiveResult = false;
-            // this.plinkoSocket.retrieveResult();
+            this.gameSocket.retrieveResult();
         }
     }
 }

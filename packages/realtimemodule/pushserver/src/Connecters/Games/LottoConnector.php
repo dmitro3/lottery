@@ -133,11 +133,9 @@ class LottoConnector implements ConnecterInterface
         }
 
 
-
-
         $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
         $user = $this->connection['userTargetMessage'];
-
+        $money = $money * 1000;
         if ($money > $user->getAmount()) {
             $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_NOT_ENOUGH_MONEY, false, 'Số tiền không đủ.'));
             return $this->connection;
@@ -152,23 +150,24 @@ class LottoConnector implements ConnecterInterface
     }
     private function retrieveResult($action)
     {
-        // $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
-        // if (!isset($currentGameClientInfo)) {
-        //     $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
-        // }
+        $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
+        if (!isset($currentGameClientInfo)) {
+            $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
+        }
 
-        // $user = $this->connection['userTargetMessage'];
+        $user = $this->connection['userTargetMessage'];
 
-        // $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
-        // $userBet = $currentGameRecord->gamePlinkoUserBets()->where('user_id', $user->id)->where('is_returned', 0)->orderBy('id', 'desc')->first();
-        // $games = [];
-        // if ($userBet) {
-        //     $games = $userBet->gamePlinkoUserBetDetails()->select('path', 'type')->orderBy('zigzag', 'desc')->get()->toArray();
-        //     $userBet->is_returned = 1;
-        //     $userBet->save();
-        // }
-        // $this->from->send($this->buildResponse(200, true, 'Lấy kết quả thành công!', compact('games'), $action));
-        // return $this->connection;
+        $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
+
+        $userBet = $currentGameRecord->gameLottoPlayUserBets()->where('user_id', $user->id)->where('is_returned', 0)->orderBy('id', 'desc')->first();
+        $games = [];
+        if ($userBet) {
+            $games = $userBet->gamePlinkoUserBetDetails()->select('path', 'type')->orderBy('zigzag', 'desc')->get()->toArray();
+            $userBet->is_returned = 1;
+            $userBet->save();
+        }
+        $this->from->send($this->buildResponse(200, true, 'Lấy kết quả thành công!', compact('games'), $action));
+        return $this->connection;
     }
     private function buildResponse($code, $status, $message, $data = [], $action = null)
     {

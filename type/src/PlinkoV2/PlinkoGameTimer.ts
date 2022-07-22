@@ -8,12 +8,9 @@ export default class PlinkoGameTimer {
     private timeRemaining: number = 0;
     private gamePlinkoTimeBox: any;
     private needRetreiveResult: boolean = false;
-    public constructor(
-        private plinkoSocket: PlinkoSocket
-    ) {
+    public constructor(private plinkoSocket: PlinkoSocket) {
         this.gamePlinkoTimeBox = Selector._("#game-plinko-time-box");
     }
-
 
     public initInfo(data: any) {
         if (!this.gamePlinkoTimeBox || !data.html) return;
@@ -50,34 +47,28 @@ export default class PlinkoGameTimer {
                     `;
             }
         }
-        this.autoPlay();
         this.showTimeChecker();
+        this.autoPlay();
         this.timeRemaining--;
-
     }
     public refreshGame() {
         if (this.interValGameTime) {
             clearInterval(this.interValGameTime);
         }
         if (Storage.isInactive()) {
-            Storage.setGameStateBet(0);
             window.location.href = window.location.href;
         } else {
             this.plinkoSocket.initGame();
-            Storage.setGameStateBet(0);
         }
     }
     public showTimeChecker() {
         var mark = Selector._(".game-betting .mark-box");
         let lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
-        let duration = parseInt(PLINKO_CONFIG.NUMBER_TIME_TO_CHECK);
-        let showCountDownCalculate =
-            this.timeRemaining <= lastPoint &&
-            this.timeRemaining >= lastPoint - duration;
+        let showCountDownCalculate = this.timeRemaining <= lastPoint;
         if (showCountDownCalculate) {
             Selector.flex(mark);
-            let time: any = lastPoint - this.timeRemaining;
-            time = Math.abs(time - duration);
+            let time: any = this.timeRemaining;
+            time = Math.abs(time);
             time = time < 10 ? "0" + time : "" + time;
             let html = ``;
             for (var i = 0; i < time.length; i++) {
@@ -87,21 +78,12 @@ export default class PlinkoGameTimer {
         } else {
             Selector.none(mark);
         }
-        if (this.timeRemaining < lastPoint - duration) {
-            if (!this.needRetreiveResult) return;
-            if (!Storage.isGameBetted()) return;
-            this.needRetreiveResult = false;
-            this.plinkoSocket.retrieveResult();
-        }
     }
     public autoPlay() {
         let lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
-        let status =
-            !Storage.isGameBetted() &&
-            this.timeRemaining > lastPoint &&
-            this.timeRemaining < lastPoint + 2;
+        let status = PlinkoGlobal.acceptBet() && this.timeRemaining > lastPoint;
         if (PlinkoGlobal.isAutoMode() && status) {
-            this.plinkoSocket.sendPlayRequest();
+            this.plinkoSocket.sendPlayRequest(false);
         }
     }
 }

@@ -105,7 +105,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="game-list p-b-20">
@@ -119,7 +119,6 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 <script src="theme/frontend/plinko/js/gui.js" defer></script>
 <script src="theme/frontend/plinko/js/lib.js" defer></script>
 <script src="theme/frontend/plinko/js//p5.min.js" defer></script>
-<script src="theme/frontend/plinko/js/p5.sound.min.js" defer></script>
 <script src="theme/frontend/plinko/js/main.js" defer></script>
 <script src="theme/frontend/game/ts/plinko.js" defer></script>
 @endsection

@@ -1,19 +1,21 @@
 import InactiveBrowser from "../Base/InactiveBrowser";
 import Selector from "../Base/Selector";
+import PlinkoGlobal from "./PlinkoGlobal";
 import PlinkoSocket from "./PlinkoSocketV2";
 import Storage from "./PlinkoStorage";
 
-export default class PlinkoUi{
-    public constructor(private plinkoSocket: PlinkoSocket) {
-
-    }
+export default class PlinkoUi {
+    public constructor(private plinkoSocket: PlinkoSocket) {}
     public playGame() {
+        if (!PlinkoGlobal.acceptBet()) {
+            return;
+        }
         let self = this;
         this.disableButtonPlay();
         this.plinkoSocket.sendPlayRequest(false);
         setTimeout(function () {
             self.enableButtonPlay();
-        }, 500);
+        }, PlinkoGlobal.TIME_EACH_BALL);
     }
     disableButtonPlay() {
         var button = Selector._("button.play");
@@ -32,10 +34,11 @@ export default class PlinkoUi{
             self.playGame();
         });
         this.initEvent();
-        this.detectInactive();
+        // this.detectInactive();
         // this.showBlurPopupIfInactive();
         this.loadPlinkoHistoryGame();
-    };
+        this.loadGuiFromLocalStorage();
+    }
     public initEvent() {
         let self = this;
         var lsMode = document.querySelectorAll(".label_choose.mode");
@@ -54,6 +57,8 @@ export default class PlinkoUi{
                 self.updateLocalStorage();
             });
         });
+    }
+    private loadGuiFromLocalStorage() {
         Selector._(".qty_box input[name='qty']").value = Storage.getQty();
         Selector._(
             `.label_choose.mode input[value="${Storage.getMode()}"]`
@@ -66,25 +71,24 @@ export default class PlinkoUi{
         let qty = Selector._(".qty_box input[name='qty']").value;
         let type = Selector._(".label_choose.risk input:checked").value;
         let mode = Selector._(".label_choose.mode input:checked").value;
-        Storage.setConfigGame(qty, mode, type)
+        Storage.setConfigGame(qty, mode, type);
     }
     public detectInactive() {
         let self = this;
         let inactiveBrowser = new InactiveBrowser();
         inactiveBrowser.onEventHidden = function () {
             self.showBlurPopupIfInactive(true);
-        }
+        };
         inactiveBrowser.onEventVisible = function () {
             self.showBlurPopupIfInactive(false);
-        }
+        };
     }
     public showBlurPopupIfInactive(isHidden: boolean) {
-        if (Storage.isGameBetted() || isHidden) {
+        if (isHidden) {
             Selector._("#game").classList.add("inactive");
             Selector._("#warning-inactive").classList.remove("d-none");
             Storage.setInactive(1);
-        }
-        else {
+        } else {
             Selector._("#game").classList.remove("inactive");
             Selector._("#warning-inactive").classList.add("d-none");
             Storage.setInactive(0);
