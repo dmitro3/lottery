@@ -46,6 +46,16 @@
     pointer-events: none;
     z-index: 1;
 }
+.count_down_ball{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.count_down_ball span{
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+}
 
 .box_game {
     padding-top: .3rem;
@@ -321,4 +331,16 @@ input[type=number] {
 .game-betting .content > .box{
     padding: 0px!important;
     overflow: hidden;
+}
+.qty_box.disabled:after {
+    position: absolute;
+    z-index: 9999;
+    background: #9a9a9a82;
+    top: 0;
+    left: 0;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: not-allowed;
 }

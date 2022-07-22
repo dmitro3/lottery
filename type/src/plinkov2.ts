@@ -5,8 +5,8 @@ import PlinkoUi from "./PlinkoV2/PlinkoUi";
 
 const socket: Socket = new Socket('ws://localhost:8888/');
 const plinkoSocket = new PlinkoSocket(socket);
-const plinkoGameTimer = new PlinkGameTimer(plinkoSocket);
 const plinkoUi = new PlinkoUi(plinkoSocket);
+const plinkoGameTimer = new PlinkGameTimer(plinkoSocket, plinkoUi);
 plinkoSocket.onOpenSocketCallback = function () {
     plinkoUi.init();
 }

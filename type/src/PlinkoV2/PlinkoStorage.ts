@@ -6,6 +6,7 @@ export default class PlinkoStorage {
     private static KEY_PLINKO_MODE = "plinko_mode";
     private static KEY_PLINKO_TYPE = "plinko_type";
     private static KEY_PLINKO_BETTED = "plinko_betted";
+    private static KEY_PLINKO_CURRENT_COUNT_BALL_AUTO_MODE = "plinko_current_count_ball";
     public static isInactive() {
         let state: any = sessionStorage.getItem(PlinkoStorage.KEY_PLINKO_INACTIVE);
         return state != undefined && state == 1;
@@ -44,23 +45,17 @@ export default class PlinkoStorage {
         );
     }
 
-    public static isGameBetted() {
-        try {
 
-            let obj = JSON.parse(sessionStorage.getItem(PlinkoStorage.KEY_PLINKO_BETTED));
-            let game_index = PlinkoGlobal.currentGameInfo.current_game_idx;
-            let state = obj[game_index];
-            return state != undefined && state == 1;
-        } catch (error) { }
-        return false;
+    public static getCountCurrentBall() {
+        let count = sessionStorage.getItem(this.KEY_PLINKO_CURRENT_COUNT_BALL_AUTO_MODE);
+        return count == undefined ? 0 : parseInt(count);
     }
-    public static setGameStateBet(value: any) {
-        try {
-            let game_index = PlinkoGlobal.currentGameInfo.current_game_idx;
-            let obj: any = {};
-            obj[game_index] = value;
-            sessionStorage.setItem(PlinkoStorage.KEY_PLINKO_BETTED, JSON.stringify(obj));
-        } catch (error) {
-        }
+    public static resetCountCurrentBall() {
+        sessionStorage.setItem(this.KEY_PLINKO_CURRENT_COUNT_BALL_AUTO_MODE, "0");
+    }
+    public static incrementCountCurrentBall() {
+        let count = this.getCountCurrentBall();
+        count++;
+        sessionStorage.setItem(this.KEY_PLINKO_CURRENT_COUNT_BALL_AUTO_MODE, String(count));
     }
 }

@@ -24,7 +24,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                     <div class="out">
                         <div class="txt"> Thời gian còn lại để mua </div>
                         <div class="number c-row c-row-middle c-flew-end">
-                           
+
                         </div>
                     </div>
                 </div>

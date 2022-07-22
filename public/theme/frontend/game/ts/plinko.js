@@ -113,12 +113,14 @@ __webpack_require__.r(__webpack_exports__);
 var InactiveBrowser = /** @class */ (function () {
     function InactiveBrowser() {
         this.browserPrefixes = ['moz', 'ms', 'o', 'webkit'];
-        this.isVisible = true;
+        this.isVisible = false;
         this.browserPrefix = this.getBrowserPrefix();
         this.hiddenPropertyName = this.getHiddenPropertyName(this.browserPrefix);
         this.visibilityEventName = this.getVisibilityEvent(this.browserPrefix);
-        this.initEvent();
     }
+    InactiveBrowser.prototype.init = function () {
+        this.initEvent();
+    };
     InactiveBrowser.prototype.getHiddenPropertyName = function (prefix) {
         return (prefix ? prefix + 'Hidden' : 'hidden');
     };
@@ -180,6 +182,7 @@ var InactiveBrowser = /** @class */ (function () {
         window.addEventListener('blur', function () {
             self.handleVisibilityChange(false);
         }, false);
+        self.handleVisibilityChange(document.visibilityState == 'visible');
     };
     return InactiveBrowser;
 }());
@@ -350,21 +353,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var PlinkoGameTimer = /** @class */ (function () {
-    function PlinkoGameTimer(plinkoSocket) {
+    function PlinkoGameTimer(plinkoSocket, plinkoUi) {
         this.plinkoSocket = plinkoSocket;
+        this.plinkoUi = plinkoUi;
         this.interValGameTime = null;
         this.timeRemaining = 0;
-        this.needRetreiveResult = false;
         this.gamePlinkoTimeBox = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._("#game-plinko-time-box");
     }
     PlinkoGameTimer.prototype.initInfo = function (data) {
         var _a;
         if (!this.gamePlinkoTimeBox || !data.html)
             return;
-        this.needRetreiveResult = true;
         this.gamePlinkoTimeBox.innerHTML = data.html;
         this.timeRemaining = (_a = data.time_remaining) !== null && _a !== void 0 ? _a : 0;
+        _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].resetCountCurrentBall();
         if (this.interValGameTime) {
             clearInterval(this.interValGameTime);
         }
@@ -383,65 +387,58 @@ var PlinkoGameTimer = /** @class */ (function () {
             this.refreshGame();
         }
         else {
-            var countDownTimeBox = this.gamePlinkoTimeBox.querySelector(".out .number");
-            if (countDownTimeBox) {
-                countDownTimeBox.innerHTML = "\n                        <div class=\"item\">".concat(minutes.substr(0, 1), "</div>\n                        <div class=\"item\">").concat(minutes.substr(1, 1), "</div>\n                        <div class=\"item c-row c-row-middle\">:</div>\n                        <div class=\"item\">").concat(seconds.substr(0, 1), "</div>\n                        <div class=\"item\">").concat(seconds.substr(1, 1), "</div>\n                    ");
-            }
+            this.plinkoUi.updateCountDownMain(minutes, seconds);
         }
-        this.autoPlay();
         this.showTimeChecker();
+        this.autoPlay();
+        this.plinkoUi.updateCountDownPlayBox(this.timeRemaining);
+        this.plinkoUi.updateCountDownBall();
         this.timeRemaining--;
     };
     PlinkoGameTimer.prototype.refreshGame = function () {
         if (this.interValGameTime) {
             clearInterval(this.interValGameTime);
         }
+        _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].resetCountCurrentBall();
         if (_PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].isInactive()) {
-            _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].setGameStateBet(0);
             window.location.href = window.location.href;
         }
         else {
             this.plinkoSocket.initGame();
-            _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].setGameStateBet(0);
         }
     };
     PlinkoGameTimer.prototype.showTimeChecker = function () {
         var mark = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".game-betting .mark-box");
-        var lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
-        var duration = parseInt(PLINKO_CONFIG.NUMBER_TIME_TO_CHECK);
-        var showCountDownCalculate = this.timeRemaining <= lastPoint &&
-            this.timeRemaining >= lastPoint - duration;
+        var lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_COUNT_DOWN);
+        var showCountDownCalculate = this.timeRemaining <= lastPoint;
         if (showCountDownCalculate) {
             _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].flex(mark);
-            var time = lastPoint - this.timeRemaining;
-            time = Math.abs(time - duration);
-            time = time < 10 ? "0" + time : "" + time;
-            var html = "";
-            for (var i = 0; i < time.length; i++) {
-                html += "<span class=\"item m-r-20\">".concat(time.charAt(i), "</span>");
-            }
-            mark.innerHTML = html;
+            this.plinkoUi.updateCountDownFullBox(mark, this.timeRemaining);
         }
         else {
             _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].none(mark);
         }
-        if (this.timeRemaining < lastPoint - duration) {
-            if (!this.needRetreiveResult)
-                return;
-            if (!_PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].isGameBetted())
-                return;
-            this.needRetreiveResult = false;
-            this.plinkoSocket.retrieveResult();
-        }
     };
     PlinkoGameTimer.prototype.autoPlay = function () {
-        var lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
-        var status = !_PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].isGameBetted() &&
-            this.timeRemaining > lastPoint &&
-            this.timeRemaining < lastPoint + 2;
-        if (_PlinkoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].isAutoMode() && status) {
-            this.plinkoSocket.sendPlayRequest();
+        var status = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].acceptBet() && this.hasEnoughTimeToPlay() && !_PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].isInactive();
+        var hasEnoughBall = this.hasEnoughBall();
+        var gameInited = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].GAME_INITED;
+        var isAutoMode = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_1__["default"].isAutoMode();
+        if (isAutoMode && status && hasEnoughBall && gameInited) {
+            this.plinkoUi.disableButtonPlay();
+            this.plinkoSocket.sendPlayRequest(false);
+            _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].incrementCountCurrentBall();
         }
+    };
+    PlinkoGameTimer.prototype.hasEnoughBall = function () {
+        var userQty = _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].getQty();
+        var max = PLINKO_CONFIG.MAXIMUM_BALL;
+        var currentCount = _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].getCountCurrentBall();
+        return userQty <= max && userQty - currentCount > 0;
+    };
+    PlinkoGameTimer.prototype.hasEnoughTimeToPlay = function () {
+        var lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
+        return this.timeRemaining > lastPoint;
     };
     return PlinkoGameTimer;
 }());
@@ -479,7 +476,18 @@ var PlinkoGlobal = /** @class */ (function () {
         var input = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".label_choose input[name=mode]:checked");
         return input.value == "auto";
     };
+    PlinkoGlobal.setTimeBet = function () {
+        var time = new Date().getTime();
+        this.lastTimeBet = time;
+    };
+    PlinkoGlobal.acceptBet = function () {
+        var time = new Date().getTime();
+        return time - this.lastTimeBet > this.TIME_EACH_BALL;
+    };
+    PlinkoGlobal.TIME_EACH_BALL = 500;
+    PlinkoGlobal.GAME_INITED = false;
     PlinkoGlobal._currentGameInfo = {};
+    PlinkoGlobal.lastTimeBet = 0;
     return PlinkoGlobal;
 }());
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PlinkoGlobal);
@@ -497,11 +505,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Base_BaseGui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Base/BaseGui */ "./src/Base/BaseGui.ts");
-/* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Base/Selector */ "./src/Base/Selector.ts");
-/* harmony import */ var _Plinko_PlinkoSocket__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Plinko/PlinkoSocket */ "./src/Plinko/PlinkoSocket.ts");
-/* harmony import */ var _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PlinkoGlobal */ "./src/PlinkoV2/PlinkoGlobal.ts");
-/* harmony import */ var _PlinkoStorage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PlinkoStorage */ "./src/PlinkoV2/PlinkoStorage.ts");
+/* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Base/Selector */ "./src/Base/Selector.ts");
+/* harmony import */ var _Plinko_PlinkoSocket__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Plinko/PlinkoSocket */ "./src/Plinko/PlinkoSocket.ts");
+/* harmony import */ var _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PlinkoGlobal */ "./src/PlinkoV2/PlinkoGlobal.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -556,8 +562,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
-
 var PlinkoSocketV2 = /** @class */ (function (_super) {
     __extends(PlinkoSocketV2, _super);
     function PlinkoSocketV2() {
@@ -568,28 +572,33 @@ var PlinkoSocketV2 = /** @class */ (function (_super) {
     };
     PlinkoSocketV2.prototype.sendPlayRequest = function (showLoading) {
         if (showLoading === void 0) { showLoading = true; }
-        _PlinkoStorage__WEBPACK_IMPORTED_MODULE_4__["default"].setGameStateBet(1);
+        _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].setTimeBet();
         var data = {};
         data.type = connectionGameType;
         data.action = PLINKO_STATUS.GAME_ACTION_DO_BET;
-        data.currentGame = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_3__["default"].currentGameInfo;
+        data.currentGame = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].currentGameInfo;
         var gameData = {
-            type: _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("[name=risk]:checked").value,
-            mode: _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("[name=mode]:checked").value,
-            qty: _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("[name=qty]").value,
+            type: _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._("[name=risk]:checked").value,
+            mode: _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._("[name=mode]:checked").value,
+            qty: _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._("[name=qty]").value,
         };
         data.gameData = gameData;
         this.sendData(JSON.stringify(data), showLoading);
     };
     PlinkoSocketV2.prototype.betSuccess = function (data) {
-        _Base_BaseGui__WEBPACK_IMPORTED_MODULE_0__["default"].createFlashNotify("Bet thành công.");
+        var game = data.games;
+        if (game) {
+            this.renderBall(game);
+        }
+        // BaseGui.createFlashNotify("Bet thành công.");
+        console.log("bet thanh cong");
     };
     PlinkoSocketV2.prototype.processMessageData = function (data) {
         var _a;
         switch (data.action) {
             case PLINKO_STATUS.GAME_ACTION_GET_CURRENT_GAME_INFO:
                 var dataAttachment = data.data;
-                _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_3__["default"].currentGameInfo.current_game_idx =
+                _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].currentGameInfo.current_game_idx =
                     (_a = dataAttachment.current_game_idx) !== null && _a !== void 0 ? _a : "";
                 if (this.onInitGameCallback) {
                     this.onInitGameCallback(dataAttachment);
@@ -602,29 +611,18 @@ var PlinkoSocketV2 = /** @class */ (function (_super) {
                 break;
         }
     };
-    PlinkoSocketV2.prototype.renderBall = function (data) {
+    PlinkoSocketV2.prototype.renderBall = function (game) {
         return __awaiter(this, void 0, void 0, function () {
-            var games, index, item;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        games = data.games;
-                        if (!games)
-                            return [2 /*return*/];
-                        index = 0;
-                        _a.label = 1;
+                        if (typeof ShortPlinko != 'undefined') {
+                            ShortPlinko.createDisc(game.path, game.type);
+                        }
+                        return [4 /*yield*/, this.sleep(500)];
                     case 1:
-                        if (!(index < games.length)) return [3 /*break*/, 4];
-                        item = games[index];
-                        ShortPlinko.createDisc(item.path, item.type);
-                        return [4 /*yield*/, this.sleep(400)];
-                    case 2:
                         _a.sent();
-                        _a.label = 3;
-                    case 3:
-                        index++;
-                        return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -633,7 +631,7 @@ var PlinkoSocketV2 = /** @class */ (function (_super) {
         return new Promise(function (resolve) { return setTimeout(resolve, ms); });
     };
     return PlinkoSocketV2;
-}(_Plinko_PlinkoSocket__WEBPACK_IMPORTED_MODULE_2__["default"]));
+}(_Plinko_PlinkoSocket__WEBPACK_IMPORTED_MODULE_1__["default"]));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PlinkoSocketV2);
 
 
@@ -649,8 +647,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PlinkoGlobal */ "./src/PlinkoV2/PlinkoGlobal.ts");
-
 var PlinkoStorage = /** @class */ (function () {
     function PlinkoStorage() {
     }
@@ -678,31 +674,24 @@ var PlinkoStorage = /** @class */ (function () {
         localStorage.setItem(PlinkoStorage.KEY_PLINKO_TYPE, type);
         localStorage.setItem(PlinkoStorage.KEY_PLINKO_MODE, mode);
     };
-    PlinkoStorage.isGameBetted = function () {
-        try {
-            var obj = JSON.parse(sessionStorage.getItem(PlinkoStorage.KEY_PLINKO_BETTED));
-            var game_index = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_0__["default"].currentGameInfo.current_game_idx;
-            var state = obj[game_index];
-            return state != undefined && state == 1;
-        }
-        catch (error) { }
-        return false;
+    PlinkoStorage.getCountCurrentBall = function () {
+        var count = sessionStorage.getItem(this.KEY_PLINKO_CURRENT_COUNT_BALL_AUTO_MODE);
+        return count == undefined ? 0 : parseInt(count);
     };
-    PlinkoStorage.setGameStateBet = function (value) {
-        try {
-            var game_index = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_0__["default"].currentGameInfo.current_game_idx;
-            var obj = {};
-            obj[game_index] = value;
-            sessionStorage.setItem(PlinkoStorage.KEY_PLINKO_BETTED, JSON.stringify(obj));
-        }
-        catch (error) {
-        }
+    PlinkoStorage.resetCountCurrentBall = function () {
+        sessionStorage.setItem(this.KEY_PLINKO_CURRENT_COUNT_BALL_AUTO_MODE, "0");
+    };
+    PlinkoStorage.incrementCountCurrentBall = function () {
+        var count = this.getCountCurrentBall();
+        count++;
+        sessionStorage.setItem(this.KEY_PLINKO_CURRENT_COUNT_BALL_AUTO_MODE, String(count));
     };
     PlinkoStorage.KEY_PLINKO_INACTIVE = "plinko_inactive";
     PlinkoStorage.KEY_PLINKO_QTY = "plinko_qty";
     PlinkoStorage.KEY_PLINKO_MODE = "plinko_mode";
     PlinkoStorage.KEY_PLINKO_TYPE = "plinko_type";
     PlinkoStorage.KEY_PLINKO_BETTED = "plinko_betted";
+    PlinkoStorage.KEY_PLINKO_CURRENT_COUNT_BALL_AUTO_MODE = "plinko_current_count_ball";
     return PlinkoStorage;
 }());
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PlinkoStorage);
@@ -722,7 +711,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Base_InactiveBrowser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Base/InactiveBrowser */ "./src/Base/InactiveBrowser.ts");
 /* harmony import */ var _Base_Selector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Base/Selector */ "./src/Base/Selector.ts");
-/* harmony import */ var _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PlinkoStorage */ "./src/PlinkoV2/PlinkoStorage.ts");
+/* harmony import */ var _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PlinkoGlobal */ "./src/PlinkoV2/PlinkoGlobal.ts");
+/* harmony import */ var _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PlinkoStorage */ "./src/PlinkoV2/PlinkoStorage.ts");
+
+
 
 
 
@@ -731,12 +723,15 @@ var PlinkoUi = /** @class */ (function () {
         this.plinkoSocket = plinkoSocket;
     }
     PlinkoUi.prototype.playGame = function () {
+        if (!_PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].acceptBet()) {
+            return;
+        }
         var self = this;
         this.disableButtonPlay();
         this.plinkoSocket.sendPlayRequest(false);
         setTimeout(function () {
             self.enableButtonPlay();
-        }, 500);
+        }, _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].TIME_EACH_BALL);
     };
     PlinkoUi.prototype.disableButtonPlay = function () {
         var button = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("button.play");
@@ -750,6 +745,18 @@ var PlinkoUi = /** @class */ (function () {
             return;
         button.disabled = false;
     };
+    PlinkoUi.prototype.disableQtyBox = function () {
+        var box = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".qty_box");
+        if (!box)
+            return;
+        box.classList.add('disabled');
+    };
+    PlinkoUi.prototype.enableQtyBox = function () {
+        var box = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".qty_box");
+        if (!box)
+            return;
+        box.classList.remove('disabled');
+    };
     PlinkoUi.prototype.init = function () {
         var self = this;
         var button = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("button.play");
@@ -760,35 +767,59 @@ var PlinkoUi = /** @class */ (function () {
         this.detectInactive();
         // this.showBlurPopupIfInactive();
         this.loadPlinkoHistoryGame();
+        this.loadGuiFromLocalStorage();
     };
-    ;
     PlinkoUi.prototype.initEvent = function () {
         var self = this;
         var lsMode = document.querySelectorAll(".label_choose.mode");
         var inputQty = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".qty_box input[name='qty']");
-        inputQty.addEventListener("input", function (e) {
+        inputQty.addEventListener("input", function (event) {
             self.updateLocalStorage();
         });
         lsMode.forEach(function (e, i) {
-            e.addEventListener("click", function () {
+            e.addEventListener("click", function (event) {
+                var autoMode = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].isAutoMode();
+                if (autoMode) {
+                    self.disableButtonPlay();
+                    self.enableQtyBox();
+                }
+                else {
+                    self.enableButtonPlay();
+                    self.disableQtyBox();
+                }
                 self.updateLocalStorage();
             });
         });
         var lsrisk = document.querySelectorAll(".label_choose.risk");
         lsrisk.forEach(function (e, i) {
-            e.addEventListener("click", function () {
+            e.addEventListener("click", function (event) {
                 self.updateLocalStorage();
             });
         });
-        _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".qty_box input[name='qty']").value = _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].getQty();
-        _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".label_choose.mode input[value=\"".concat(_PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].getMode(), "\"]")).checked = true;
-        _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".label_choose.risk input[value=\"".concat(_PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].getType(), "\"]")).checked = true;
+        document.addEventListener('game_inited', function () {
+            _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].GAME_INITED = true;
+        });
+    };
+    PlinkoUi.prototype.loadGuiFromLocalStorage = function () {
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".qty_box input[name='qty']").value = _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getQty();
+        var mode = _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getMode();
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".label_choose.mode input[value=\"".concat(_PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getMode(), "\"]")).checked = true;
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".label_choose.risk input[value=\"".concat(_PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getType(), "\"]")).checked = true;
+        var autoMode = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].isAutoMode();
+        if (autoMode) {
+            this.disableButtonPlay();
+            this.enableQtyBox();
+        }
+        else {
+            this.enableButtonPlay();
+            this.disableQtyBox();
+        }
     };
     PlinkoUi.prototype.updateLocalStorage = function () {
         var qty = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".qty_box input[name='qty']").value;
         var type = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".label_choose.risk input:checked").value;
         var mode = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".label_choose.mode input:checked").value;
-        _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].setConfigGame(qty, mode, type);
+        _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].setConfigGame(qty, mode, type);
     };
     PlinkoUi.prototype.detectInactive = function () {
         var self = this;
@@ -799,17 +830,61 @@ var PlinkoUi = /** @class */ (function () {
         inactiveBrowser.onEventVisible = function () {
             self.showBlurPopupIfInactive(false);
         };
+        inactiveBrowser.init();
     };
     PlinkoUi.prototype.showBlurPopupIfInactive = function (isHidden) {
-        if (_PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].isGameBetted() || isHidden) {
-            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#game").classList.add("inactive");
-            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#warning-inactive").classList.remove("d-none");
-            _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].setInactive(1);
+        if (isHidden) {
+            // Selector._("#game").classList.add("inactive");
+            // Selector._("#warning-inactive").classList.remove("d-none");
+            _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].setInactive(1);
         }
         else {
-            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#game").classList.remove("inactive");
-            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#warning-inactive").classList.add("d-none");
-            _PlinkoStorage__WEBPACK_IMPORTED_MODULE_2__["default"].setInactive(0);
+            // Selector._("#game").classList.remove("inactive");
+            // Selector._("#warning-inactive").classList.add("d-none");
+            _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].setInactive(0);
+        }
+    };
+    PlinkoUi.prototype.updateCountDownPlayBox = function (timeRemaining) {
+        var lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
+        var status = timeRemaining <= lastPoint;
+        if (!status) {
+            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"].none(_Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".ready"));
+        }
+        else {
+            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"].flex(_Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".ready"));
+            var seconds = timeRemaining % 60 | 0;
+            seconds = seconds < 10 ? "0" + seconds : String(seconds);
+            var time = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".ready .time");
+            time.innerHTML = "<span class=\"item\">".concat(seconds.substr(0, 1), "</span>\n                <span class=\"item\">").concat(seconds.substr(1, 1), "</span>");
+        }
+    };
+    PlinkoUi.prototype.updateCountDownMain = function (minutes, seconds) {
+        var gamePlinkoTimeBox = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#game-plinko-time-box");
+        var countDownTimeBox = gamePlinkoTimeBox.querySelector(".out .number");
+        if (countDownTimeBox) {
+            countDownTimeBox.innerHTML = "\n                <div class=\"item\">".concat(minutes.substr(0, 1), "</div>\n                <div class=\"item\">").concat(minutes.substr(1, 1), "</div>\n                <div class=\"item c-row c-row-middle\">:</div>\n                <div class=\"item\">").concat(seconds.substr(0, 1), "</div>\n                <div class=\"item\">").concat(seconds.substr(1, 1), "</div>\n            ");
+        }
+    };
+    PlinkoUi.prototype.updateCountDownFullBox = function (boxHtml, timeRemaining) {
+        var time = timeRemaining;
+        time = Math.abs(time);
+        time = time < 10 ? "0" + time : "" + time;
+        var html = "";
+        for (var i = 0; i < time.length; i++) {
+            html += "<span class=\"item m-r-20\">".concat(time.charAt(i), "</span>");
+        }
+        boxHtml.innerHTML = html;
+    };
+    PlinkoUi.prototype.updateCountDownBall = function () {
+        var boxBall = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('.count_down_ball');
+        if (_PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].isAutoMode()) {
+            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"].flex(boxBall);
+            var span = boxBall.querySelector('span');
+            var userQty = _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getQty();
+            span.innerText = userQty - _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getCountCurrentBall();
+        }
+        else {
+            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"].none(boxBall);
         }
     };
     PlinkoUi.prototype.loadPlinkoHistoryGame = function () {
@@ -1209,8 +1284,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var socket = new _Base_Socket__WEBPACK_IMPORTED_MODULE_0__["default"]('ws://localhost:8888/');
 var plinkoSocket = new _PlinkoV2_PlinkoSocketV2__WEBPACK_IMPORTED_MODULE_2__["default"](socket);
-var plinkoGameTimer = new _PlinkoV2_PlinkoGameTimer__WEBPACK_IMPORTED_MODULE_1__["default"](plinkoSocket);
 var plinkoUi = new _PlinkoV2_PlinkoUi__WEBPACK_IMPORTED_MODULE_3__["default"](plinkoSocket);
+var plinkoGameTimer = new _PlinkoV2_PlinkoGameTimer__WEBPACK_IMPORTED_MODULE_1__["default"](plinkoSocket, plinkoUi);
 plinkoSocket.onOpenSocketCallback = function () {
     plinkoUi.init();
 };

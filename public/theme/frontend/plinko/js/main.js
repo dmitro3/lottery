@@ -438,6 +438,16 @@ var BaseComponent = /** @class */ (function () {
         this.world = world;
         this.P5 = P5;
     }
+    Object.defineProperty(BaseComponent.prototype, "body", {
+        get: function () {
+            return this._body;
+        },
+        set: function (value) {
+            this._body = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(BaseComponent.prototype, "x", {
         get: function () {
             return this._x;
@@ -548,6 +558,7 @@ var Disc = /** @class */ (function (_super) {
         _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].TEST.count++;
         if (_configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].TEST.count > 29) {
             _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].TEST.count = 0;
+            this.pegContainer.resetMaskCrossWall();
         }
     };
     Disc.prototype.testWall = function (paths) {
@@ -1039,9 +1050,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Peg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Peg */ "./src/components/Peg.ts");
 /* harmony import */ var _wall_CrossLeftWall__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../wall/CrossLeftWall */ "./src/components/wall/CrossLeftWall.ts");
 /* harmony import */ var _wall_CrossRightWall__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../wall/CrossRightWall */ "./src/components/wall/CrossRightWall.ts");
-/* harmony import */ var _wall_FunnelDownWall__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../wall/FunnelDownWall */ "./src/components/wall/FunnelDownWall.ts");
-/* harmony import */ var _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../wall/FunnelWall */ "./src/components/wall/FunnelWall.ts");
-/* harmony import */ var _wall_Wall__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../wall/Wall */ "./src/components/wall/Wall.ts");
+/* harmony import */ var _wall_CrossWall__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../wall/CrossWall */ "./src/components/wall/CrossWall.ts");
+/* harmony import */ var _wall_FunnelDownWall__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../wall/FunnelDownWall */ "./src/components/wall/FunnelDownWall.ts");
+/* harmony import */ var _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../wall/FunnelWall */ "./src/components/wall/FunnelWall.ts");
+/* harmony import */ var _wall_Wall__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../wall/Wall */ "./src/components/wall/Wall.ts");
+
 
 
 
@@ -1116,12 +1129,12 @@ var PegContainer = /** @class */ (function () {
             var peg = this.pegs[0];
             var x2 = peg.x;
             var y2 = peg.y - 100;
-            var w = new _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_5__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
+            var w = new _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_6__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
             this.funnelwalls.push(w);
             peg = this.pegs[2];
             x2 = peg.x;
             y2 = peg.y - 100;
-            w = new _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_5__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
+            w = new _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_6__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
             this.funnelwalls.push(w);
         }
         if (this.pegs.length > 167) {
@@ -1129,7 +1142,7 @@ var PegContainer = /** @class */ (function () {
                 var peg = this.pegs[index];
                 var x2 = peg.x;
                 var y2 = peg.y + 50;
-                var w = new _wall_FunnelDownWall__WEBPACK_IMPORTED_MODULE_4__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
+                var w = new _wall_FunnelDownWall__WEBPACK_IMPORTED_MODULE_5__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
                 this.funnelwalls.push(w);
             }
         }
@@ -1147,7 +1160,7 @@ var PegContainer = /** @class */ (function () {
                 var newY1 = peg.y - _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].WALL.height / 2;
                 var newX2 = nextPeg.x - _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].PEG.radius;
                 var newY2 = nextPeg.y - _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].WALL.height / 2;
-                var w = new _wall_Wall__WEBPACK_IMPORTED_MODULE_6__["default"](this.world, this.P5, peg.x, peg.y, nextPeg.x, nextPeg.y);
+                var w = new _wall_Wall__WEBPACK_IMPORTED_MODULE_7__["default"](this.world, this.P5, peg.x, peg.y, nextPeg.x, nextPeg.y);
                 w.fromPeg = peg;
                 w.toPeg = nextPeg;
                 w.fromIndex = pegIndex;
@@ -1197,6 +1210,15 @@ var PegContainer = /** @class */ (function () {
         w.setWallName(wallName);
         this.walls[wallName] = w;
         return w;
+    };
+    PegContainer.prototype.resetMaskCrossWall = function () {
+        for (var _i = 0, _a = Object.entries(this.walls); _i < _a.length; _i++) {
+            var _b = _a[_i], key = _b[0], wall = _b[1];
+            if (wall instanceof _wall_CrossWall__WEBPACK_IMPORTED_MODULE_4__["default"]) {
+                wall.body.collisionFilter.mask = 0;
+                wall.body.collisionFilter.category = 0;
+            }
+        }
     };
     PegContainer.prototype.show = function () {
         for (var _i = 0, _a = Object.entries(this.walls); _i < _a.length; _i++) {
@@ -2118,27 +2140,33 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var currentGame;
+var gameInited = false;
 function makeGame() {
     var tmp = function (p) {
         _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance();
         var p5w = (currentGame = new _P5Wrapper__WEBPACK_IMPORTED_MODULE_2__.P5Wrapper(p));
         p.preload = function () {
-            console.log("preload");
             p5w.preload();
         };
         p.setup = function () {
-            console.log("setup");
             p5w.setup();
         };
         p.draw = function () {
-            console.log("draw");
             p5w.draw();
+            if (!gameInited) {
+                gameInited = true;
+                eventInited();
+            }
         };
         p.mousePressed = function () {
             p5w.mousePressed();
         };
     };
     return new p5__WEBPACK_IMPORTED_MODULE_0__(tmp);
+}
+function eventInited() {
+    var event = new Event("game_inited");
+    document.dispatchEvent(event);
 }
 var hostname = window.location.hostname;
 if (hostname != "localhost" &&
@@ -2172,6 +2200,37 @@ window["ShortPlinko"] = {
     },
 };
 window["ShortPlinko"].init();
+
+
+/***/ }),
+
+/***/ "./src/sounds/InteractionListener.ts":
+/*!*******************************************!*\
+  !*** ./src/sounds/InteractionListener.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _SoundManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SoundManager */ "./src/sounds/SoundManager.ts");
+
+var InteractionListener = /** @class */ (function () {
+    function InteractionListener() {
+        this.initEvents();
+    }
+    InteractionListener.prototype.handleInteraction = function () {
+        _SoundManager__WEBPACK_IMPORTED_MODULE_0__["default"].USER_INTERACTION = true;
+    };
+    InteractionListener.prototype.initEvents = function () {
+        document.body.addEventListener('keydown', this.handleInteraction);
+        document.body.addEventListener('click', this.handleInteraction);
+        document.body.addEventListener('touchstart', this.handleInteraction);
+    };
+    return InteractionListener;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InteractionListener);
 
 
 /***/ }),
@@ -2341,9 +2400,16 @@ var SoundManager = /** @class */ (function () {
         return (!this.isTurnOff() && sound && sound.isLoaded() && !sound.isPlaying());
     };
     SoundManager.isTurnOff = function () {
+        if (!this.userHasInteraction()) {
+            return true;
+        }
         return (this.turnoff = this.getSoundStatus());
     };
+    SoundManager.userHasInteraction = function () {
+        return this.USER_INTERACTION;
+    };
     SoundManager.turnoff = false;
+    SoundManager.USER_INTERACTION = false;
     return SoundManager;
 }());
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SoundManager);
@@ -2361,7 +2427,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Sound__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sound */ "./src/sounds/Sound.ts");
+/* harmony import */ var _InteractionListener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InteractionListener */ "./src/sounds/InteractionListener.ts");
+/* harmony import */ var _Sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sound */ "./src/sounds/Sound.ts");
+
 
 var SoundProvider = /** @class */ (function () {
     function SoundProvider() {
@@ -2376,11 +2444,15 @@ var SoundProvider = /** @class */ (function () {
         };
         this.audios = {};
         this.initAudio();
+        this.initInteractionListener();
     }
+    SoundProvider.prototype.initInteractionListener = function () {
+        new _InteractionListener__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    };
     SoundProvider.prototype.initAudio = function () {
         for (var _i = 0, _a = Object.entries(this._sounds); _i < _a.length; _i++) {
             var _b = _a[_i], key = _b[0], value = _b[1];
-            this.audios[key] = new _Sound__WEBPACK_IMPORTED_MODULE_0__["default"](new Audio(value));
+            this.audios[key] = new _Sound__WEBPACK_IMPORTED_MODULE_1__["default"](new Audio(value));
         }
     };
     SoundProvider.prototype.getSound = function (key) {

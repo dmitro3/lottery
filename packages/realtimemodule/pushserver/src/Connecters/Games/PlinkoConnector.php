@@ -55,9 +55,10 @@ class PlinkoConnector implements ConnecterInterface
             case PlinkoStatus::GAME_ACTION_GET_CURRENT_GAME_INFO:
                 return $this->getCurrentGameTypeInfo($action);
             case PlinkoStatus::GAME_ACTION_DO_BET:
+                $games = GamePlinkoUserBetDetail::select('path', 'type')->inRandomOrder()->first();
+                $this->from->send($this->buildResponse(200, true, 'Lấy kết quả thành công!', compact('games'), $action));
+                break;
                 return $this->play($action);
-            case PlinkoStatus::GAME_ACTION_RETRIEVE_RESULT:
-                return $this->retrieveResult($action);
             default:
                 return $this->connection;
         }

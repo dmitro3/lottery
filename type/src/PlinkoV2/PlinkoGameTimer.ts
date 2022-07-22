@@ -1,25 +1,23 @@
 import Selector from "../Base/Selector";
 import PlinkoGlobal from "./PlinkoGlobal";
 import PlinkoSocket from "./PlinkoSocketV2";
+import PlinkoStorage from "./PlinkoStorage";
 import Storage from "./PlinkoStorage";
+import PlinkoUi from "./PlinkoUi";
 
 export default class PlinkoGameTimer {
     private interValGameTime: any = null;
     private timeRemaining: number = 0;
     private gamePlinkoTimeBox: any;
-    private needRetreiveResult: boolean = false;
-    public constructor(
-        private plinkoSocket: PlinkoSocket
-    ) {
+    public constructor(private plinkoSocket: PlinkoSocket, private plinkoUi: PlinkoUi) {
         this.gamePlinkoTimeBox = Selector._("#game-plinko-time-box");
     }
 
-
     public initInfo(data: any) {
         if (!this.gamePlinkoTimeBox || !data.html) return;
-        this.needRetreiveResult = true;
         this.gamePlinkoTimeBox.innerHTML = data.html;
         this.timeRemaining = data.time_remaining ?? 0;
+        PlinkoStorage.resetCountCurrentBall();
 
         if (this.interValGameTime) {
             clearInterval(this.interValGameTime);
@@ -38,70 +36,56 @@ export default class PlinkoGameTimer {
         if (this.timeRemaining <= 0) {
             this.refreshGame();
         } else {
-            var countDownTimeBox =
-                this.gamePlinkoTimeBox.querySelector(".out .number");
-            if (countDownTimeBox) {
-                countDownTimeBox.innerHTML = `
-                        <div class="item">${minutes.substr(0, 1)}</div>
-                        <div class="item">${minutes.substr(1, 1)}</div>
-                        <div class="item c-row c-row-middle">:</div>
-                        <div class="item">${seconds.substr(0, 1)}</div>
-                        <div class="item">${seconds.substr(1, 1)}</div>
-                    `;
-            }
+            this.plinkoUi.updateCountDownMain(minutes, seconds);
         }
-        this.autoPlay();
         this.showTimeChecker();
+        this.autoPlay();
+        this.plinkoUi.updateCountDownPlayBox(this.timeRemaining);
+        this.plinkoUi.updateCountDownBall();
         this.timeRemaining--;
-
     }
+
     public refreshGame() {
         if (this.interValGameTime) {
             clearInterval(this.interValGameTime);
         }
+        PlinkoStorage.resetCountCurrentBall();
         if (Storage.isInactive()) {
-            Storage.setGameStateBet(0);
             window.location.href = window.location.href;
         } else {
             this.plinkoSocket.initGame();
-            Storage.setGameStateBet(0);
         }
     }
     public showTimeChecker() {
         var mark = Selector._(".game-betting .mark-box");
-        let lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
-        let duration = parseInt(PLINKO_CONFIG.NUMBER_TIME_TO_CHECK);
-        let showCountDownCalculate =
-            this.timeRemaining <= lastPoint &&
-            this.timeRemaining >= lastPoint - duration;
+        let lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_COUNT_DOWN);
+        let showCountDownCalculate = this.timeRemaining <= lastPoint;
         if (showCountDownCalculate) {
             Selector.flex(mark);
-            let time: any = lastPoint - this.timeRemaining;
-            time = Math.abs(time - duration);
-            time = time < 10 ? "0" + time : "" + time;
-            let html = ``;
-            for (var i = 0; i < time.length; i++) {
-                html += `<span class="item m-r-20">${time.charAt(i)}</span>`;
-            }
-            mark.innerHTML = html;
+            this.plinkoUi.updateCountDownFullBox(mark, this.timeRemaining);
         } else {
             Selector.none(mark);
         }
-        if (this.timeRemaining < lastPoint - duration) {
-            if (!this.needRetreiveResult) return;
-            if (!Storage.isGameBetted()) return;
-            this.needRetreiveResult = false;
-            this.plinkoSocket.retrieveResult();
-        }
     }
     public autoPlay() {
-        let lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
-        let status =
-            !Storage.isGameBetted() &&
-            this.timeRemaining > lastPoint &&
-            this.timeRemaining < lastPoint + 2;
-        if (PlinkoGlobal.isAutoMode() && status) {
-            this.plinkoSocket.sendPlayRequest();
+        let status = PlinkoGlobal.acceptBet() && this.hasEnoughTimeToPlay() && !Storage.isInactive();
+        let hasEnoughBall = this.hasEnoughBall()
+        let gameInited = PlinkoGlobal.GAME_INITED;
+        let isAutoMode = PlinkoGlobal.isAutoMode();
+        if (isAutoMode && status && hasEnoughBall && gameInited) {
+            this.plinkoUi.disableButtonPlay();
+            this.plinkoSocket.sendPlayRequest(false);
+            PlinkoStorage.incrementCountCurrentBall();
         }
+    }
+    private hasEnoughBall() {
+        let userQty: any = PlinkoStorage.getQty();
+        let max: any = PLINKO_CONFIG.MAXIMUM_BALL;
+        let currentCount: any = PlinkoStorage.getCountCurrentBall();
+        return userQty <= max && userQty - currentCount > 0
+    }
+    private hasEnoughTimeToPlay() {
+        let lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
+        return this.timeRemaining > lastPoint;
     }
 }
