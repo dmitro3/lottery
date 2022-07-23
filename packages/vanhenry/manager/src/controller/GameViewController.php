@@ -69,6 +69,9 @@ class GameViewController extends Admin
             return 'Game tạm thời không khả dụng';
         }
         $currentGame = $gameWinType->getCurrentGameRecord();
+        if (!isset($currentGame)) {
+            return 'Game tạm thời không khả dụng';
+        }
         return response()->json([
             'current_game_idx' => $currentGame->id,
             'time_remaining' => $currentGame->getTimeRemaining(),
