@@ -11,12 +11,12 @@ use \vanhenry\helpers\helpers\SettingHelper as Setting;
 
 class PrizeBagCollection
 {
-    private $min = 0;
-    private $max = 0;
-    private $sum = 0;
-    private $prizeBags = [];
+    protected $min = 0;
+    protected $max = 0;
+    protected $sum = 0;
+    protected $prizeBags = [];
 
-    private $configKeys = [
+    protected $configKeys = [
         "plinko_percent_prize_ball_1000",
         "plinko_percent_prize_ball_500",
         "plinko_percent_prize_ball_100",
@@ -56,7 +56,7 @@ class PrizeBagCollection
             $this->sum += $num;
         }
     }
-    
+
 
     /**
      * Get the value of max

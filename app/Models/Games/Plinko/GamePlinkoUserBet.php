@@ -29,6 +29,7 @@ class GamePlinkoUserBet extends BaseModel
         $this->return_amount = $returnAmount;
         $this->is_returned = 1;
         $this->is_residual = $game->is_residual;
+        $this->is_marketing = $game->is_marketing;
         $this->save();
         $user = $this->user;
         $reason = vsprintf('Cộng tiền thắng game Plinko. Phiên giao dịch %s.', [$this->game_plinko_record_id]);

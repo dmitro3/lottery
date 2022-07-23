@@ -51,6 +51,7 @@ class PrizeV2
         $totalbet = GamePlinkoUserBet::select('type', \DB::raw("SUM(amount) as sum"))
             ->where('game_plinko_record_id', $currentGameRecordId)
             ->where('is_returned', 1)
+            ->where('is_marketing', 0)
             ->groupBy('type')->get()->keyBy('type')->toArray();
         $percent = Setting::getSetting('plinko_percent_prize', 80);
         $ballTypes = BallType::getConstList();

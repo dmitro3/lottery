@@ -47,30 +47,30 @@ class CalculateResultV2 extends Command
         $this->info("Start");
         $gameEnded = false;
 
-        // while (true) {
-        //     $now = now();
-        //     $minute = $now->minute;
-        //     $second = $now->second;
+        while (true) {
+            $now = now();
+            $minute = $now->minute;
+            $second = $now->second;
 
-        //     if ($second > (60 - PlinkoConfig::LAST_POINT_TO_BET)) {
-        //         if (!$gameEnded) {
-        $this->generateGameResult();
-        //             $gameEnded = true;
-        //         }
-        //     } else {
-        //         $gameEnded = false;
-        //     }
+            if ($second > (60 - PlinkoConfig::LAST_POINT_TO_BET)) {
+                if (!$gameEnded) {
+                    $this->generateGameResult();
+                    $gameEnded = true;
+                }
+            } else {
+                $gameEnded = false;
+            }
 
-        //     $this->info($minute . '-' . $second);
-        //     sleep(1);
-        // }
+            $this->info($minute . '-' . $second);
+            sleep(1);
+        }
         $this->info("End");
     }
     private function generateGameResult()
     {
         $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
-        // if (!$currentGameRecord) return;
-        // if ($currentGameRecord->is_end == 1) return;
+        if (!$currentGameRecord) return;
+        if ($currentGameRecord->is_end == 1) return;
         $prize = new PrizeV2();
         $prize->calculate($currentGameRecord->id);
         $currentGameRecord->end();

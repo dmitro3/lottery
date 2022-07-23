@@ -31,7 +31,6 @@ export default class PlinkoSocketV2 extends PlinkoSocket {
             this.renderBall(game);
         }
         // BaseGui.createFlashNotify("Bet thành công.");
-        console.log("bet thanh cong");
     }
     public processMessageData(data: any) {
         switch (data.action) {
