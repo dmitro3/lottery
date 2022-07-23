@@ -86,6 +86,6 @@ export default class PlinkoGameTimer {
     }
     private hasEnoughTimeToPlay() {
         let lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
-        return this.timeRemaining > lastPoint;
+        return this.timeRemaining > lastPoint + 3;
     }
 }

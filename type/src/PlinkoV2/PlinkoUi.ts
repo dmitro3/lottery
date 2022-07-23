@@ -7,7 +7,7 @@ import PlinkoStorage from "./PlinkoStorage";
 import Storage from "./PlinkoStorage";
 
 export default class PlinkoUi {
-    public constructor(private plinkoSocket: PlinkoSocket) {}
+    public constructor(private plinkoSocket: PlinkoSocket) { }
 
     public playGame() {
         if (!PlinkoGlobal.acceptBet()) {
