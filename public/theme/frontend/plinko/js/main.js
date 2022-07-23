@@ -2182,6 +2182,7 @@ function eventInited() {
 var hostname = window.location.hostname;
 if (hostname != "localhost" &&
     hostname != "127.0.0.1" &&
+    hostname != "doanso.test" &&
     hostname != "vinlott.net") {
     var content = document.createElement("span");
     content.style.color = "red";

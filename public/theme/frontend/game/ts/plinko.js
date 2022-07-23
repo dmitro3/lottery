@@ -1300,7 +1300,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var socket = new _Base_Socket__WEBPACK_IMPORTED_MODULE_0__["default"]('ws://localhost:8888/');
+var socket = new _Base_Socket__WEBPACK_IMPORTED_MODULE_0__["default"]('ws://localhost:8081/');
 var plinkoSocket = new _PlinkoV2_PlinkoSocketV2__WEBPACK_IMPORTED_MODULE_2__["default"](socket);
 var plinkoUi = new _PlinkoV2_PlinkoUi__WEBPACK_IMPORTED_MODULE_3__["default"](plinkoSocket);
 var plinkoGameTimer = new _PlinkoV2_PlinkoGameTimer__WEBPACK_IMPORTED_MODULE_1__["default"](plinkoSocket, plinkoUi);
