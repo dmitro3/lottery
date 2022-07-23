@@ -20,7 +20,10 @@ class GamePlinkoUserBetDetail extends BaseModel
         $ballType = $ball->getValue();
         $count = static::where('game_plinko_record_id', $currentGameRecord->id)->where('is_checked', 0)->where('type', $ballType)->count();
         if ($count > 0) {
-            $game = static::where('game_plinko_record_id', $currentGameRecord->id)->where('is_checked', 0)->where('type', $ballType)->inRandomOrder()->first();
+            $game = static::where('game_plinko_record_id', $currentGameRecord->id)->where('is_checked', 0)->where('is_residual', 0)->where('type', $ballType)->inRandomOrder()->first();
+            if (!$game) {
+                $game = static::where('game_plinko_record_id', $currentGameRecord->id)->where('is_checked', 0)->where('type', $ballType)->inRandomOrder()->first();
+            }
         } else {
             $bag = Bag::BAG9();
             $path = GamePlinkoPath::whereIn('start', [16, 18])->whereIn('dest', [$bag->getBagIndexs()])->inRandomOrder()->limit(1)->first();
@@ -35,6 +38,7 @@ class GamePlinkoUserBetDetail extends BaseModel
             $game->dest = $path->dest;
             $game->game_plinko_path_id = $path->id;
             $game->zigzag = $path->zigzag;
+            $game->is_residual = 1;
             $game->bag_name = $bag->getName();
             $game->bag_value = $bag->getValue();
         }

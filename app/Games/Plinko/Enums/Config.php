@@ -6,7 +6,7 @@ use App\Games\Plinko\Enums\BaseEnum;
 
 class Config extends BaseEnum
 {
-    public const LAST_POINT_TO_BET  = 10;
+    public const LAST_POINT_TO_BET  = 15;
     public const NUMBER_TIME_TO_CHECK = 5; // Sử dụng ở V1, V2 không sử dụng
     public const LAST_POINT_TO_COUNT_DOWN = 5;
 

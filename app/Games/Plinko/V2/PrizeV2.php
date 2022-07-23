@@ -25,15 +25,26 @@ class PrizeV2
         $this->prizeBagCollection->generate();
         $prizeBags = $this->prizeBagCollection->getPrizeBags();
         $sum = $this->prizeBagCollection->getSum();
-        $gameRecordPrizeId = $currentGameRecordId - 1;
+
+
+        $gameRecordPrizeId = $this->getNextGameRecord($currentGameRecordId);
+
         $ballTypes = BallType::getConstList();
         foreach ($ballTypes as $ballType) {
-            $bet = GamePlinkoTotalBet::select('total_bet', 'total_prize')->where('type', $ballType)->where('game_plinko_record_id', $gameRecordPrizeId)->first();
+            $bet = GamePlinkoTotalBet::select('total_bet', 'total_prize')->where('type', $ballType)->where('game_plinko_record_id', $currentGameRecordId)->first();
             $totalPrize = $bet ? $bet->total_prize : 0;
             $prizeDevider = new PrizeDevider($prizeBags, $sum);
             $prizeDevider->devidePrizeMoney($ballType, $totalPrize);
-            $prizeDevider->generateBetDetails($ballType, $currentGameRecordId);
+            $prizeDevider->generateBetDetails($ballType, $gameRecordPrizeId);
         }
+    }
+    private function getNextGameRecord($currentGameRecordId)
+    {
+        $record = GamePlinkoRecord::select('id')->where('id', '>', $currentGameRecordId)->limit(1)->first();
+        if ($record) {
+            return $record->id;
+        }
+        return 0;
     }
     private function calculateTotalBets($currentGameRecordId = 0)
     {

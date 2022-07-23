@@ -27,84 +27,73 @@ class PrizeDevider
             $tmpPrize = $totalPrize *  $prizeBag->getRange() / $this->sum;
             $bagValue = $prizeBag->getBagValue();
             $numBall = $tmpPrize / ($ballAmount * $bagValue);
+
             $prizeBag->setNumBall($numBall);
             $totalPrize -= $numBall * $bagValue * $ballAmount;
         }
 
         $this->devidePrizeToSmallestBag($ballAmount, $totalPrize);
     }
-    public function generateBetDetails($ballType, $currentGameRecordId)
+    public function generateBetDetails($ballType, $gameRecordId)
     {
         $prizeBags = $this->prizeBags;
         $startPoints = [16, 18];
         $dataInserts = [];
         $count = 0;
         foreach ($prizeBags as $kPrizeBag => $prizeBag) {
-            $numBall = $prizeBag->getNumBall();
+
             $bagName = $prizeBag->getName();
             $bag = Bag::$bagName();
             $bagIndexs = $bag->getBagIndexs();
-            $paths = collect();
-            while ($numBall > 0) {
-                $tmp = $paths->concat(GamePlinkoPath::select('id', 'start', 'dest', 'path', 'zigzag')->whereIn('start', $startPoints)->whereIn('dest', $bagIndexs)->inRandomOrder()->limit($numBall)->get());
-                $paths = $paths->concat($tmp);
-                $numBall = $numBall - $paths->count();
-            }
-            foreach ($paths as $path) {
-                $dataInserts[] = [
-                    'game_plinko_type_id' => 1,
-                    'game_plinko_record_id' => $currentGameRecordId,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'type' => $ballType,
-                    'path' => $path->path,
-                    'start' => $path->start,
-                    'dest' => $path->dest,
-                    'game_plinko_path_id' => $path->id,
-                    'bag_name' => $bag->getName(),
-                    'bag_value' => $bag->getValue(),
-                    'zigzag' => $path->zigzag
-                ];
-                if ($count % 100 == 0) {
-                    GamePlinkoUserBetDetail::insert($dataInserts);
-                    $dataInserts = [];
-                }
-                $count++;
-            }
-            $paths = collect();
-            $numBallResidual = $prizeBag->getNumBallResidual();
-            while ($numBallResidual > 0) {
-                $tmp = GamePlinkoPath::select('id', 'start', 'dest', 'path', 'zigzag')->whereIn('start', $startPoints)->whereIn('dest', $bagIndexs)->inRandomOrder()->limit($numBallResidual)->get();
-                $paths = $paths->concat($tmp);
-                $numBallResidual = $numBallResidual - $tmp->count();
-            }
-            foreach ($paths as $path) {
-                $dataInserts[] = [
-                    'game_plinko_type_id' => 1,
-                    'game_plinko_record_id' => $currentGameRecordId,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'type' => $ballType,
-                    'path' => $path->path,
-                    'start' => $path->start,
-                    'dest' => $path->dest,
-                    'game_plinko_path_id' => $path->id,
-                    'bag_name' => $bag->getName(),
-                    'bag_value' => $bag->getValue(),
-                    'zigzag' => $path->zigzag,
-                    'is_residual' => 1
-                ];
-                if ($count % 200 == 0) {
-                    GamePlinkoUserBetDetail::insert($dataInserts);
-                    $dataInserts = [];
-                }
-                $count++;
-            }
 
-            if (count($dataInserts) > 0) {
-                GamePlinkoUserBetDetail::insert($dataInserts);
-            }
+            $numBall = $prizeBag->getNumBall();
+            $paths = $this->retreivePaths($numBall, $startPoints, $bagIndexs);
+            $this->createBetDetail($paths, $gameRecordId, $ballType, $bag);
+
+            $numBallResidual = $prizeBag->getNumBallResidual();
+            $paths = $this->retreivePaths($numBallResidual, $startPoints, $bagIndexs);
+            $this->createBetDetail($paths, $gameRecordId, $ballType, $bag, 1);
         }
+    }
+    private function createBetDetail($paths, $gameRecordId, $ballType, $bag, $is_residual = 0)
+    {
+        $count = 0;
+        $dataInserts = [];
+        foreach ($paths as $path) {
+            $dataInserts[] = [
+                'game_plinko_type_id' => 1,
+                'game_plinko_record_id' => $gameRecordId,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'type' => $ballType,
+                'path' => $path->path,
+                'start' => $path->start,
+                'dest' => $path->dest,
+                'game_plinko_path_id' => $path->id,
+                'bag_name' => $bag->getName(),
+                'bag_value' => $bag->getValue(),
+                'zigzag' => $path->zigzag,
+                'is_residual' => $is_residual
+            ];
+            if ($count % 100 == 0) {
+                GamePlinkoUserBetDetail::insert($dataInserts);
+                $dataInserts = [];
+            }
+            $count++;
+        }
+        if (count($dataInserts) > 0) {
+            GamePlinkoUserBetDetail::insert($dataInserts);
+        }
+    }
+    private function retreivePaths($numBall, $startPoints, $bagIndexs)
+    {
+        $paths = collect();
+        while ($numBall > 0) {
+            $tmp = GamePlinkoPath::select('id', 'start', 'dest', 'path', 'zigzag')->whereIn('start', $startPoints)->whereIn('dest', $bagIndexs)->inRandomOrder()->limit($numBall)->get();
+            $paths = $paths->concat($tmp);
+            $numBall = $numBall - $tmp->count();
+        }
+        return $paths;
     }
     private function devidePrizeToSmallestBag($ballAmount, $totalPrize)
     {
