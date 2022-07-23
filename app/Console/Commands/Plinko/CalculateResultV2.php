@@ -69,8 +69,8 @@ class CalculateResultV2 extends Command
     private function generateGameResult()
     {
         $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
-        // if (!$currentGameRecord) return;
-        // if ($currentGameRecord->is_end == 1) return;
+        if (!$currentGameRecord) return;
+        if ($currentGameRecord->is_end == 1) return;
         $prize = new PrizeV2();
         $prize->calculate($currentGameRecord->id);
         $currentGameRecord->end();
