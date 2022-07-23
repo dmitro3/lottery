@@ -55,9 +55,6 @@ class PlinkoConnector implements ConnecterInterface
             case PlinkoStatus::GAME_ACTION_GET_CURRENT_GAME_INFO:
                 return $this->getCurrentGameTypeInfo($action);
             case PlinkoStatus::GAME_ACTION_DO_BET:
-                $games = GamePlinkoUserBetDetail::select('path', 'type')->inRandomOrder()->first();
-                $this->from->send($this->buildResponse(200, true, 'Lấy kết quả thành công!', compact('games'), $action));
-                break;
                 return $this->play($action);
             default:
                 return $this->connection;
@@ -106,38 +103,23 @@ class PlinkoConnector implements ConnecterInterface
     {
         $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
         $gameData = $this->messageInfo['gameData'] ?? null;
-        if (!isset($currentGameClientInfo) || !isset($gameData)) {
-            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
-        }
-        $validator = $this->validatorPlayRequest($gameData);
-        if ($validator->fails()) {
-            $this->from->send($this->buildResponse(100, false, $validator->errors()->first()));
+        if (!$this->isValidGame($currentGameClientInfo, $gameData)) {
             return $this->connection;
         }
         $currentGameRecord = GamePlinkoType::find(1)->getCurrentGameRecord();
         $user = $this->connection['userTargetMessage'];
-        $betExist = GamePlinkoUserBet::where('game_plinko_record_id', $currentGameRecord->id)->where('user_id', $user->id)->count() > 0;
-        if ($betExist) {
-            $this->from->send($this->buildResponse(100, false, 'Bạn đã sẵn sàng, không thể hủy bỏ yêu cầu!'));
-            return $this->connection;
-        }
 
-        $qty = (int) $gameData['qty'];
+        $qty = 1; //(int) $gameData['qty'];
         $type = (int) $gameData['type'];
         $mode = $gameData['mode'];
         $ball = BallType::getByValue($type);
-        if (($qty < PlinkoConfig::MINIMUM_BALL || $qty > PlinkoConfig::MAXIMUM_BALL)) {
-
-            $this->from->send($this->buildResponse(100, false, vsprintf('Số lượng bóng tối thiểu là %s, tối đa là %s !', [PlinkoConfig::MINIMUM_BALL, PlinkoConfig::MAXIMUM_BALL])));
+        if (!$this->isValidDataPlay($qty, $ball)) {
+            return $this->connection;
         }
         $money = $ball->getBetAmount();
-        if ($money == 0) {
-            $this->from->send($this->buildResponse(100, false, 'Loại bóng không hợp lệ!'));
-        }
         $totalMoney = $qty * $money;
         $user =  $this->connection['userTargetMessage'];
-        if ($totalMoney > $user->getAmount()) {
-            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_NOT_ENOUGH_MONEY, false, 'Số tiền không đủ.'));
+        if (!$this->isValidUserData($totalMoney, $user, $currentGameClientInfo, $currentGameRecord)) {
             return $this->connection;
         }
 
@@ -145,41 +127,60 @@ class PlinkoConnector implements ConnecterInterface
         $reason = vsprintf('Trừ tiền cược game Plinko. Phiên giao dịch %s.', [$currentGameRecord->id]);
         $user->changeMoney(0 - $totalMoney, $reason, WalletTransactionType::MINUS_MONEY_BET_GAME_PLINKO, $itemUserBet->id);
 
-        $games = $this->retrieveResult($user, $currentGameRecord, $itemUserBet, $type);
+        $games = $this->retrieveResult($user, $currentGameRecord, $itemUserBet, $ball);
 
-        $this->from->send($this->buildResponse(200, true, 'Lấy kết quả thành công!', compact('games'), $action));
+        $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_SUCCESS, true, 'Lấy kết quả thành công!', compact('games'), $action));
         return $this->connection;
     }
-    private function retrieveResult($user, $currentGameRecord, $userBet, $ballType)
+    private function isValidUserData($totalMoney, $user, $currentGameClientInfo, $currentGameRecord)
     {
-        $count = GamePlinkoUserBetDetail::where('game_plinko_record_id', $currentGameRecord->id)->where('type', $ballType)->count();
-        if ($count > 0) {
-            $game = GamePlinkoUserBetDetail::select('path', 'type')->where('game_plinko_record_id', $currentGameRecord->id)->where('type', $ballType)->inRandomOrder()->first();
-        } else {
-            $bag = Bag::BAG9();
-            $path = GamePlinkoPath::select('id', 'start', 'dest', 'path', 'zigzag')->whereIn('start', [16, 18])->whereIn('dest', [$bag->getBagIndexs()])->inRandomOrder()->limit(1)->get();
-            $dataInserts[] = [
-                'game_plinko_type_id' => 1,
-                'game_plinko_record_id' => $currentGameRecord->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-                'type' => $ballType,
-                'path' => $path->path,
-                'start' => $path->start,
-                'dest' => $path->dest,
-                'game_plinko_path_id' => $path->id,
-                'bag_name' => $bag->getName(),
-                'bag_value' => $bag->getValue(),
-                'zigzag' => $path->zigzag
-            ];
-            $game = GamePlinkoUserBetDetail::insert($dataInserts);
+        if ($totalMoney > $user->getAmount()) {
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_NOT_ENOUGH_MONEY, false, 'Số tiền không đủ.'));
+            return false;
         }
+        if ($currentGameClientInfo['current_game_idx'] != $currentGameRecord->id || $currentGameRecord->end_time - now()->timestamp <= PlinkoConfig::LAST_POINT_TO_BET) {
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_CURRENT_GAME_INVALID, false, 'Đã hết thời gian đặt cược của ván này.'));
+            return false;
+        }
+        return true;
+    }
+    private function isValidGame($currentGameClientInfo, $gameData)
+    {
+        if (!isset($currentGameClientInfo) || !isset($gameData)) {
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
+            return false;
+        }
+        $validator = $this->validatorPlayRequest($gameData);
+        if ($validator->fails()) {
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_GAME_DATA_INVALID, false, $validator->errors()->first()));
+            return false;
+        }
+        return true;
+    }
+    private function isValidDataPlay($qty, $ball)
+    {
+        if (($qty < PlinkoConfig::MINIMUM_BALL || $qty > PlinkoConfig::MAXIMUM_BALL)) {
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_GAME_DATA_INVALID, false, vsprintf('Số lượng bóng tối thiểu là %s, tối đa là %s !', [PlinkoConfig::MINIMUM_BALL, PlinkoConfig::MAXIMUM_BALL])));
+            return false;
+        }
+        $money = $ball->getBetAmount();
+        if ($money == 0) {
+            $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_GAME_DATA_INVALID, false, 'Loại bóng không hợp lệ!'));
+            return false;
+        }
+        return true;
+    }
+    private function retrieveResult($user, GamePlinkoRecord $currentGameRecord, GamePlinkoUserBet $userBet, BallType $ball)
+    {
+        $game = GamePlinkoUserBetDetail::retreiveOne($user, $currentGameRecord, $userBet, $ball);
 
-        $userBet->is_returned = 1;
-        $userBet->game_plinko_user_bet_id = $userBet->id;
-        $userBet->user_id = $user->id;
-        $userBet->save();
-        return $game;
+        $userBet->end($game);
+        $currentGameRecord->end();
+        return [
+            'type' => $game->type,
+            'path' => $game->path,
+            'zigzag' => $game->zigzag,
+        ];
     }
     private function buildResponse($code, $status, $message, $data = [], $action = null)
     {

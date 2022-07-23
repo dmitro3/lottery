@@ -295,6 +295,7 @@ var Bag = /** @class */ (function (_super) {
             friction: 1,
             game_active: 0,
             game_bag_index: -1,
+            game_type_ball: -1,
         };
         _this.effectYMax = 3;
         _this.effectY = 0;
@@ -383,7 +384,7 @@ var Bag = /** @class */ (function (_super) {
     };
     Bag.prototype.showWinPanel = function () {
         if (this.body.game_active == 1) {
-            _WinPanel__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance(this.P5).init(this.body.game_bag_index);
+            _WinPanel__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance(this.P5).init(this.body.game_bag_index, this.body.game_type_ball);
         }
         _WinPanel__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance(this.P5).show();
     };
@@ -521,17 +522,17 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 var Disc = /** @class */ (function (_super) {
     __extends(Disc, _super);
-    function Disc(world, P5, x, y, r, pegContainer, fileType) {
-        if (fileType === void 0) { fileType = _sprites_Fire__WEBPACK_IMPORTED_MODULE_3__.FireType.NORMAL; }
+    function Disc(world, P5, x, y, r, pegContainer, _fileType) {
+        if (_fileType === void 0) { _fileType = _sprites_Fire__WEBPACK_IMPORTED_MODULE_3__.FireType.NORMAL; }
         var _this = _super.call(this, world, P5) || this;
         _this.pegContainer = pegContainer;
-        _this.fileType = fileType;
+        _this._fileType = _fileType;
         _this.options = {
             restitution: 1,
             friction: 1,
             frictionAir: 0.01,
             density: 1,
-            // inerita:Infinity
+            game_type_ball: 0,
         };
         _this.currentPaths = [];
         _this.body = matter_js__WEBPACK_IMPORTED_MODULE_0__.Bodies.circle(x, y, r, _this.options);
@@ -540,11 +541,22 @@ var Disc = /** @class */ (function (_super) {
         _this.body.collisionFilter.group = 1;
         _this.body.collisionFilter.mask = 1;
         _this.body.collisionFilter.category = 1;
+        _this.body.game_type_ball = _fileType;
         matter_js__WEBPACK_IMPORTED_MODULE_0__.Composite.add(world, _this.body);
-        _this.fire = new _sprites_Fire__WEBPACK_IMPORTED_MODULE_3__["default"](P5, fileType);
+        _this.fire = new _sprites_Fire__WEBPACK_IMPORTED_MODULE_3__["default"](P5, _fileType);
         _this.width = _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].DISC.draw_width();
         return _this;
     }
+    Object.defineProperty(Disc.prototype, "fileType", {
+        get: function () {
+            return this._fileType;
+        },
+        set: function (value) {
+            this._fileType = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Disc.prototype.init = function (paths) {
         if (paths === void 0) { paths = []; }
         this.incrementCount();
@@ -833,14 +845,12 @@ var WinPanel = /** @class */ (function () {
         this.index_bag = -1;
         this.currentBallPrice = 0;
     }
-    WinPanel.prototype.init = function (index) {
+    WinPanel.prototype.init = function (index, typeBall) {
         this.scale = 1;
         this.state = WinPanelState.UP;
         this.index_bag = index;
-        var element = document.querySelector('[name="risk"]:checked');
-        var value = element.value;
-        var price = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].DISC.prices[value];
-        price = price !== null && price !== void 0 ? price : 100000;
+        var price = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].DISC.prices[String(typeBall)];
+        price = price !== null && price !== void 0 ? price : 0;
         this.currentBallPrice = price;
     };
     WinPanel.prototype.drawPanel = function (text) {
@@ -1995,6 +2005,7 @@ var BagDiscCollision = /** @class */ (function (_super) {
     BagDiscCollision.prototype.action = function () {
         _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].RUNTIME.numberDiscInGame--;
         this.bag.game_active = 1;
+        this.bag.game_type_ball = this.disc.game_type_ball;
         this.discContainer.removeById(this.disc.id);
     };
     return BagDiscCollision;

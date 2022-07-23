@@ -50,7 +50,6 @@ class PrizeDevider
                 $paths = $paths->concat($tmp);
                 $numBall = $numBall - $paths->count();
             }
-
             foreach ($paths as $path) {
                 $dataInserts[] = [
                     'game_plinko_type_id' => 1,
@@ -66,7 +65,7 @@ class PrizeDevider
                     'bag_value' => $bag->getValue(),
                     'zigzag' => $path->zigzag
                 ];
-                if ($count % 200 == 0) {
+                if ($count % 100 == 0) {
                     GamePlinkoUserBetDetail::insert($dataInserts);
                     $dataInserts = [];
                 }

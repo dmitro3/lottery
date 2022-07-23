@@ -7,9 +7,7 @@ import PlinkoStorage from "./PlinkoStorage";
 import Storage from "./PlinkoStorage";
 
 export default class PlinkoUi {
-    public constructor(private plinkoSocket: PlinkoSocket) {
-    }
-
+    public constructor(private plinkoSocket: PlinkoSocket) {}
 
     public playGame() {
         if (!PlinkoGlobal.acceptBet()) {
@@ -35,12 +33,32 @@ export default class PlinkoUi {
     disableQtyBox() {
         var box = Selector._(".qty_box");
         if (!box) return;
-        box.classList.add('disabled');
+        box.classList.add("disabled");
     }
     enableQtyBox() {
         var box = Selector._(".qty_box");
         if (!box) return;
-        box.classList.remove('disabled');
+        box.classList.remove("disabled");
+    }
+    disableRiskBox() {
+        var box = Selector._(".risk_level");
+        if (!box) return;
+        box.classList.add("disabled");
+    }
+    enableRiskBox() {
+        var box = Selector._(".risk_level");
+        if (!box) return;
+        box.classList.remove("disabled");
+    }
+    public guiForAutoMode() {
+        this.disableButtonPlay();
+        this.enableQtyBox();
+        this.disableRiskBox();
+    }
+    public guiForManualMode() {
+        this.enableButtonPlay();
+        this.disableQtyBox();
+        this.enableRiskBox();
     }
     public init() {
         let self = this;
@@ -65,13 +83,9 @@ export default class PlinkoUi {
             e.addEventListener("click", function (event: any) {
                 let autoMode = PlinkoGlobal.isAutoMode();
                 if (autoMode) {
-                    self.disableButtonPlay();
-                    self.enableQtyBox();
-                }
-                else {
-
-                    self.enableButtonPlay();
-                    self.disableQtyBox();
+                    self.guiForAutoMode();
+                } else {
+                    self.guiForManualMode();
                 }
                 self.updateLocalStorage();
             });
@@ -82,9 +96,9 @@ export default class PlinkoUi {
                 self.updateLocalStorage();
             });
         });
-        document.addEventListener('game_inited', function () {
+        document.addEventListener("game_inited", function () {
             PlinkoGlobal.GAME_INITED = true;
-        })
+        });
     }
 
     private loadGuiFromLocalStorage() {
@@ -98,13 +112,9 @@ export default class PlinkoUi {
         ).checked = true;
         let autoMode = PlinkoGlobal.isAutoMode();
         if (autoMode) {
-            this.disableButtonPlay();
-            this.enableQtyBox();
-        }
-        else {
-
-            this.enableButtonPlay();
-            this.disableQtyBox();
+            this.guiForAutoMode();
+        } else {
+            this.guiForManualMode();
         }
     }
     public updateLocalStorage() {
@@ -126,12 +136,12 @@ export default class PlinkoUi {
     }
     public showBlurPopupIfInactive(isHidden: boolean) {
         if (isHidden) {
-            // Selector._("#game").classList.add("inactive");
-            // Selector._("#warning-inactive").classList.remove("d-none");
+            Selector._("#game").classList.add("inactive");
+            Selector._("#warning-inactive").classList.remove("d-none");
             Storage.setInactive(1);
         } else {
-            // Selector._("#game").classList.remove("inactive");
-            // Selector._("#warning-inactive").classList.add("d-none");
+            Selector._("#game").classList.remove("inactive");
+            Selector._("#warning-inactive").classList.add("d-none");
             Storage.setInactive(0);
         }
     }
@@ -153,8 +163,7 @@ export default class PlinkoUi {
 
     public updateCountDownMain(minutes: any, seconds: any) {
         let gamePlinkoTimeBox = Selector._("#game-plinko-time-box");
-        var countDownTimeBox =
-            gamePlinkoTimeBox.querySelector(".out .number");
+        var countDownTimeBox = gamePlinkoTimeBox.querySelector(".out .number");
         if (countDownTimeBox) {
             countDownTimeBox.innerHTML = `
                 <div class="item">${minutes.substr(0, 1)}</div>
@@ -177,14 +186,13 @@ export default class PlinkoUi {
         boxHtml.innerHTML = html;
     }
     public updateCountDownBall() {
-        let boxBall = Selector._('.count_down_ball');
+        let boxBall = Selector._(".count_down_ball");
         if (PlinkoGlobal.isAutoMode()) {
             Selector.flex(boxBall);
-            let span = boxBall.querySelector('span');
+            let span = boxBall.querySelector("span");
             let userQty: any = PlinkoStorage.getQty();
             span.innerText = userQty - PlinkoStorage.getCountCurrentBall();
-        }
-        else {
+        } else {
             Selector.none(boxBall);
         }
     }

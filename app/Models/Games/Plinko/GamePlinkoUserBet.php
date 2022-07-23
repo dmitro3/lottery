@@ -6,6 +6,7 @@ use App\Games\Plinko\Enums\BallType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\BaseModel;
 use App\Models\User;
+use App\Models\WalletTransactionType;
 
 class GamePlinkoUserBet extends BaseModel
 {
@@ -17,6 +18,20 @@ class GamePlinkoUserBet extends BaseModel
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function end(GamePlinkoUserBetDetail $game)
+    {
+        $amount = $game->amount;
+        $returnAmount = $game->return_amount;
+        $status = $returnAmount > $amount ? GamePlinkoUserBet::STATUS_WIN : GamePlinkoUserBet::STATUS_LOSE;
+        $this->game_win_user_bet_status_id = $status;
+        $this->game_plinko_user_bet_status_id = $status;
+        $this->return_amount = $returnAmount;
+        $this->is_returned = 1;
+        $this->save();
+        $user = $this->user;
+        $reason = vsprintf('Cộng tiền thắng game Plinko. Phiên giao dịch %s.', [$this->game_plinko_record_id]);
+        $user->changeMoney($returnAmount, $reason, WalletTransactionType::PLUS_MONEY_BET_GAME_PLINKO, $this->id);
     }
 
     public static function toDatabase($user, $currentGameRecord, BallType $ball, $mode, $qty, $totalMoney)

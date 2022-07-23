@@ -484,7 +484,7 @@ var PlinkoGlobal = /** @class */ (function () {
         var time = new Date().getTime();
         return time - this.lastTimeBet > this.TIME_EACH_BALL;
     };
-    PlinkoGlobal.TIME_EACH_BALL = 500;
+    PlinkoGlobal.TIME_EACH_BALL = 1000;
     PlinkoGlobal.GAME_INITED = false;
     PlinkoGlobal._currentGameInfo = {};
     PlinkoGlobal.lastTimeBet = 0;
@@ -749,13 +749,35 @@ var PlinkoUi = /** @class */ (function () {
         var box = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".qty_box");
         if (!box)
             return;
-        box.classList.add('disabled');
+        box.classList.add("disabled");
     };
     PlinkoUi.prototype.enableQtyBox = function () {
         var box = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".qty_box");
         if (!box)
             return;
-        box.classList.remove('disabled');
+        box.classList.remove("disabled");
+    };
+    PlinkoUi.prototype.disableRiskBox = function () {
+        var box = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".risk_level");
+        if (!box)
+            return;
+        box.classList.add("disabled");
+    };
+    PlinkoUi.prototype.enableRiskBox = function () {
+        var box = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".risk_level");
+        if (!box)
+            return;
+        box.classList.remove("disabled");
+    };
+    PlinkoUi.prototype.guiForAutoMode = function () {
+        this.disableButtonPlay();
+        this.enableQtyBox();
+        this.disableRiskBox();
+    };
+    PlinkoUi.prototype.guiForManualMode = function () {
+        this.enableButtonPlay();
+        this.disableQtyBox();
+        this.enableRiskBox();
     };
     PlinkoUi.prototype.init = function () {
         var self = this;
@@ -780,12 +802,10 @@ var PlinkoUi = /** @class */ (function () {
             e.addEventListener("click", function (event) {
                 var autoMode = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].isAutoMode();
                 if (autoMode) {
-                    self.disableButtonPlay();
-                    self.enableQtyBox();
+                    self.guiForAutoMode();
                 }
                 else {
-                    self.enableButtonPlay();
-                    self.disableQtyBox();
+                    self.guiForManualMode();
                 }
                 self.updateLocalStorage();
             });
@@ -796,7 +816,7 @@ var PlinkoUi = /** @class */ (function () {
                 self.updateLocalStorage();
             });
         });
-        document.addEventListener('game_inited', function () {
+        document.addEventListener("game_inited", function () {
             _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].GAME_INITED = true;
         });
     };
@@ -807,12 +827,10 @@ var PlinkoUi = /** @class */ (function () {
         _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".label_choose.risk input[value=\"".concat(_PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getType(), "\"]")).checked = true;
         var autoMode = _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].isAutoMode();
         if (autoMode) {
-            this.disableButtonPlay();
-            this.enableQtyBox();
+            this.guiForAutoMode();
         }
         else {
-            this.enableButtonPlay();
-            this.disableQtyBox();
+            this.guiForManualMode();
         }
     };
     PlinkoUi.prototype.updateLocalStorage = function () {
@@ -834,13 +852,13 @@ var PlinkoUi = /** @class */ (function () {
     };
     PlinkoUi.prototype.showBlurPopupIfInactive = function (isHidden) {
         if (isHidden) {
-            // Selector._("#game").classList.add("inactive");
-            // Selector._("#warning-inactive").classList.remove("d-none");
+            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#game").classList.add("inactive");
+            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#warning-inactive").classList.remove("d-none");
             _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].setInactive(1);
         }
         else {
-            // Selector._("#game").classList.remove("inactive");
-            // Selector._("#warning-inactive").classList.add("d-none");
+            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#game").classList.remove("inactive");
+            _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._("#warning-inactive").classList.add("d-none");
             _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].setInactive(0);
         }
     };
@@ -876,10 +894,10 @@ var PlinkoUi = /** @class */ (function () {
         boxHtml.innerHTML = html;
     };
     PlinkoUi.prototype.updateCountDownBall = function () {
-        var boxBall = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('.count_down_ball');
+        var boxBall = _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._(".count_down_ball");
         if (_PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].isAutoMode()) {
             _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"].flex(boxBall);
-            var span = boxBall.querySelector('span');
+            var span = boxBall.querySelector("span");
             var userQty = _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getQty();
             span.innerText = userQty - _PlinkoStorage__WEBPACK_IMPORTED_MODULE_3__["default"].getCountCurrentBall();
         }

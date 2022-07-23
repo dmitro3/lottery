@@ -21,7 +21,6 @@ class PrizeV2
 
     public function calculate($currentGameRecordId = 0)
     {
-
         $this->calculateTotalBets($currentGameRecordId);
         $this->prizeBagCollection->generate();
         $prizeBags = $this->prizeBagCollection->getPrizeBags();
@@ -40,16 +39,17 @@ class PrizeV2
     {
         $totalbet = GamePlinkoUserBet::select('type', \DB::raw("SUM(amount) as sum"))
             ->where('game_plinko_record_id', $currentGameRecordId)
-            ->groupBy('type')->get()->groupBy('type');
+            ->where('is_returned', 1)
+            ->groupBy('type')->get()->keyBy('type')->toArray();
         $percent = Setting::getSetting('plinko_percent_prize', 80);
         $ballTypes = BallType::getConstList();
         foreach ($ballTypes as $ballType) {
-            $total = $totalbet[$ballType] ?? 0;
-            $total = $total * $percent / 100;
+            $total = array_key_exists($ballType, $totalbet) ? $totalbet[$ballType]['sum'] : 0;
+            $prize = $total * $percent / 100;
             $gamePlinkoTotalBet = new GamePlinkoTotalBet;
             $gamePlinkoTotalBet->game_plinko_record_id = $currentGameRecordId;
             $gamePlinkoTotalBet->total_bet = $total;
-            $gamePlinkoTotalBet->total_prize = 0;
+            $gamePlinkoTotalBet->total_prize = $prize;
             $gamePlinkoTotalBet->type = $ballType;
             $gamePlinkoTotalBet->created_at = now();
             $gamePlinkoTotalBet->updated_at = now();
