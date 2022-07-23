@@ -64,7 +64,7 @@ class GamePlinkoUserBetDetail extends BaseModel
             $game->game_plinko_path_id = $path->id;
             $game->zigzag = $path->zigzag;
             $game->is_residual = 1;
-            $game->is_from_account_marketing = 0;
+            $game->is_marketing = 0;
             $game->bag_name = $bag->getName();
             $game->bag_value = $bag->getValue();
         }
@@ -86,7 +86,7 @@ class GamePlinkoUserBetDetail extends BaseModel
         $game->game_plinko_path_id = $path->id;
         $game->zigzag = $path->zigzag;
         $game->is_residual = 1;
-        $game->is_from_account_marketing = 1;
+        $game->is_marketing = 1;
         $game->bag_name = $bag->getName();
         $game->bag_value = $bag->getValue();
         return $game;
