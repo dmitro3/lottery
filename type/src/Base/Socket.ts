@@ -30,8 +30,10 @@ export default class Socket {
             this.errorListeners.push(callback);
         }
     }
-    public sendData(data: any) {
-        BaseGui.showLoading();
+    public sendData(data: any, showLoading: boolean = true) {
+        if (showLoading) {
+            BaseGui.showLoading();
+        }
         if (this.wsReady) {
             this.connecter.send(data);
         } else {

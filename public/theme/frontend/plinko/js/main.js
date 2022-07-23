@@ -21,6 +21,7 @@ var Loader = /** @class */ (function () {
             light: "theme/frontend/plinko/assets/images/light.png",
             bg: "theme/frontend/plinko/assets/images/bg.jpg",
             hole: "theme/frontend/plinko/assets/images/hole.png",
+            panel: "theme/frontend/plinko/assets/images/panel.png",
         };
         this.P5 = P5;
     }
@@ -200,7 +201,9 @@ var P5Wrapper = /** @class */ (function () {
         this.matterWrapper.init();
     };
     P5Wrapper.prototype.draw = function () {
-        this.P5.background(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("bg"));
+        var background = _Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("bg");
+        if (background)
+            this.P5.background(background);
         this.debug();
         this.matterWrapper.update();
         this.matterWrapper.drawHole();
@@ -209,11 +212,18 @@ var P5Wrapper = /** @class */ (function () {
         this.matterWrapper.drawDiscs();
         this.matterWrapper.drawBag();
     };
+    P5Wrapper.prototype.mousePressed = function () {
+        this.loadAndPlayGameSound();
+    };
+    P5Wrapper.prototype.loadAndPlayGameSound = function () {
+        //SoundManager.playBackgroundSound();
+    };
     P5Wrapper.prototype.debug = function () {
         if (!_configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].APP.DEMO)
             return;
         this.debugLine();
         this.debugFrameRate();
+        // this.P5.frameRate(5)
     };
     P5Wrapper.prototype.debugLine = function () {
         this.P5.push();
@@ -247,7 +257,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var matter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! matter-js */ "./node_modules/matter-js/build/matter.js");
 /* harmony import */ var matter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(matter_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _configs_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../configs/app */ "./src/configs/app.ts");
-/* harmony import */ var _BaseComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BaseComponent */ "./src/components/BaseComponent.ts");
+/* harmony import */ var _sounds_SoundManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sounds/SoundManager */ "./src/sounds/SoundManager.ts");
+/* harmony import */ var _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../sounds/SoundProvider */ "./src/sounds/SoundProvider.ts");
+/* harmony import */ var _sprites_Broken__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../sprites/Broken */ "./src/sprites/Broken.ts");
+/* harmony import */ var _BaseComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./BaseComponent */ "./src/components/BaseComponent.ts");
+/* harmony import */ var _WinPanel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./WinPanel */ "./src/components/WinPanel.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -266,12 +280,14 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 
 
+
+
+
+
 var Bag = /** @class */ (function (_super) {
     __extends(Bag, _super);
-    function Bag(world, P5, x, y, color, text) {
+    function Bag(world, P5, x, y, index) {
         var _this = _super.call(this, world, P5) || this;
-        _this.color = color;
-        _this.text = text;
         _this.options = {
             isStatic: true,
             isSensor: true,
@@ -279,9 +295,14 @@ var Bag = /** @class */ (function (_super) {
             friction: 1,
             game_active: 0,
             game_bag_index: -1,
+            game_type_ball: -1,
         };
+        _this.effectYMax = 3;
+        _this.effectY = 0;
         _this.x = x + 1;
         _this.y = y + _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].BAG.topBufferFromPeg;
+        _this.color = _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].BAG.colors[index];
+        _this.text = _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].BAG.texts[index];
         _this.text = _this.text + "";
         var w = _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].PEG.spacing - _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].PEG.radius;
         var h = _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].BAG.heightBody;
@@ -293,6 +314,13 @@ var Bag = /** @class */ (function (_super) {
         _this.body.collisionFilter.mask = 2147483647;
         _this.body.collisionFilter.category = 2147483647;
         matter_js__WEBPACK_IMPORTED_MODULE_0__.Composite.add(world, _this.body);
+        _this.brokenEffect = new _sprites_Broken__WEBPACK_IMPORTED_MODULE_4__["default"](P5, nx, _this.y + h * 0.5);
+        if (_configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].BAG.texts[index] > 1) {
+            _this.sound = _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getSound("big_win");
+        }
+        else {
+            _this.sound = _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance().getSound("win_sound");
+        }
         return _this;
     }
     Bag.prototype.setGameBagIndex = function (index) {
@@ -300,16 +328,72 @@ var Bag = /** @class */ (function (_super) {
     };
     Bag.prototype.show = function () {
         this.P5.push();
+        this.effectCollision();
         this.showGameItem();
         this.showBody();
+        this.showBrokenEffect();
+        this.playSound();
+        this.showWinPanel();
         this.P5.pop();
     };
+    Bag.prototype.effectCollision = function () {
+        if (this.body.game_active == 1) {
+            this.effectY -= 0.5;
+        }
+        if (this.body.game_active == 0 && this.effectY < 0) {
+            this.effectY += 0.5;
+        }
+        if (this.effectY + this.effectYMax < 0 && this.body.game_active == 1) {
+            this.body.game_active = 0;
+        }
+    };
+    Bag.prototype.showBrokenEffect = function () {
+        if (this.body.game_active == 1) {
+            this.brokenEffect.show();
+        }
+        else {
+            this.brokenEffect.init();
+        }
+    };
+    Bag.prototype.getEffectColor = function () {
+        if (this.effectY >= 0)
+            return this.color;
+        var color = [];
+        for (var i = 0; i < this.color.length; i++) {
+            var element = this.color[i];
+            if (element != 255 && element != 0) {
+                element += Math.abs(this.effectY * 50);
+            }
+            element = Math.min(255, element);
+            color.push(element);
+        }
+        return color;
+    };
+    Bag.prototype.playSound = function () {
+        if (this.body.game_active == 1) {
+            this._playSound();
+        }
+    };
+    Bag.prototype._playSound = function () {
+        if (_sounds_SoundManager__WEBPACK_IMPORTED_MODULE_2__["default"].exists(this.sound)) {
+            if (this.sound.isPlaying()) {
+                this.sound.stop();
+            }
+            this.sound.play();
+        }
+    };
+    Bag.prototype.showWinPanel = function () {
+        if (this.body.game_active == 1) {
+            _WinPanel__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance(this.P5).init(this.body.game_bag_index, this.body.game_type_ball);
+        }
+        _WinPanel__WEBPACK_IMPORTED_MODULE_6__["default"].getInstance(this.P5).show();
+    };
     Bag.prototype.showGameItem = function () {
-        this.P5.fill(this.color);
+        this.P5.fill(this.getEffectColor());
         this.P5.beginShape();
         this.P5.noStroke();
         var addX = this.x;
-        var addY = this.y;
+        var addY = this.y + this.effectY;
         for (var index = 0; index < _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].BAG.path.length; index++) {
             var element = _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].BAG.path[index];
             var nx = element.x * 0.35 + addX;
@@ -332,7 +416,7 @@ var Bag = /** @class */ (function (_super) {
         this.P5.text(this.text, nx - 14, ny + 14);
     };
     return Bag;
-}(_BaseComponent__WEBPACK_IMPORTED_MODULE_2__["default"]));
+}(_BaseComponent__WEBPACK_IMPORTED_MODULE_5__["default"]));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Bag);
 
 
@@ -355,6 +439,16 @@ var BaseComponent = /** @class */ (function () {
         this.world = world;
         this.P5 = P5;
     }
+    Object.defineProperty(BaseComponent.prototype, "body", {
+        get: function () {
+            return this._body;
+        },
+        set: function (value) {
+            this._body = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(BaseComponent.prototype, "x", {
         get: function () {
             return this._x;
@@ -428,17 +522,17 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 var Disc = /** @class */ (function (_super) {
     __extends(Disc, _super);
-    function Disc(world, P5, x, y, r, pegContainer, fileType) {
-        if (fileType === void 0) { fileType = _sprites_Fire__WEBPACK_IMPORTED_MODULE_3__.FireType.NORMAL; }
+    function Disc(world, P5, x, y, r, pegContainer, _fileType) {
+        if (_fileType === void 0) { _fileType = _sprites_Fire__WEBPACK_IMPORTED_MODULE_3__.FireType.NORMAL; }
         var _this = _super.call(this, world, P5) || this;
         _this.pegContainer = pegContainer;
-        _this.fileType = fileType;
+        _this._fileType = _fileType;
         _this.options = {
             restitution: 1,
             friction: 1,
             frictionAir: 0.01,
             density: 1,
-            // inerita:Infinity
+            game_type_ball: 0,
         };
         _this.currentPaths = [];
         _this.body = matter_js__WEBPACK_IMPORTED_MODULE_0__.Bodies.circle(x, y, r, _this.options);
@@ -447,11 +541,22 @@ var Disc = /** @class */ (function (_super) {
         _this.body.collisionFilter.group = 1;
         _this.body.collisionFilter.mask = 1;
         _this.body.collisionFilter.category = 1;
+        _this.body.game_type_ball = _fileType;
         matter_js__WEBPACK_IMPORTED_MODULE_0__.Composite.add(world, _this.body);
-        _this.fire = new _sprites_Fire__WEBPACK_IMPORTED_MODULE_3__["default"](P5, fileType);
+        _this.fire = new _sprites_Fire__WEBPACK_IMPORTED_MODULE_3__["default"](P5, _fileType);
         _this.width = _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].DISC.draw_width();
         return _this;
     }
+    Object.defineProperty(Disc.prototype, "fileType", {
+        get: function () {
+            return this._fileType;
+        },
+        set: function (value) {
+            this._fileType = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Disc.prototype.init = function (paths) {
         if (paths === void 0) { paths = []; }
         this.incrementCount();
@@ -465,6 +570,7 @@ var Disc = /** @class */ (function (_super) {
         _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].TEST.count++;
         if (_configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].TEST.count > 29) {
             _configs_app__WEBPACK_IMPORTED_MODULE_1__["default"].TEST.count = 0;
+            this.pegContainer.resetMaskCrossWall();
         }
     };
     Disc.prototype.testWall = function (paths) {
@@ -597,7 +703,10 @@ var Hole = /** @class */ (function (_super) {
         this.P5.noStroke();
         this.P5.translate(this.x, this.y);
         this.P5.imageMode(this.P5.CENTER);
-        this.P5.image(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("hole"), 0, 0, this.width, this.height);
+        var image = _Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("hole");
+        if (image) {
+            this.P5.image(image, 0, 0, this.width, this.height);
+        }
     };
     return Hole;
 }(_BaseComponent__WEBPACK_IMPORTED_MODULE_2__["default"]));
@@ -710,6 +819,109 @@ var Peg = /** @class */ (function (_super) {
 
 /***/ }),
 
+/***/ "./src/components/WinPanel.ts":
+/*!************************************!*\
+  !*** ./src/components/WinPanel.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _configs_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../configs/app */ "./src/configs/app.ts");
+/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Loader */ "./src/Loader.ts");
+
+
+var WinPanel = /** @class */ (function () {
+    function WinPanel(P5) {
+        this.P5 = P5;
+        this.imageWidth = 340;
+        this.imageHeight = 50;
+        this.scale = 0;
+        this.effectYMax = 5;
+        this.effectY = 0;
+        this.state = WinPanelState.UP;
+        this.index_bag = -1;
+        this.currentBallPrice = 0;
+    }
+    WinPanel.prototype.init = function (index, typeBall) {
+        this.scale = 1;
+        this.state = WinPanelState.UP;
+        this.index_bag = index;
+        var price = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].DISC.prices[String(typeBall)];
+        price = price !== null && price !== void 0 ? price : 0;
+        this.currentBallPrice = price;
+    };
+    WinPanel.prototype.drawPanel = function (text) {
+        if (text === void 0) { text = "Win + 100.000 VNĐ"; }
+        this.P5.push();
+        this.P5.imageMode(this.P5.CENTER);
+        var x = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].APP.WIDTH / 2;
+        var y = _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].APP.HEIGHT - this.imageHeight - 10 + this.effectY;
+        // let t = 150 - (1 - this.scale) * 255;
+        // t = Math.max(0, t);
+        // this.P5.tint(255, t);
+        this.P5.image(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"].getImage("panel"), x, y, this.imageWidth * this.scale, this.imageHeight * this.scale);
+        this.P5.textAlign(this.P5.CENTER, this.P5.CENTER);
+        this.P5.textSize(22 * this.scale);
+        this.P5.textStyle(this.P5.BOLD);
+        this.P5.text(text, x, y);
+        this.P5.pop();
+    };
+    WinPanel.prototype.show = function () {
+        if (this.scale < 0.5) {
+            this.effectY = 0;
+            this.state = WinPanelState.NONE;
+            return;
+        }
+        if (this.state == WinPanelState.UP) {
+            this.effectY -= 0.1;
+        }
+        if (this.state == WinPanelState.DOWN) {
+            this.effectY += 0.1;
+        }
+        if (this.effectY + this.effectYMax < 0) {
+            this.state = WinPanelState.DOWN;
+        }
+        if (this.effectY > 0) {
+            this.state = WinPanelState.STOP;
+            this.scale -= 0.001;
+        }
+        this.drawPanel(this.getCurrentText(this.index_bag));
+    };
+    WinPanel.prototype.getCurrentText = function (index) {
+        var text = this.currentBallPrice * _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].BAG.texts[index];
+        return "Win +" + this.formatMoney(text) + " VNĐ";
+    };
+    WinPanel.prototype.formatMoney = function (number) {
+        var pieces = parseFloat(number).toFixed(2).split("");
+        var ii = pieces.length - 3;
+        while ((ii -= 3) > 0) {
+            pieces.splice(ii, 0, ",");
+        }
+        return pieces.join("").replace(".00", "").replace(/,/g, ".");
+    };
+    WinPanel.getInstance = function (P5) {
+        if (!this.instance) {
+            this.instance = new WinPanel(P5);
+        }
+        return this.instance;
+    };
+    return WinPanel;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (WinPanel);
+var WinPanelState;
+(function (WinPanelState) {
+    WinPanelState[WinPanelState["NONE"] = 0] = "NONE";
+    WinPanelState[WinPanelState["UP"] = 1] = "UP";
+    WinPanelState[WinPanelState["DOWN"] = 2] = "DOWN";
+    WinPanelState[WinPanelState["STOP"] = 3] = "STOP";
+})(WinPanelState || (WinPanelState = {}));
+
+
+/***/ }),
+
 /***/ "./src/components/containers/BagContainer.ts":
 /*!***************************************************!*\
   !*** ./src/components/containers/BagContainer.ts ***!
@@ -720,9 +932,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _configs_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../configs/app */ "./src/configs/app.ts");
-/* harmony import */ var _Bag__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Bag */ "./src/components/Bag.ts");
-
+/* harmony import */ var _Bag__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Bag */ "./src/components/Bag.ts");
 
 var BagContainer = /** @class */ (function () {
     function BagContainer(world, P5, pegContainer) {
@@ -736,7 +946,7 @@ var BagContainer = /** @class */ (function () {
         for (var index = 0; index < 17; index++) {
             var idx = 150 + index; //150 = peg ngoài cùng bên trái
             var peg = this.pegContainer.pegs[idx];
-            var b = new _Bag__WEBPACK_IMPORTED_MODULE_1__["default"](this.world, this.P5, peg.x, peg.y, _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].BAG.colors[index], _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].BAG.texts[index]);
+            var b = new _Bag__WEBPACK_IMPORTED_MODULE_0__["default"](this.world, this.P5, peg.x, peg.y, index);
             b.setGameBagIndex(index);
             this.bags.push(b);
         }
@@ -850,9 +1060,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Peg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Peg */ "./src/components/Peg.ts");
 /* harmony import */ var _wall_CrossLeftWall__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../wall/CrossLeftWall */ "./src/components/wall/CrossLeftWall.ts");
 /* harmony import */ var _wall_CrossRightWall__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../wall/CrossRightWall */ "./src/components/wall/CrossRightWall.ts");
-/* harmony import */ var _wall_FunnelDownWall__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../wall/FunnelDownWall */ "./src/components/wall/FunnelDownWall.ts");
-/* harmony import */ var _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../wall/FunnelWall */ "./src/components/wall/FunnelWall.ts");
-/* harmony import */ var _wall_Wall__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../wall/Wall */ "./src/components/wall/Wall.ts");
+/* harmony import */ var _wall_CrossWall__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../wall/CrossWall */ "./src/components/wall/CrossWall.ts");
+/* harmony import */ var _wall_FunnelDownWall__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../wall/FunnelDownWall */ "./src/components/wall/FunnelDownWall.ts");
+/* harmony import */ var _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../wall/FunnelWall */ "./src/components/wall/FunnelWall.ts");
+/* harmony import */ var _wall_Wall__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../wall/Wall */ "./src/components/wall/Wall.ts");
+
 
 
 
@@ -927,12 +1139,12 @@ var PegContainer = /** @class */ (function () {
             var peg = this.pegs[0];
             var x2 = peg.x;
             var y2 = peg.y - 100;
-            var w = new _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_5__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
+            var w = new _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_6__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
             this.funnelwalls.push(w);
             peg = this.pegs[2];
             x2 = peg.x;
             y2 = peg.y - 100;
-            w = new _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_5__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
+            w = new _wall_FunnelWall__WEBPACK_IMPORTED_MODULE_6__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
             this.funnelwalls.push(w);
         }
         if (this.pegs.length > 167) {
@@ -940,7 +1152,7 @@ var PegContainer = /** @class */ (function () {
                 var peg = this.pegs[index];
                 var x2 = peg.x;
                 var y2 = peg.y + 50;
-                var w = new _wall_FunnelDownWall__WEBPACK_IMPORTED_MODULE_4__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
+                var w = new _wall_FunnelDownWall__WEBPACK_IMPORTED_MODULE_5__["default"](this.world, this.P5, peg.x, peg.y, x2, y2);
                 this.funnelwalls.push(w);
             }
         }
@@ -958,7 +1170,7 @@ var PegContainer = /** @class */ (function () {
                 var newY1 = peg.y - _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].WALL.height / 2;
                 var newX2 = nextPeg.x - _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].PEG.radius;
                 var newY2 = nextPeg.y - _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].WALL.height / 2;
-                var w = new _wall_Wall__WEBPACK_IMPORTED_MODULE_6__["default"](this.world, this.P5, peg.x, peg.y, nextPeg.x, nextPeg.y);
+                var w = new _wall_Wall__WEBPACK_IMPORTED_MODULE_7__["default"](this.world, this.P5, peg.x, peg.y, nextPeg.x, nextPeg.y);
                 w.fromPeg = peg;
                 w.toPeg = nextPeg;
                 w.fromIndex = pegIndex;
@@ -1008,6 +1220,15 @@ var PegContainer = /** @class */ (function () {
         w.setWallName(wallName);
         this.walls[wallName] = w;
         return w;
+    };
+    PegContainer.prototype.resetMaskCrossWall = function () {
+        for (var _i = 0, _a = Object.entries(this.walls); _i < _a.length; _i++) {
+            var _b = _a[_i], key = _b[0], wall = _b[1];
+            if (wall instanceof _wall_CrossWall__WEBPACK_IMPORTED_MODULE_4__["default"]) {
+                wall.body.collisionFilter.mask = 0;
+                wall.body.collisionFilter.category = 0;
+            }
+        }
     };
     PegContainer.prototype.show = function () {
         for (var _i = 0, _a = Object.entries(this.walls); _i < _a.length; _i++) {
@@ -1530,9 +1751,10 @@ __webpack_require__.r(__webpack_exports__);
 var AppConfig = /** @class */ (function () {
     function AppConfig() {
     }
+    AppConfig.P5 = null;
     AppConfig.APP = {
         WIDTH: 550,
-        HEIGHT: 500,
+        HEIGHT: 580,
         TOPBUFFER: 50,
         SHOW_BODY: false,
         DEMO: true,
@@ -1549,6 +1771,11 @@ var AppConfig = /** @class */ (function () {
     AppConfig.DISC = {
         x: AppConfig.HOLE.DROP_POSITION_X,
         y: AppConfig.HOLE.DROP_POSITION_Y,
+        prices: {
+            "0": 1000,
+            "1": 10000,
+            "2": 100000,
+        },
         tolerance: 1,
         radius: (AppConfig.PEG.spacing - 2 * AppConfig.PEG.radius - 3) / 2,
         real_width: function () {
@@ -1582,8 +1809,8 @@ var AppConfig = /** @class */ (function () {
         topBufferFromPeg: 30,
         heightBody: 10,
         texts: [
-            1000, 500, 100, 10, 5, 0.1, 0.02, 0.01, 0.005, 0.01, 0.02, 0.1, 5,
-            10, 100, 500, 1000,
+            1000, 500, 100, 10, 5, 1.1, 1, 0.5, 0.1, 0.5, 1, 1.1, 5, 10, 100,
+            500, 1000,
         ],
         colors: [
             [255, 50, 0],
@@ -1716,18 +1943,18 @@ var AppConfig = /** @class */ (function () {
         maximumDiscInGame: 100,
         minDistanceTime: 100,
         paths: [
-            "18 52 86 120 154 188 222 256 292 326 362 398 434 470 506 542",
+            // "18 52 86 120 154 188 222 256 292 326 362 398 434 470 506 542",
             "18 52 86 120 154 188 222 256 292 328 362 398 434 470 506 542",
-            "18 52 86 120 154 188 222 256 292 328 364 398 434 470 506 542",
-            "18 52 86 120 154 188 222 256 292 328 364 400 434 470 506 542",
-            "18 52 86 120 154 188 222 256 292 328 364 400 436 470 506 542",
-            "18 52 86 120 154 188 222 256 292 328 364 400 436 472 506 542",
-            "18 52 86 120 154 188 222 256 292 328 364 400 436 472 508 542",
-            "18 52 86 120 154 188 222 258 292 326 362 398 434 470 506 542",
-            "18 52 86 120 154 188 222 258 292 328 362 398 434 470 506 542",
-            "18 52 86 120 154 188 222 258 292 328 364 398 434 470 506 542",
-            "18 52 86 120 154 188 222 258 292 328 364 400 434 470 506 542",
-            "18 52 86 120 154 188 222 258 292 328 364 400 436 470 506 542",
+            // "18 52 86 120 154 188 222 256 292 328 364 398 434 470 506 542",
+            // "18 52 86 120 154 188 222 256 292 328 364 400 434 470 506 542",
+            // "18 52 86 120 154 188 222 256 292 328 364 400 436 470 506 542",
+            // "18 52 86 120 154 188 222 256 292 328 364 400 436 472 506 542",
+            // "18 52 86 120 154 188 222 256 292 328 364 400 436 472 508 542",
+            // "18 52 86 120 154 188 222 258 292 326 362 398 434 470 506 542",
+            // "18 52 86 120 154 188 222 258 292 328 362 398 434 470 506 542",
+            // "18 52 86 120 154 188 222 258 292 328 364 398 434 470 506 542",
+            // "18 52 86 120 154 188 222 258 292 328 364 400 434 470 506 542",
+            // "18 52 86 120 154 188 222 258 292 328 364 400 436 470 506 542",
         ],
     };
     return AppConfig;
@@ -1777,6 +2004,8 @@ var BagDiscCollision = /** @class */ (function (_super) {
     };
     BagDiscCollision.prototype.action = function () {
         _configs_app__WEBPACK_IMPORTED_MODULE_0__["default"].RUNTIME.numberDiscInGame--;
+        this.bag.game_active = 1;
+        this.bag.game_type_ball = this.disc.game_type_ball;
         this.discContainer.removeById(this.disc.id);
     };
     return BagDiscCollision;
@@ -1866,7 +2095,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Collision__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Collision */ "./src/events/Collision.ts");
+/* harmony import */ var _sounds_PegSoundCollection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../sounds/PegSoundCollection */ "./src/sounds/PegSoundCollection.ts");
+/* harmony import */ var _Collision__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Collision */ "./src/events/Collision.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1883,6 +2113,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
     };
 })();
 
+
 var PegDiscCollision = /** @class */ (function (_super) {
     __extends(PegDiscCollision, _super);
     function PegDiscCollision() {
@@ -1894,9 +2125,10 @@ var PegDiscCollision = /** @class */ (function (_super) {
     };
     PegDiscCollision.prototype.action = function () {
         this.peg.game_active = 1;
+        _sounds_PegSoundCollection__WEBPACK_IMPORTED_MODULE_0__["default"].getIntance().speaker();
     };
     return PegDiscCollision;
-}(_Collision__WEBPACK_IMPORTED_MODULE_0__["default"]));
+}(_Collision__WEBPACK_IMPORTED_MODULE_1__["default"]));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PegDiscCollision);
 
 
@@ -1911,13 +2143,19 @@ var PegDiscCollision = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var p5__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! p5 */ "./node_modules/p5/lib/p5.min.js");
 /* harmony import */ var p5__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(p5__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _P5Wrapper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./P5Wrapper */ "./src/P5Wrapper.ts");
+/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Loader */ "./src/Loader.ts");
+/* harmony import */ var _P5Wrapper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./P5Wrapper */ "./src/P5Wrapper.ts");
+/* harmony import */ var _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sounds/SoundProvider */ "./src/sounds/SoundProvider.ts");
+
+
 
 
 var currentGame;
+var gameInited = false;
 function makeGame() {
     var tmp = function (p) {
-        var p5w = (currentGame = new _P5Wrapper__WEBPACK_IMPORTED_MODULE_1__.P5Wrapper(p));
+        _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__["default"].getInstance();
+        var p5w = (currentGame = new _P5Wrapper__WEBPACK_IMPORTED_MODULE_2__.P5Wrapper(p));
         p.preload = function () {
             p5w.preload();
         };
@@ -1926,38 +2164,434 @@ function makeGame() {
         };
         p.draw = function () {
             p5w.draw();
+            if (!gameInited) {
+                gameInited = true;
+                eventInited();
+            }
+        };
+        p.mousePressed = function () {
+            p5w.mousePressed();
         };
     };
     return new p5__WEBPACK_IMPORTED_MODULE_0__(tmp);
 }
+function eventInited() {
+    var event = new Event("game_inited");
+    document.dispatchEvent(event);
+}
 var hostname = window.location.hostname;
-// if (hostname != "localhost" && hostname != "127.0.0.1") {
-//     document.write("Ahihi Stupid");
-// } else {
-makeGame();
-// }
+if (hostname != "localhost" &&
+    hostname != "127.0.0.1" &&
+    hostname != "vinlott.net") {
+    var content = document.createElement("span");
+    content.style.color = "red";
+    content.innerHTML = "Licence không hợp lệ!";
+    document.body.innerHTML = "";
+    document.body.appendChild(content);
+}
+else {
+    makeGame();
+}
 window["ShortPlinko"] = {
-    blurWhenInactive: function () {
-        // document.addEventListener("visibilitychange", function (event) {
-        //     if (document.hidden) {
-        //         document.querySelector("#game").classList.add("inactive");
-        //         document
-        //             .querySelector("#warning-inactive")
-        //             .classList.remove("d-none");
-        //     }
-        // });
-    },
+    blurWhenInactive: function () { },
     getGame: function () {
         return currentGame;
     },
     createDisc: function (path, type) {
         return this.getGame().matterWrapper.discContainer.createDisc(path, type);
     },
+    sound: function () {
+        return _sounds_SoundProvider__WEBPACK_IMPORTED_MODULE_3__["default"];
+    },
+    loader: function () {
+        return _Loader__WEBPACK_IMPORTED_MODULE_1__["default"];
+    },
     init: function () {
         this.blurWhenInactive();
     },
 };
 window["ShortPlinko"].init();
+
+
+/***/ }),
+
+/***/ "./src/sounds/InteractionListener.ts":
+/*!*******************************************!*\
+  !*** ./src/sounds/InteractionListener.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _SoundManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SoundManager */ "./src/sounds/SoundManager.ts");
+
+var InteractionListener = /** @class */ (function () {
+    function InteractionListener() {
+        this.initEvents();
+    }
+    InteractionListener.prototype.handleInteraction = function () {
+        _SoundManager__WEBPACK_IMPORTED_MODULE_0__["default"].USER_INTERACTION = true;
+    };
+    InteractionListener.prototype.initEvents = function () {
+        document.body.addEventListener('keydown', this.handleInteraction);
+        document.body.addEventListener('click', this.handleInteraction);
+        document.body.addEventListener('touchstart', this.handleInteraction);
+    };
+    return InteractionListener;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InteractionListener);
+
+
+/***/ }),
+
+/***/ "./src/sounds/PegSoundCollection.ts":
+/*!******************************************!*\
+  !*** ./src/sounds/PegSoundCollection.ts ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _SoundManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SoundManager */ "./src/sounds/SoundManager.ts");
+/* harmony import */ var _SoundProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SoundProvider */ "./src/sounds/SoundProvider.ts");
+
+
+var PegSound = /** @class */ (function () {
+    function PegSound() {
+        this.bornTime = 0;
+        this.duration = 300;
+        this.sound = _SoundProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getInstance().getSound("col");
+        this.duration = this.sound.duration() * 1000;
+        this.sound.setVolume(0.2);
+        this.bornTime = new Date().getTime();
+    }
+    PegSound.prototype.play = function (time) {
+        if (this.soundExists()) {
+            if (this.needRemove(time)) {
+                this.sound.stop();
+            }
+            this.sound.play();
+        }
+    };
+    PegSound.prototype.soundExists = function () {
+        return !_SoundManager__WEBPACK_IMPORTED_MODULE_0__["default"].isTurnOff() && this.sound && this.sound.isLoaded();
+    };
+    PegSound.prototype.needRemove = function (time) {
+        return time - this.bornTime > this.duration;
+    };
+    return PegSound;
+}());
+var PegSoundCollection = /** @class */ (function () {
+    function PegSoundCollection() {
+        this.sounds = [];
+        for (var i = 0; i < 1; i++) {
+            this.sounds.push(new PegSound());
+        }
+    }
+    PegSoundCollection.prototype.speaker = function () {
+        var time = new Date().getTime();
+        for (var i = 0; i < this.sounds.length; i++) {
+            var element = this.sounds[i];
+            if (element) {
+                element.play(time);
+            }
+        }
+    };
+    PegSoundCollection.getIntance = function () {
+        if (!this.PEGSOUND) {
+            this.PEGSOUND = new PegSoundCollection();
+        }
+        return this.PEGSOUND;
+    };
+    return PegSoundCollection;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PegSoundCollection);
+
+
+/***/ }),
+
+/***/ "./src/sounds/Sound.ts":
+/*!*****************************!*\
+  !*** ./src/sounds/Sound.ts ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var Sound = /** @class */ (function () {
+    function Sound(audio) {
+        this.audio = audio;
+    }
+    Sound.prototype.play = function () {
+        if (this.audio) {
+            this.audio.play();
+        }
+    };
+    Sound.prototype.stop = function () {
+        if (this.audio) {
+            this.audio.pause();
+            this.audio.currentTime = 0;
+        }
+    };
+    Sound.prototype.isPlaying = function () {
+        return (this.audio &&
+            this.audio.currentTime > 0 &&
+            !this.audio.paused &&
+            !this.audio.ended &&
+            this.audio.readyState > 2);
+    };
+    Sound.prototype.isLoaded = function () {
+        return this.audio && this.audio.readyState == 4;
+    };
+    Sound.prototype.setVolume = function (value) {
+        if (this.audio) {
+            this.audio.volume = value;
+        }
+    };
+    Sound.prototype.duration = function () {
+        return this.audio.duration;
+    };
+    return Sound;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Sound);
+
+
+/***/ }),
+
+/***/ "./src/sounds/SoundManager.ts":
+/*!************************************!*\
+  !*** ./src/sounds/SoundManager.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _SoundProvider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SoundProvider */ "./src/sounds/SoundProvider.ts");
+
+var SoundManager = /** @class */ (function () {
+    function SoundManager() {
+    }
+    SoundManager.mute = function () {
+        localStorage.setItem("plinko_mute", "1");
+    };
+    SoundManager.unmute = function () {
+        localStorage.setItem("plinko_mute", "0");
+    };
+    SoundManager.getSoundStatus = function () {
+        var status = localStorage.getItem("plinko_mute");
+        if (!status) {
+            status = "1";
+        }
+        return status == "0";
+    };
+    SoundManager.playBackgroundSound = function () {
+        this.playSound("bg", true);
+    };
+    SoundManager.playSound = function (name, loop) {
+        if (loop === void 0) { loop = false; }
+        var sound = _SoundProvider__WEBPACK_IMPORTED_MODULE_0__["default"].getInstance().getSound(name);
+        if (this.needPlaySound(sound)) {
+            if (loop)
+                sound.loop();
+            sound.play();
+        }
+    };
+    SoundManager.exists = function (sound) {
+        return !this.isTurnOff() && sound && sound.isLoaded();
+    };
+    SoundManager.needPlaySound = function (sound) {
+        return (!this.isTurnOff() && sound && sound.isLoaded() && !sound.isPlaying());
+    };
+    SoundManager.isTurnOff = function () {
+        if (!this.userHasInteraction()) {
+            return true;
+        }
+        return (this.turnoff = this.getSoundStatus());
+    };
+    SoundManager.userHasInteraction = function () {
+        return this.USER_INTERACTION;
+    };
+    SoundManager.turnoff = false;
+    SoundManager.USER_INTERACTION = false;
+    return SoundManager;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SoundManager);
+
+
+/***/ }),
+
+/***/ "./src/sounds/SoundProvider.ts":
+/*!*************************************!*\
+  !*** ./src/sounds/SoundProvider.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _InteractionListener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InteractionListener */ "./src/sounds/InteractionListener.ts");
+/* harmony import */ var _Sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sound */ "./src/sounds/Sound.ts");
+
+
+var SoundProvider = /** @class */ (function () {
+    function SoundProvider() {
+        this._sounds = {
+            bg: "theme/frontend/plinko/assets/sounds/bg.ogg",
+            big_win: "theme/frontend/plinko/assets/sounds/big_win.ogg",
+            click: "theme/frontend/plinko/assets/sounds/click.ogg",
+            over: "theme/frontend/plinko/assets/sounds/over.ogg",
+            play: "theme/frontend/plinko/assets/sounds/play.ogg",
+            win_sound: "theme/frontend/plinko/assets/sounds/win_sound.ogg",
+            col: "theme/frontend/plinko/assets/sounds/col.ogg",
+        };
+        this.audios = {};
+        this.initAudio();
+        this.initInteractionListener();
+    }
+    SoundProvider.prototype.initInteractionListener = function () {
+        new _InteractionListener__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    };
+    SoundProvider.prototype.initAudio = function () {
+        for (var _i = 0, _a = Object.entries(this._sounds); _i < _a.length; _i++) {
+            var _b = _a[_i], key = _b[0], value = _b[1];
+            this.audios[key] = new _Sound__WEBPACK_IMPORTED_MODULE_1__["default"](new Audio(value));
+        }
+    };
+    SoundProvider.prototype.getSound = function (key) {
+        return this.audios[key];
+    };
+    SoundProvider.getInstance = function () {
+        if (!this.instance) {
+            this.instance = new SoundProvider();
+        }
+        return this.instance;
+    };
+    SoundProvider.instance = null;
+    return SoundProvider;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SoundProvider);
+
+
+/***/ }),
+
+/***/ "./src/sprites/Broken.ts":
+/*!*******************************!*\
+  !*** ./src/sprites/Broken.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _BrokenBug__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BrokenBug */ "./src/sprites/BrokenBug.ts");
+
+var Broken = /** @class */ (function () {
+    function Broken(P5, x, y) {
+        this.P5 = P5;
+        this.x = x;
+        this.y = y;
+        this.bugs = [];
+        this.numBugs = 40;
+        this.init();
+    }
+    Broken.prototype.init = function () {
+        if (this.bugs.length == this.numBugs)
+            return;
+        this.bugs = [];
+        for (var i = 0; i < this.numBugs; i++) {
+            var radius = this.P5.random(4, 8);
+            var b = new _BrokenBug__WEBPACK_IMPORTED_MODULE_0__["default"](this.P5, this.x, this.y, radius, i % 4);
+            this.bugs.push(b);
+        }
+    };
+    Broken.prototype.show = function () {
+        for (var i = this.bugs.length - 1; i >= 0; i--) {
+            var bug = this.bugs[i];
+            bug.move();
+            bug.show();
+            bug.shrink();
+            if (bug.finished()) {
+                this.bugs.splice(i, 1);
+            }
+        }
+    };
+    return Broken;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Broken);
+
+
+/***/ }),
+
+/***/ "./src/sprites/BrokenBug.ts":
+/*!**********************************!*\
+  !*** ./src/sprites/BrokenBug.ts ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Bug__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Bug */ "./src/sprites/Bug.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var BrokenBug = /** @class */ (function (_super) {
+    __extends(BrokenBug, _super);
+    function BrokenBug(P5, x, y, r, direction) {
+        var _this = _super.call(this, P5, x, y, r) || this;
+        _this.direction = direction;
+        _this.rangex = 2;
+        _this.rangey = 2;
+        return _this;
+    }
+    BrokenBug.prototype.move = function () {
+        if (this.direction == 0) {
+            this.x += this.P5.random(-this.rangex, 0);
+            this.y += this.P5.random(-this.rangey, 0);
+        }
+        else if (this.direction == 1) {
+            this.x += this.P5.random(0, this.rangex);
+            this.y += this.P5.random(-this.rangey, 0);
+        }
+        else if (this.direction == 2) {
+            this.x += this.P5.random(0, this.rangex);
+            this.y += this.P5.random(0, this.rangey);
+        }
+        else if (this.direction == 3) {
+            this.x += this.P5.random(-this.rangex, 0);
+            this.y += this.P5.random(0, this.rangey);
+        }
+    };
+    BrokenBug.prototype.shrink = function () {
+        this.r -= 0.4;
+    };
+    return BrokenBug;
+}(_Bug__WEBPACK_IMPORTED_MODULE_0__.Bug));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BrokenBug);
 
 
 /***/ }),
@@ -2123,6 +2757,9 @@ var Light = /** @class */ (function () {
         var h = this.options.height * p;
         if (this.image) {
             this.P5.image(this.image, this.options.x, this.options.y, w, h);
+        }
+        else {
+            this.image = _Loader__WEBPACK_IMPORTED_MODULE_0__["default"].getImage(this.name);
         }
     };
     return Light;

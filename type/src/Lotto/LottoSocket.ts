@@ -50,6 +50,7 @@ export default class LottoSocket extends BaseGameSocket {
 
     public betSuccess(data: any) {
         BaseGui.createFlashNotify("Bet thành công.");
+        window.location.href = window.location.href;
     }
     public processMessageData(data: any) {
         switch (data.action) {
@@ -62,6 +63,7 @@ export default class LottoSocket extends BaseGameSocket {
                 }
                 break;
             case LOTTO_STATUS.GAME_ACTION_DO_BET:
+                this.betSuccess(data.data);
                 break;
             case LOTTO_STATUS.GAME_ACTION_RETRIEVE_RESULT:
                 break;

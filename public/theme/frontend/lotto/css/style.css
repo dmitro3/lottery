@@ -404,3 +404,22 @@
 .plot_totay .db {
     font-size: 20px;
 }
+.result_plot_threads .mark-box {
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, .7);
+    position: absolute;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    font-weight: 600;
+    color: #fff;
+    font-size: 4rem
+}
+
+.result_plot_threads .mark-box .item {
+    display: inline-block;
+    border-radius: .4rem;
+    padding: 0 .4rem;
+    background-color: #fb4e4e
+}

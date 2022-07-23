@@ -96,8 +96,9 @@ var BaseGameSocket = /** @class */ (function () {
             }
         }
     };
-    BaseGameSocket.prototype.sendData = function (data) {
-        this.psocket.sendData(data);
+    BaseGameSocket.prototype.sendData = function (data, showLoading) {
+        if (showLoading === void 0) { showLoading = true; }
+        this.psocket.sendData(data, showLoading);
     };
     return BaseGameSocket;
 }());
@@ -223,8 +224,11 @@ var Socket = /** @class */ (function () {
             this.errorListeners.push(callback);
         }
     };
-    Socket.prototype.sendData = function (data) {
-        _BaseGui__WEBPACK_IMPORTED_MODULE_0__["default"].showLoading();
+    Socket.prototype.sendData = function (data, showLoading) {
+        if (showLoading === void 0) { showLoading = true; }
+        if (showLoading) {
+            _BaseGui__WEBPACK_IMPORTED_MODULE_0__["default"].showLoading();
+        }
         if (this.wsReady) {
             this.connecter.send(data);
         }
@@ -706,24 +710,24 @@ var LottoGameTimer = /** @class */ (function () {
                 countDownTimeBox.innerHTML = "\n                        <div class=\"item\">".concat(minutes.substr(0, 1), "</div>\n                        <div class=\"item\">").concat(minutes.substr(1, 1), "</div>\n                        <div class=\"item c-row c-row-middle\">:</div>\n                        <div class=\"item\">").concat(seconds.substr(0, 1), "</div>\n                        <div class=\"item\">").concat(seconds.substr(1, 1), "</div>\n                    ");
             }
         }
-        // this.showTimeChecker();
+        this.showTimeChecker();
         this.timeRemaining--;
     };
     LottoGameTimer.prototype.refreshGame = function () {
         if (this.interValGameTime) {
             clearInterval(this.interValGameTime);
         }
+        window.location.href = window.location.href;
     };
     LottoGameTimer.prototype.showTimeChecker = function () {
-        var mark = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".game-betting .mark-box");
+        var mark = _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"]._(".result_plot_threads .mark-box");
         var lastPoint = parseInt(LOTTO_CONFIG.LAST_POINT_TO_BET);
-        var duration = parseInt(LOTTO_CONFIG.NUMBER_TIME_TO_CHECK);
-        var showCountDownCalculate = this.timeRemaining <= lastPoint &&
-            this.timeRemaining >= lastPoint - duration;
+        var timeToRetreive = parseInt(LOTTO_CONFIG.NUMBER_TIME_TO_CHECK);
+        var showCountDownCalculate = this.timeRemaining <= lastPoint;
         if (showCountDownCalculate) {
             _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].flex(mark);
             var time = lastPoint - this.timeRemaining;
-            time = Math.abs(time - duration);
+            time = Math.abs(time - timeToRetreive);
             time = time < 10 ? "0" + time : "" + time;
             var html = "";
             for (var i = 0; i < time.length; i++) {
@@ -734,11 +738,11 @@ var LottoGameTimer = /** @class */ (function () {
         else {
             _Base_Selector__WEBPACK_IMPORTED_MODULE_0__["default"].none(mark);
         }
-        if (this.timeRemaining < lastPoint - duration) {
+        if (this.timeRemaining < timeToRetreive) {
             if (!this.needRetreiveResult)
                 return;
             this.needRetreiveResult = false;
-            // this.plinkoSocket.retrieveResult();
+            this.gameSocket.retrieveResult();
         }
     };
     return LottoGameTimer;
@@ -898,6 +902,7 @@ var LottoSocket = /** @class */ (function (_super) {
     };
     LottoSocket.prototype.betSuccess = function (data) {
         _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].createFlashNotify("Bet thành công.");
+        window.location.href = window.location.href;
     };
     LottoSocket.prototype.processMessageData = function (data) {
         var _a;
@@ -911,6 +916,7 @@ var LottoSocket = /** @class */ (function (_super) {
                 }
                 break;
             case LOTTO_STATUS.GAME_ACTION_DO_BET:
+                this.betSuccess(data.data);
                 break;
             case LOTTO_STATUS.GAME_ACTION_RETRIEVE_RESULT:
                 break;

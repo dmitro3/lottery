@@ -2,7 +2,7 @@ const path = require("path");
 module.exports = {
     mode: "development",
     entry: {
-        plinko: "./src/plinko.ts",
+        plinko: "./src/plinkov2.ts",
         lotto: "./src/lotto.ts",
     },
     devtool: false,

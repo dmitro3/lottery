@@ -1,6 +1,6 @@
 export default class InactiveBrowser {
     private browserPrefixes = ['moz', 'ms', 'o', 'webkit'];
-    private isVisible = true;
+    private isVisible = false;
     private hiddenPropertyName: any;
     private browserPrefix: any;
     private visibilityEventName: any;
@@ -10,9 +10,12 @@ export default class InactiveBrowser {
         this.browserPrefix = this.getBrowserPrefix();
         this.hiddenPropertyName = this.getHiddenPropertyName(this.browserPrefix);
         this.visibilityEventName = this.getVisibilityEvent(this.browserPrefix);
-        this.initEvent();
+
     }
 
+    init() {
+        this.initEvent();
+    }
     public getHiddenPropertyName(prefix: any) {
         return (prefix ? prefix + 'Hidden' : 'hidden');
     }
@@ -82,6 +85,9 @@ export default class InactiveBrowser {
         window.addEventListener('blur', function () {
             self.handleVisibilityChange(false);
         }, false);
+
+        self.handleVisibilityChange(document.visibilityState == 'visible');
+
     }
 }
 

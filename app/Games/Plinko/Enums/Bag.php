@@ -11,10 +11,10 @@ class Bag extends BaseEnum
     public const BAG3 = 100;
     public const BAG4 = 10;
     public const BAG5 = 5;
-    public const BAG6 = 0.1;
-    public const BAG7 = 0.02;
-    public const BAG8 = 0.01;
-    public const BAG9 = 0.005;
+    public const BAG6 = 1.1;
+    public const BAG7 = 1;
+    public const BAG8 = 0.5;
+    public const BAG9 = 0.1;
 
     public function getBagIndexs()
     {

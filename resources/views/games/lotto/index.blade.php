@@ -24,12 +24,13 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                     <div class="out">
                         <div class="txt"> Thời gian còn lại để mua </div>
                         <div class="number c-row c-row-middle c-flew-end">
-                           
+
                         </div>
                     </div>
                 </div>
 
                 <section class="result_plot_threads">
+                    <div class="mark-box c-row c-row-middle-center" style="display: none;"></div>
                     @include('games.lotto.result_table')
                     <div class="container">
                         <div class="box box_choose">
