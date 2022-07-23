@@ -92,7 +92,7 @@ class UserManageController extends Admin
         if ($itemWithdrawalRequest->withdrawal_request_status_id != $status->id) {
             if ($status->id == WithdrawalRequestStatus::STATUS_CANCEL) {
                 $reason = 'Hoàn tiền khi hủy yêu cầu rút tiền';
-                $user->changeMoney($itemWithdrawalRequest->amount,$reason,WalletTransactionType::REFUND_CANCEL_WITHDRAWAL_REQUEST,$itemWithdrawalRequest->id);
+                $user->changeMoney($itemWithdrawalRequest->amount,$reason,WalletTransactionType::REFUND_CANCEL_WITHDRAWAL_REQUEST,$itemWithdrawalRequest->id,$itemWithdrawalRequest->is_marketing,false);
             }
             $itemWithdrawalRequest->withdrawal_request_status_id = $status->id;
             $itemWithdrawalRequest->status_changed = 1;
@@ -139,7 +139,7 @@ class UserManageController extends Admin
             if ($itemRechargeRequest->recharge_method_id == RechargeMethod::DIRECT_TRANSFER_METHOD) {
                 if ($status->id == RechargeStatus::STATUS_CONFIRMED) {
                     $reason = 'Cộng tiền chuyển khoản trực tiếp';
-                    $user->changeMoney($itemRechargeRequest->amount,$reason,WalletTransactionType::RECHARGE_MONEY,$itemRechargeRequest->id);
+                    $user->changeMoney($itemRechargeRequest->amount,$reason,WalletTransactionType::RECHARGE_MONEY,$itemRechargeRequest->id,$itemRechargeRequest->is_marketing,false);
                 }
                 $itemRechargeRequest->recharge_status_id = $status->id;
                 $itemRechargeRequest->recharged = 1;
@@ -294,6 +294,7 @@ class UserManageController extends Admin
         }
         $adminPlusMoneyRecord = new AdminPlusMoneyRecord;
         $adminPlusMoneyRecord->user_id = $user->id;
+        $adminPlusMoneyRecord->is_marketing = $user->is_marketing_account;
         $adminPlusMoneyRecord->wallet_transaction_type_id = request()->transaction_type;
         $adminPlusMoneyRecord->amount = abs(request()->amount);
         if (\Auth::guard('h_users')->check()) {
@@ -301,7 +302,7 @@ class UserManageController extends Admin
         }
         $adminPlusMoneyRecord->save();
         $reason = 'Admin cộng tiền';
-        $user->changeMoney($adminPlusMoneyRecord->amount,$reason,$adminPlusMoneyRecord->wallet_transaction_type_id,$adminPlusMoneyRecord->id);
+        $user->changeMoney($adminPlusMoneyRecord->amount,$reason,$adminPlusMoneyRecord->wallet_transaction_type_id,$adminPlusMoneyRecord->id,$adminPlusMoneyRecord->is_marketing,false);
         return response()->json([
             'code' => 200,
             'message' => 'Cộng tiền thành công',
@@ -338,6 +339,7 @@ class UserManageController extends Admin
         }
         $adminMinusMoneyRecord = new AdminMinusMoneyRecord();
         $adminMinusMoneyRecord->user_id = $user->id;
+        $adminMinusMoneyRecord->is_marketing = $user->is_marketing_account;
         $adminMinusMoneyRecord->wallet_transaction_type_id = request()->transaction_type;
         $adminMinusMoneyRecord->amount = abs(request()->amount);
         if (\Auth::guard('h_users')->check()) {
@@ -345,7 +347,7 @@ class UserManageController extends Admin
         }
         $adminMinusMoneyRecord->save();
         $reason = 'Admin trừ tiền';
-        $user->changeMoney(0 - $adminMinusMoneyRecord->amount,$reason,$adminMinusMoneyRecord->wallet_transaction_type_id,$adminMinusMoneyRecord->id);
+        $user->changeMoney(0 - $adminMinusMoneyRecord->amount,$reason,$adminMinusMoneyRecord->wallet_transaction_type_id,$adminMinusMoneyRecord->id,$adminMinusMoneyRecord->is_marketing,false);
         return response()->json([
             'code' => 200,
             'message' => 'Trừ tiền thành công',
