@@ -2,11 +2,14 @@
 
 namespace App\Games\Lotto\Types;
 
+use App\Games\Lotto\Conditions\AndCondition;
+use App\Games\Lotto\Conditions\OrCondition;
 use App\Games\Lotto\Renderers\Renderer0099;
 use Arr;
 
 class LoXien2 extends ATypeGame
 {
+
     public function devideNumber($gameLottoPlayUserBets, $totalPrize)
     {
         $win = $this->gameLottoType->win;
@@ -15,11 +18,12 @@ class LoXien2 extends ATypeGame
         if ($maxRate == 0) {
             $this->excludeNumbers = $statisticList;
         } else {
-            foreach ($statisticList as $key => $rate) {
-                if ($rate > $maxRate) {
-                    $this->excludeNumbers[$key] = $rate;
+            foreach ($statisticList as $key => $condition) {
+                if ($condition->getRate() > $maxRate) {
+                    $orCondition = new OrCondition($condition->getName(), $condition->getRate(), $condition->getRealNumbers());
+                    $this->excludeNumbers[$key] = $orCondition;
                 } else {
-                    $this->includeNumbers[$key] = $rate;
+                    $this->includeNumbers[$key] = $condition;
                 }
             }
         }
@@ -32,15 +36,22 @@ class LoXien2 extends ATypeGame
             $numbers = explode(',', $number);
             $money = $bet->money;
             $amount_base = $bet->amount_base;
-            $rate = $money / ($amount_base);
-            foreach ($numbers as $number) {
-                if (!Arr::exists($statisticList, $number)) {
-                    $statisticList[$number] = $rate;
-                } else {
-                    $statisticList[$number] += $rate;
-                }
+            $rate = $this->getRateNumber($money, $numbers, $amount_base);
+
+            $numberName = implode('_', $numbers);
+            if (!Arr::exists($statisticList, $numberName)) {
+                $condition = new AndCondition($numberName, $rate, $numbers);
+                $statisticList[$numberName] = $condition;
+            } else {
+                $tmpCondition = $statisticList[$numberName];
+                $tmpCondition->addRate($rate);
+                $statisticList[$numberName] = $tmpCondition;
             }
         }
         return $statisticList;
+    }
+    protected function getRateNumber($money, $numbers, $amount_base)
+    {
+        return $money / ($amount_base);
     }
 }

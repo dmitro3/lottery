@@ -2,6 +2,8 @@
 
 namespace App\Games\Lotto;
 
+use App\Games\Lotto\Conditions\OrCondition;
+use App\Games\Lotto\Generators\MBGenerator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -11,6 +13,9 @@ class PrizeGameCollection
     private $currentGameRecord;
     private $gameLottoPlayUserBets;
     private $totalBetMoney = 0;
+
+    private $mixExcludeNumbers = [];
+    private $mixIncludeNumbers = [];
 
     public function __construct($currentGameRecord)
     {
@@ -24,8 +29,58 @@ class PrizeGameCollection
         }
         foreach ($this->listPrizeGames as $game) {
             $game->calculate();
-            var_dump($game->getExcludeNumbers());
-            var_dump($game->getIncludeNumbers());
+        }
+        foreach ($this->listPrizeGames as $game) {
+            $this->mixExcludeNumbers($game->getExcludeNumbers());
+
+            $this->mixIncludeNumbers($game->getIncludeNumbers());
+        }
+        $this->mixIncludeNumbers = array_diff($this->mixIncludeNumbers, $this->mixExcludeNumbers);
+
+
+
+
+
+
+
+
+
+        $generator = $this->makeGenerator();
+        $results = $generator->generate();
+        dd($results);
+    }
+    private function makeGenerator()
+    {
+        $generator = new MBGenerator($this->mixIncludeNumbers, $this->mixExcludeNumbers);
+        foreach ($this->listPrizeGames as $game) {
+            if ($game->getGameKey() == 'DE_DAU') {
+                $generator->addGameGiaiBay($game);
+            } else if ($game->getGameKey() == 'BA_CANG_DE') {
+                $generator->setGameDeBaCang($game);
+            } else if ($game->getGameKey() == 'DE_TO_NHAT') {
+                $generator->setGameDe($game);
+            } else if ($game->getGameKey() == 'BA_CANG_LO') {
+                $generator->setGameLoBaCang($game);
+            } else if ($game->getGameKey() == 'BON_CANG_DE') {
+                $generator->setGameDeBonCang($game);
+            } else if ($game->getGameKey() == 'BON_CANG_LO') {
+                $generator->setGameLoBonCang($game);
+            }
+        }
+        return $generator;
+    }
+    private function mixExcludeNumbers($conditions)
+    {
+        foreach ($conditions as $condition) {
+            $numbers = $condition->getNumbers();
+            $this->mixExcludeNumbers = array_merge($this->mixExcludeNumbers, $numbers);
+        }
+    }
+    private function mixIncludeNumbers($conditions)
+    {
+        foreach ($conditions as $condition) {
+            $numbers = $condition->getNumbers();
+            $this->mixIncludeNumbers = array_merge($this->mixIncludeNumbers, $numbers);
         }
     }
     private function addGameToList($gameBet)

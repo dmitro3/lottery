@@ -28,6 +28,7 @@ class PrizeOneGame
     public function addUserBet(GameLottoPlayUserBet $userBet)
     {
         if (!$this->gameLottoType) {
+
             $this->gameLottoType = $userBet->gameLottoType;
         }
         array_push($this->gameLottoPlayUserBets, $userBet);
@@ -40,7 +41,7 @@ class PrizeOneGame
     }
     public function getTotalPrize()
     {
-        return $this->totalPrize = $this->sum * Setting::getSetting('lotto_percent_prize', 80);
+        return $this->totalPrize = $this->sum * (float)(Setting::getSetting('lotto_percent_prize', 80) / 100);
     }
 
     public function getCountBet()
@@ -87,5 +88,25 @@ class PrizeOneGame
     public function getExcludeNumbers()
     {
         return $this->excludeNumbers;
+    }
+
+    /**
+     * Get the value of gameKey
+     *
+     * @return  mixed
+     */
+    public function getGameKey()
+    {
+        return $this->gameKey;
+    }
+
+    /**
+     * Get the value of gameKeyId
+     *
+     * @return  mixed
+     */
+    public function getGameKeyId()
+    {
+        return $this->gameKeyId;
     }
 }
