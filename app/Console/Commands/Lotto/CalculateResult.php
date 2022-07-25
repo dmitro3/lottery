@@ -4,6 +4,7 @@ namespace App\Console\Commands\Lotto;
 
 use App\Games\Lotto\Enums\Config as PlinkoConfig;
 use App\Games\Lotto\Prize;
+use App\Models\Games\Lotto\GameLottoPlayRecord;
 use App\Models\Games\Lotto\GameLottoPlayType;
 use App\Models\Games\Lotto\GameLottoPlayUserBet;
 use Illuminate\Console\Command;
@@ -68,13 +69,13 @@ class CalculateResult extends Command
     }
     private function generateGameResult()
     {
-        $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
-        if (!$currentGameRecord) return;
-        if ($currentGameRecord->is_end == 1) return;
-        $records = GameLottoPlayUserBet::where('game_lotto_play_record_id', $currentGameRecord->id)->get();
+        // $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
+        // if (!$currentGameRecord) return;
+        // if ($currentGameRecord->is_end == 1) return;
+        $currentGameRecord = GameLottoPlayRecord::find(2022071810276);
 
-        $prize = new Prize($records);
-        $prize->calculateResult();
-        $currentGameRecord->end();
+        $prize = new Prize($currentGameRecord);
+        $prize->calculate();
+        // $currentGameRecord->end();
     }
 }

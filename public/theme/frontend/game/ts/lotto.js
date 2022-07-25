@@ -1204,11 +1204,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var tabPanel = new _Lotto_TabPanel__WEBPACK_IMPORTED_MODULE_7__["default"]();
-var socket = new _Base_Socket__WEBPACK_IMPORTED_MODULE_0__["default"]('ws://localhost:8888/');
+var socket = new _Base_Socket__WEBPACK_IMPORTED_MODULE_0__["default"](SOCKET_URL);
 var lottoSocket = new _Lotto_LottoSocket__WEBPACK_IMPORTED_MODULE_5__["default"](socket);
 var plinkoGameTimer = new _Lotto_LottoGameTimer__WEBPACK_IMPORTED_MODULE_4__["default"](lottoSocket);
-lottoSocket.onOpenSocketCallback = function () {
-};
+lottoSocket.onOpenSocketCallback = function () { };
 lottoSocket.onInitGameCallback = function (data) {
     plinkoGameTimer.initInfo(data);
 };

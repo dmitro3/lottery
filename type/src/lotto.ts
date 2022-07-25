@@ -7,21 +7,15 @@ import LottoSocket from "./Lotto/LottoSocket";
 import LottoUi from "./Lotto/LottoUi";
 import TabPanel from "./Lotto/TabPanel";
 
-
-
 let tabPanel = new TabPanel();
 
-
-
-
-const socket: Socket = new Socket('ws://localhost:8888/');
+const socket: Socket = new Socket(SOCKET_URL);
 const lottoSocket = new LottoSocket(socket);
 const plinkoGameTimer = new LottoGameTimer(lottoSocket);
-lottoSocket.onOpenSocketCallback = function () {
-}
+lottoSocket.onOpenSocketCallback = function () {};
 lottoSocket.onInitGameCallback = function (data: any) {
     plinkoGameTimer.initInfo(data);
-}
+};
 lottoSocket.init();
 let formBet = new FormBet(lottoSocket);
 let gameChoose = new GameChoose(formBet);

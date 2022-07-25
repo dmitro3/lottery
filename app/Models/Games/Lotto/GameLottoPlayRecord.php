@@ -16,6 +16,7 @@ class GameLottoPlayRecord extends BaseModel
     {
         return $this->hasMany(GameLottoPlayUserBet::class);
     }
+
     public function end()
     {
         // $this->fresh();

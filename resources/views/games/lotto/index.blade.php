@@ -9,6 +9,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
     var LOTTO_TYPES = <?php echo json_encode($types) ?>;
     var LOTTO_STATUS = <?php echo json_encode(\realtimemodule\pushserver\Enums\Lotto\Status::getConstList()) ?>;
     var LOTTO_CONFIG = <?php echo json_encode(\App\Games\Lotto\Enums\Config::getConstList()) ?>;
+    var SOCKET_URL = 'ws://localhost:8081/';
 </script>
 @endsection
 @section('content')

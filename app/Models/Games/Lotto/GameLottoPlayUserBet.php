@@ -18,6 +18,10 @@ class GameLottoPlayUserBet extends BaseModel
     {
         return $this->belongsTo(User::class);
     }
+    public function gameLottoType()
+    {
+        return $this->belongsTo(GameLottoType::class);
+    }
 
     public static function toDatabase($user, $currentGameRecord, $gameType, $numbers, $money)
     {
