@@ -89,7 +89,7 @@ class GameWinRecord extends BaseModel
          */
         
         $winRatio = 100*($totalUserLostAmount > 0 ? $totalAmountReturnUser/$totalUserLostAmount:0);
-        $phanTramNhaCaiMuonAn = 20;
+        $phanTramNhaCaiMuonAn = (int)\SettingHelper::getSetting('wingo_home_income_percent',100);
 
         $priorityPercentRegulation = abs(1 - (100 - $winRatio)/$phanTramNhaCaiMuonAn);
         $ret['house_income'] = $totalIncomeAmount - $totalAmountReturnUser;

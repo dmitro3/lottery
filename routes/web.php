@@ -49,7 +49,7 @@ Route::group([
         // Nạp tiền
         Route::get('/nap-tien', 'RechargeController@index');
         Route::get('/init-recharge-method', 'RechargeController@initRechargeMethod');
-        Route::post('/send-direct-transfer-recharge', 'RechargeController@sendDirectTransferRecharge');
+        Route::post('/send-recharge', 'RechargeController@sendRecharge');
         Route::get('/lich-su-nap-tien', 'RechargeController@rechargeHistory');
         
         // Rút tiền
