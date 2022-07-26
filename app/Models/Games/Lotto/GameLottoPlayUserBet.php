@@ -33,7 +33,7 @@ class GameLottoPlayUserBet extends BaseModel
         $bet->game_lotto_play_record_id = $currentGameRecord->id;
         $bet->money = $money;
         $bet->numbers = implode(',', $numbers);
-        $bet->amount_base = $gameType->bet;
+        $bet->amount_base = $gameType->bet * 1000;
         $bet->amount = $money;
         $bet->return_amount = 0;
         $bet->game_lotto_play_user_bet_status_id = static::STATUS_WAIT_RESULT;

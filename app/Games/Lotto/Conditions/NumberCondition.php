@@ -7,6 +7,7 @@ class NumberCondition
     protected $name;
     protected $rate;
     protected $numbers;
+    protected $maxAppear;
     public function __construct($name, $rate, $numbers)
     {
         $this->name = $name;
@@ -50,5 +51,28 @@ class NumberCondition
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get the value of maxAppear
+     *
+     * @return  mixed
+     */
+    public function getMaxAppear()
+    {
+        return $this->maxAppear;
+    }
+
+    /**
+     * Set the value of maxAppear
+     *
+     * @param   mixed  $maxAppear  
+     *
+     * @return  self
+     */
+    public function setMaxAppear($maxAppear)
+    {
+        $this->maxAppear = $maxAppear;
+        return $this;
     }
 }

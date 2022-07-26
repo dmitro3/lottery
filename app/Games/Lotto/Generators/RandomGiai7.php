@@ -19,14 +19,8 @@ class RandomGiai7 extends BaseRandom
             return $num;
         }
         $ins = $this->gameGiai7->getIncludeArrayNumbers();
-        if (count($ins) > 0) {
-            $key = array_rand($ins);
-            $num = $ins[$key];
-            $this->commonRandom->unsetInclude($num);
-        } else {
-            $rands = $this->commonRandom->randomNumber();
-            $num = $rands[0];
-        }
+        $num = $this->commonRandom->randomNumberWithExtraInclude($ins, 0);
+
         return $num;
     }
 }

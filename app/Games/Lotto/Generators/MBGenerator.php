@@ -23,12 +23,12 @@ class MBGenerator
 
     private $commonRandom;
     private $currentGameRecord;
-    public function __construct($currentGameRecord, $includeTwoNumbers, $excludeTwoNumbers)
+    public function __construct($currentGameRecord, $maxAppearIncludeNumbers, $includeTwoNumbers, $excludeTwoNumbers)
     {
         $this->currentGameRecord = $currentGameRecord;
         $this->excludeTwoNumbers = $excludeTwoNumbers;
         $this->includeTwoNumbers = $includeTwoNumbers;
-        $this->commonRandom = new CommonRandom($this->includeTwoNumbers, $this->excludeTwoNumbers);
+        $this->commonRandom = new CommonRandom($maxAppearIncludeNumbers, $this->includeTwoNumbers, $this->excludeTwoNumbers);
     }
 
     public function setGameGiaiBay(PrizeOneGame $game)
@@ -66,16 +66,20 @@ class MBGenerator
     public function generate()
     {
 
+        $currentGameRecordId = $this->currentGameRecord->id;
+        $count = GameLottoTableResult::where('game_lotto_play_record_id', $currentGameRecordId)->count();
+        if ($count > 0) return;
         $table = [];
         $table[NoPrize::DAC_BIET] = [$this->generateDacBiet()];
 
         $table[NoPrize::BAY] = $this->generateGiai7();
         $other = $this->generateGiaiKhac();
         $table = $table + $other;
+        // dd($table, $other);
         foreach ($table as $key => $row) {
             foreach ($row as $col) {
                 $item = new GameLottoTableResult();
-                $item->game_lotto_play_record_id = $this->currentGameRecord->id;
+                $item->game_lotto_play_record_id = $currentGameRecordId;
                 $item->type_prize = $key;
                 $item->value = $col;
                 $item->created_at = now();
@@ -96,43 +100,42 @@ class MBGenerator
         $randomBonCang = new RandomBonCang($this->commonRandom, $this->gameDeBonCangs);
         $num = $randomBonCang->random($num);
 
+
+        if ($num < 0) {
+            $rands = $this->commonRandom->randomNumber();
+            $num = $rands[0];
+        }
+
         while (strlen($num) < 5) {
             $num = rand(0, 9) . $num;
         }
-
         return $num;
     }
 
     private function generateGiai7()
     {
-        $position = rand(0, 3);
-
-        $results = [];
-        for ($i = 0; $i < 4; $i++) {
-            if ($i != $position) {
-                $tmps = $this->commonRandom->randomNumber();
-                $results = array_merge($results, $tmps);
-            } else {
-                $randomGiai7 = new RandomGiai7($this->commonRandom, $this->gameGiaiBays);
-                $num = $randomGiai7->random();
-                $results[] = $num;
-            }
+        $randomGiai7 = new RandomGiai7($this->commonRandom, $this->gameGiaiBays);
+        $num = $randomGiai7->random();
+        if ($num < 0) {
+            $rands = $this->commonRandom->randomNumber();
+            $num = $rands[0];
         }
+        $results = [];
+        $results = array_merge($results, [$num]);
+        for ($i = 0; $i < 3; $i++) {
+            $tmps = $this->commonRandom->randomNumber();
+            $results = array_merge($results, $tmps);
+        }
+        shuffle($results);
         return $results;
     }
 
     private function generateGiaiKhac()
     {
-        $giais = [
-            NoPrize::NHAT => 1,
-            NoPrize::NHI => 2,
-            NoPrize::BA => 6,
-            NoPrize::BON => 4,
-            NoPrize::NAM => 6,
-            NoPrize::SAU => 3
-        ];
+
         $ins = $this->commonRandom->getIncludeTwoNumbers();
         $exs = $this->commonRandom->getExcludeTwoNumbers();
+        $maxAppears = $this->commonRandom->getMaxAppearNumbers();
         $results = [
             NoPrize::NHAT => [],
             NoPrize::NHI => [],
@@ -141,30 +144,63 @@ class MBGenerator
             NoPrize::NAM => [],
             NoPrize::SAU => []
         ];
+        $giais = [
+            NoPrize::NHAT => 1,
+            NoPrize::NHI => 2,
+            NoPrize::BA => 6,
+            NoPrize::BON => 4,
+            NoPrize::NAM => 6,
+            NoPrize::SAU => 3
+        ];
         for ($i = 0; $i < 22; $i++) {
             if (count($ins) > 0) {
-                $key = array_rand($ins);
-                $num = $ins[$key];
-                unset($ins[$key]);
+                $num = $this->getRandomNumberInclude($ins, $maxAppears);
             } else {
-                do {
-                    $tmp = rand(0, 99);
-                    $tmp = $tmp < 10 ? '0' . $tmp : '' . $tmp;
-                } while (in_array($tmp, $exs));
-                $num = $tmp;
+                $num = $this->getRandomNumberNotInExclude($exs);
             }
-            $keygiai = array_rand($giais);
-            $giais[$keygiai]--;
-            if ($giais[$keygiai] <= 0) {
-                unset($giais[$keygiai]);
-            }
-            $nonum = $this->getNoNumByGiai($keygiai) - 2;
-            for ($j = 0; $j < $nonum; $j++) {
-                $num = rand(0, 9) . $num;
-            }
-            $results[$keygiai][] = $num;
+
+            $keygiai = $this->getRandomGiai($giais);
+            $num = $this->randomFullNumber($keygiai, $num);
+            array_push($results[$keygiai], $num);
         }
         return $results;
+    }
+    private function randomFullNumber($keygiai, $num)
+    {
+        $nonum = $this->getNoNumByGiai($keygiai) - 2;
+        for ($j = 0; $j < $nonum; $j++) {
+            $num = rand(0, 9) . $num;
+        }
+        return $num;
+    }
+    private function getRandomGiai(&$giais)
+    {
+        $keygiai = array_rand($giais);
+        $giais[$keygiai]--;
+        if ($giais[$keygiai] <= 0) {
+            unset($giais[$keygiai]);
+        }
+        return $keygiai;
+    }
+    private function getRandomNumberNotInExclude($exs)
+    {
+        do {
+            $tmp = rand(0, 99);
+            $tmp = $tmp < 10 ? '0' . $tmp : '' . $tmp;
+        } while (in_array($tmp, $exs));
+        $num = $tmp;
+        return $num;
+    }
+    private function getRandomNumberInclude(&$ins, &$maxAppear)
+    {
+        $key = array_rand($ins);
+        $num = $ins[$key];
+        $maxAppear[$num]--;
+        if ($maxAppear[$num] <= 0) {
+            unset($ins[$key]);
+            unset($maxAppear[$num]);
+        }
+        return $num;
     }
     private function getNoNumByGiai($key)
     {

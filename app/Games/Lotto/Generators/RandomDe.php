@@ -20,9 +20,7 @@ class RandomDe extends BaseRandom
         }
         $ins = $this->gameDe->getIncludeArrayNumbers();
         if (count($ins) > 0) {
-            $key = array_rand($ins);
-            $num = $ins[$key];
-            $this->commonRandom->unsetInclude($num);
+            $num = $this->commonRandom->randomNumberWithExtraInclude($ins, 0);
         }
         // else {
         //     $rands = $this->randomNumber();

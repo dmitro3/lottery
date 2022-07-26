@@ -882,11 +882,11 @@ var LottoSocket = /** @class */ (function (_super) {
         this.sendData(JSON.stringify(data));
     };
     LottoSocket.prototype.retrieveResult = function () {
-        var data = {};
-        data.type = connectionGameType;
-        data.currentGame = _LottoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].currentGameInfo;
-        data.action = LOTTO_STATUS.GAME_ACTION_RETRIEVE_RESULT;
-        this.sendData(JSON.stringify(data));
+        // let data: any = {};
+        // data.type = connectionGameType;
+        // data.currentGame = LottoGlobal.currentGameInfo;
+        // data.action = LOTTO_STATUS.GAME_ACTION_RETRIEVE_RESULT;
+        // this.sendData(JSON.stringify(data));
     };
     LottoSocket.prototype.sendPlayRequest = function (type, money, numbers) {
         var data = {};

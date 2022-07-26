@@ -7,11 +7,13 @@ use App\Games\Lotto\PrizeOneGame;
 class CommonRandom
 {
     protected $includeTwoNumbers;
+    protected $maxAppearNumbers;
     protected $excludeTwoNumbers;
-    public function __construct($includeTwoNumbers, $excludeTwoNumbers)
+    public function __construct($maxAppearNumbers, $includeTwoNumbers, $excludeTwoNumbers)
     {
         $this->excludeTwoNumbers = $excludeTwoNumbers;
         $this->includeTwoNumbers = $includeTwoNumbers;
+        $this->maxAppearNumbers = $maxAppearNumbers;
     }
     public function randomNumber($oldNumber = -1, $count = 1)
     {
@@ -33,12 +35,38 @@ class CommonRandom
             } while (in_array($num, $exs));
             if ($idx = array_search($num, $ins)) {
 
-                unset($ins[$idx]);
+                $tmp = $ins[$idx];
+                $this->maxAppearNumbers[$tmp]--;
+                if ($this->maxAppearNumbers[$tmp] <= 0) {
+                    unset($ins[$idx]);
+                    unset($this->maxAppearNumbers[$tmp]);
+                }
             }
             $results[] = $num;
         }
 
         return $results;
+    }
+
+
+    public function randomNumberWithExtraInclude($extraIncludes, $noNum = 1)
+    {
+        $tmpExtraIncludes = [];
+        foreach ($extraIncludes as $item) {
+            $item = substr($item, $noNum);
+            $tmpExtraIncludes[] = $item;
+        }
+        $intersect = array_intersect($tmpExtraIncludes, $this->includeTwoNumbers);
+
+        if (count($intersect) > 0) {
+            $key = array_rand($intersect);
+            $value = $intersect[$key];
+            $key = array_search($value, $tmpExtraIncludes);
+            $num = $extraIncludes[$key];
+        } else {
+            $num = -1;
+        }
+        return $num;
     }
 
     /**
@@ -51,12 +79,6 @@ class CommonRandom
         return $this->includeTwoNumbers;
     }
 
-    public function unsetInclude($num)
-    {
-        if (in_array($num, $this->includeTwoNumbers)) {
-            unset($this->includeTwoNumbers[$num]);
-        }
-    }
 
     /**
      * Get the value of excludeTwoNumbers
@@ -66,5 +88,15 @@ class CommonRandom
     public function getExcludeTwoNumbers()
     {
         return $this->excludeTwoNumbers;
+    }
+
+    /**
+     * Get the value of maxAppearNumbers
+     *
+     * @return  mixed
+     */
+    public function getMaxAppearNumbers()
+    {
+        return $this->maxAppearNumbers;
     }
 }

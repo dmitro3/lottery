@@ -19,10 +19,6 @@ class RandomBonCang extends BaseRandom
         } else {
             $num = $this->checkDeBonCang($num);
         }
-        if ($num < 0) {
-            $exs = $this->gameDeBonCangs->getExcludeArrayNumbers();
-            $num = $this->randomResult($exs, -1, 99);
-        }
         return $num;
     }
 
@@ -35,18 +31,17 @@ class RandomBonCang extends BaseRandom
         $ins = $this->gameDeBonCangs->getIncludeArrayNumbers();
         $exs = $this->gameDeBonCangs->getExcludeArrayNumbers();
         if (count($ins) > 0) {
-            $key = array_rand($ins);
-            $num = $ins[$key];
-            $this->commonRandom->unsetInclude(substr($num, 2));
-        } else {
-            do {
-                $rands = $this->commonRandom->randomNumber($num);
-                $num = $rands[0];
-                $add = rand(0, 99);
-                $add = $add < 10 ? '0' . $add : $add;
-                $tmpNum = $add . $num;
-            } while (in_array($tmpNum, $exs));
+            $num = $this->commonRandom->randomNumberWithExtraInclude($ins, 2);
         }
+        // else {
+        //     do {
+        //         $rands = $this->commonRandom->randomNumber($num);
+        //         $num = $rands[0];
+        //         $add = rand(0, 99);
+        //         $add = $add < 10 ? '0' . $add : $add;
+        //         $tmpNum = $add . $num;
+        //     } while (in_array($tmpNum, $exs));
+        // }
         return $num;
     }
     private function checkDeBonCang($num)

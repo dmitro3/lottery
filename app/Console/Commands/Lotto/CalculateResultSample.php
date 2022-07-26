@@ -9,21 +9,21 @@ use App\Models\Games\Lotto\GameLottoPlayType;
 use App\Models\Games\Lotto\GameLottoPlayUserBet;
 use Illuminate\Console\Command;
 
-class CalculateResult extends Command
+class CalculateResultSample extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'lotto:generate-result';
+    protected $signature = 'lotto:generate-result-sample {id}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Calculate Result Lotto';
+    protected $description = 'Calculate Result Lotto Sample';
 
     /**
      * Create a new command instance.
@@ -44,36 +44,18 @@ class CalculateResult extends Command
     {
 
         $this->info("Start");
-        $gameEnded = false;
-
-        while (true) {
-            $now = now();
-            $minute = $now->minute;
-            $second = $now->second;
-
-            if ($minute == 59 && $second > (60 - LottoConfig::LAST_POINT_TO_BET)) {
-                if (!$gameEnded) {
-                    $this->generateGameResult();
-                    $gameEnded = true;
-                }
-            } else {
-                $gameEnded = false;
-            }
-
-            $this->info($minute . '-' . $second);
-            sleep(1);
-        }
+        $this->generateGameResult();
 
         $this->info("End");
     }
     private function generateGameResult()
     {
-        $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
-        if (!$currentGameRecord) return;
-        if ($currentGameRecord->is_end == 1) return;
+        $currentGameRecord = GameLottoPlayRecord::find($this->argument('id'));
+        // if (!$currentGameRecord) return;
+        // if ($currentGameRecord->is_end == 1) return;
 
         $prize = new Prize($currentGameRecord);
         $prize->calculate();
-        $currentGameRecord->end();
+        // $currentGameRecord->end();
     }
 }

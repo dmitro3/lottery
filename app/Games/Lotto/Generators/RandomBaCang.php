@@ -35,9 +35,7 @@ class RandomBaCang extends BaseRandom
         $ins = $this->gameDeBaCangs->getIncludeArrayNumbers();
         $exs = $this->gameDeBaCangs->getExcludeArrayNumbers();
         if (count($ins) > 0) {
-            $key = array_rand($ins);
-            $num = $ins[$key];
-            $this->commonRandom->unsetInclude(substr($num, 1));
+            $num = $this->commonRandom->randomNumberWithExtraInclude($ins, 1);
         }
         // else {
         //     do {

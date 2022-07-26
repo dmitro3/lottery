@@ -51,8 +51,6 @@ class LottoConnector implements ConnecterInterface
                 return $this->getCurrentGameTypeInfo($action);
             case LottoStatus::GAME_ACTION_DO_BET:
                 return $this->play($action);
-            case LottoStatus::GAME_ACTION_RETRIEVE_RESULT:
-                return $this->retrieveResult($action);
             default:
                 return $this->connection;
         }
@@ -148,27 +146,7 @@ class LottoConnector implements ConnecterInterface
         $this->from->send($this->buildResponse(200, true, 'Bet thành công!', [], $action));
         return $this->connection;
     }
-    private function retrieveResult($action)
-    {
-        $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
-        if (!isset($currentGameClientInfo)) {
-            $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
-        }
 
-        $user = $this->connection['userTargetMessage'];
-
-        $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
-
-        $userBet = $currentGameRecord->gameLottoPlayUserBets()->where('user_id', $user->id)->where('is_returned', 0)->orderBy('id', 'desc')->first();
-        $games = [];
-        if ($userBet) {
-            $games = $userBet->gamePlinkoUserBetDetails()->select('path', 'type')->orderBy('zigzag', 'desc')->get()->toArray();
-            $userBet->is_returned = 1;
-            $userBet->save();
-        }
-        $this->from->send($this->buildResponse(200, true, 'Lấy kết quả thành công!', compact('games'), $action));
-        return $this->connection;
-    }
     private function buildResponse($code, $status, $message, $data = [], $action = null)
     {
         $dataResponse = [];

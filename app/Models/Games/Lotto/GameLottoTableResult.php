@@ -13,4 +13,8 @@ class GameLottoTableResult extends BaseModel
     {
         return $this->hasMany(GameLottoPlayRecord::class);
     }
+
+    public function getTableResults(){
+        
+    }
 }

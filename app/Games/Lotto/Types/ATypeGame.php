@@ -6,6 +6,7 @@ use App\Games\Lotto\Conditions\OrCondition;
 use App\Games\Lotto\Contracts\ITypeGame;
 use App\Games\Lotto\Enums\NoPrize;
 use App\Games\Lotto\Renderers\Renderer0099;
+use App\Games\Lotto\TableResult;
 use App\Models\Games\Lotto\GameLottoType;
 use Illuminate\Support\Arr;
 
@@ -32,7 +33,9 @@ abstract class ATypeGame implements ITypeGame
     {
         $win = $this->gameLottoType->win;
         $maxRate = $totalPrize / $win;
+
         $statisticList = $this->statisticNumber($gameLottoPlayUserBets);
+
         if ($maxRate == 0) {
             $this->excludeNumbers = $statisticList;
         } else {
@@ -43,6 +46,25 @@ abstract class ATypeGame implements ITypeGame
                     $this->includeNumbers[$key] = $condition;
                 }
             }
+        }
+        $this->cleanIncludeNumbers($maxRate);
+    }
+
+    protected function cleanIncludeNumbers($maxRate)
+    {
+        $roundMaxRate = (int)$maxRate;
+        $countInclude = count($this->includeNumbers);
+        if ($roundMaxRate < $countInclude) {
+            $diff = $countInclude - $roundMaxRate;
+            for ($i = 0; $i < $diff; $i++) {
+                $key = array_rand($this->includeNumbers);
+                unset($this->includeNumbers[$key]);
+            }
+        }
+        $countInclude = count($this->includeNumbers);
+        $maxAppear = $roundMaxRate / $countInclude;
+        foreach ($this->includeNumbers as &$item) {
+            $item->setMaxAppear($maxAppear);
         }
     }
 
@@ -93,4 +115,5 @@ abstract class ATypeGame implements ITypeGame
     {
         return $this->excludeNumbers;
     }
+    abstract public function checkBet(TableResult $tableResult, $bet);
 }

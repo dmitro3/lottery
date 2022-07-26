@@ -21,6 +21,7 @@ class Prize
     public function calculate()
     {
         $prizeGameCollection = new PrizeGameCollection($this->currentGameRecord);
+        $prizeGameCollection->generate();
         $prizeGameCollection->calculate();
     }
 }
