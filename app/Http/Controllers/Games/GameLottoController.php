@@ -11,6 +11,7 @@ use App\Games\Plinko\Prize;
 use App\Models\Games\Lotto\GameLottoCategory;
 use App\Models\Games\Lotto\GameLottoPlayRecord;
 use App\Models\Games\Lotto\GameLottoPlayType;
+use App\Models\Games\Lotto\GameLottoPlayUserBet;
 use App\Models\Games\Lotto\GameLottoTableResult;
 use App\Models\Games\Lotto\GameLottoType;
 use App\Models\Games\Plinko\GamePlinkoPath;
@@ -49,5 +50,16 @@ class GameLottoController extends BaseGameController
         if (!$typeGame) return;
 
         return $typeGame->toJson();
+    }
+    public function getGameChoosenNumber($request)
+    {
+        $type = (int)$request->input('typeGame', 0);
+        if ($type == 0) return;
+        $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
+        $user = \Auth::user();
+        $bets = $currentGameRecord->gameLottoPlayUserBets()->select('numbers')->where('user_id', $user->id)->get()->pluck('numbers');
+        return response()->json(
+            ['code' => 200, 'data' => $bets]
+        );
     }
 }

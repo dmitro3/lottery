@@ -24,7 +24,7 @@ var Ajax = /** @class */ (function () {
                 method: "GET",
                 data: data
             }).then(function (res) {
-                if (res.code == 200 && res.html) {
+                if (res.code == 200 && (res.html || res.data)) {
                     resolve(res);
                 }
                 else {
@@ -363,9 +363,10 @@ var FormBet = /** @class */ (function () {
             return false;
         var money = parseInt(inputMoney.value) || 0;
         var numberLotto = this.getNumberChoosen().length;
-        var minMoney = numberLotto * currentGameConfig.min_bet;
         var minChoose = currentGameConfig.choose_min;
         var maxChoose = currentGameConfig.choose_max;
+        var d = minChoose == maxChoose ? maxChoose : 1;
+        var minMoney = numberLotto * currentGameConfig.min_bet / d;
         if (numberLotto < minChoose || numberLotto > maxChoose) {
             if (minChoose == maxChoose) {
                 alert("B\u1EA1n c\u1EA7n ch\u1ECDn ".concat(minChoose, " s\u1ED1!"));
@@ -1008,14 +1009,16 @@ var LottoUi = /** @class */ (function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
+                                _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].showLoading();
                                 input = this;
                                 parent = this.parentElement;
                                 type = input ? input.value : 0;
-                                _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].showLoading();
                                 return [4 /*yield*/, self.getGameContent(type)];
                             case 1:
                                 content = _a.sent();
-                                _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].hideLoading();
+                                return [4 /*yield*/, self.getChoosenNumber(type)];
+                            case 2:
+                                _a.sent();
                                 target = _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"]._(parent.getAttribute("data-target"));
                                 otherpanels = target.parentElement.querySelectorAll(":scope > .panel");
                                 otherpanels.forEach(function (otherpanel, i) {
@@ -1023,6 +1026,7 @@ var LottoUi = /** @class */ (function () {
                                 });
                                 target.innerHTML = content.html;
                                 self.updateAfterGetGameContent();
+                                _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].hideLoading();
                                 return [2 /*return*/];
                         }
                     });
@@ -1052,6 +1056,28 @@ var LottoUi = /** @class */ (function () {
     };
     LottoUi.prototype.getGameContent = function (typeGame) {
         return _Base_Ajax__WEBPACK_IMPORTED_MODULE_0__["default"].get("get-game-lotto-content", { typeGame: typeGame });
+    };
+    LottoUi.prototype.getChoosenNumber = function (typeGame) {
+        return __awaiter(this, void 0, void 0, function () {
+            var response, numbers, str, i, num;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, _Base_Ajax__WEBPACK_IMPORTED_MODULE_0__["default"].get("get-game-lotto-choosen", { typeGame: typeGame })];
+                    case 1:
+                        response = _a.sent();
+                        numbers = response.data;
+                        str = "";
+                        if (numbers.length > 0) {
+                            for (i = 0; i < numbers.length; i++) {
+                                num = numbers[i];
+                                str += "<span class=\"lotto\">".concat(num, "</span>");
+                            }
+                            _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"]._('.ls_lotto_choosen').innerHTML = str;
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     LottoUi.prototype.showQuestion = function () {
         _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"].on("click", "span.question", function (e) {

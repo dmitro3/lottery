@@ -46,9 +46,14 @@ export default class FormBet {
         if (!inputMoney || !currentGameConfig) return false;
         let money = parseInt(inputMoney.value) || 0;
         let numberLotto = this.getNumberChoosen().length;
-        let minMoney = numberLotto * currentGameConfig.min_bet;
+
         let minChoose = currentGameConfig.choose_min;
         let maxChoose = currentGameConfig.choose_max;
+
+        let d = minChoose == maxChoose ? maxChoose : 1;
+
+        let minMoney = numberLotto * currentGameConfig.min_bet / d;
+
         if (numberLotto < minChoose || numberLotto > maxChoose) {
             if (minChoose == maxChoose) {
                 alert(`Bạn cần chọn ${minChoose} số!`)

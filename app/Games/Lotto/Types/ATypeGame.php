@@ -32,7 +32,7 @@ abstract class ATypeGame implements ITypeGame
     public function devideNumber($gameLottoPlayUserBets, $totalPrize)
     {
         $win = $this->gameLottoType->win;
-        $maxRate = $totalPrize / $win;
+        $maxRate = $totalPrize / ($win * 1000);
 
         $statisticList = $this->statisticNumber($gameLottoPlayUserBets);
 
@@ -62,9 +62,11 @@ abstract class ATypeGame implements ITypeGame
             }
         }
         $countInclude = count($this->includeNumbers);
-        $maxAppear = $roundMaxRate / $countInclude;
-        foreach ($this->includeNumbers as &$item) {
-            $item->setMaxAppear($maxAppear);
+        if ($countInclude > 0) {
+            $maxAppear = $roundMaxRate / $countInclude;
+            foreach ($this->includeNumbers as &$item) {
+                $item->setMaxAppear($maxAppear);
+            }
         }
     }
 

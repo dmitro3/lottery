@@ -29,12 +29,14 @@ export default class LottoUi {
             typeGame.addEventListener(
                 "change",
                 async function (e: any) {
+                    BaseGui.showLoading();
                     let input = this;
                     let parent = this.parentElement;
                     let type = input ? input.value : 0;
-                    BaseGui.showLoading();
+
                     let content: any = await self.getGameContent(type);
-                    BaseGui.hideLoading();
+                    await self.getChoosenNumber(type);
+
                     let target = Selector._(parent.getAttribute("data-target"));
                     let otherpanels =
                         target.parentElement.querySelectorAll(
@@ -46,6 +48,7 @@ export default class LottoUi {
 
                     target.innerHTML = content.html;
                     self.updateAfterGetGameContent();
+                    BaseGui.hideLoading();
                 },
                 false
             );
@@ -77,6 +80,19 @@ export default class LottoUi {
     }
     getGameContent(typeGame: number) {
         return Ajax.get("get-game-lotto-content", { typeGame });
+    }
+    async getChoosenNumber(typeGame: number) {
+        let response: any = await Ajax.get("get-game-lotto-choosen", { typeGame });
+        let numbers = response.data;
+        let str = ``;
+        if (numbers.length > 0) {
+            for (let i = 0; i < numbers.length; i++) {
+                const num = numbers[i];
+                str += `<span class="lotto">${num}</span>`
+            }
+            Selector._('.ls_lotto_choosen').innerHTML = str;
+        }
+
     }
     showQuestion() {
         Selector.on("click", "span.question", function (e: any) {

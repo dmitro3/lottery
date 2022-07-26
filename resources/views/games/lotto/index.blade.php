@@ -70,6 +70,7 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
                                 <div class="types">
                                     <span class="domain xs">Miền Bắc</span> / <span class="lotto xs">Đánh lô</span> / <span class="type xs">Lô 2 số</span>
                                 </div>
+                                <div class="ls_lotto_choosen" id="ls_lotto_choosen"></div>
                                 <div class="ls_lotto" id="ls_lotto">
                                     <span class="no-result">Chưa chọn số</span>
                                 </div>
