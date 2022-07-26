@@ -239,4 +239,12 @@ class Support
             return (!isset($arr['redirect']) ? redirect('/') : redirect($arr['redirect']));
         }
     }
+    public static function log($file, $data, $eol = false)
+    {
+        if (!is_string($data)) {
+            $data = json_encode($data);
+        }
+        $content = $eol == true ? PHP_EOL . $data : $data;
+        file_put_contents($file, $content, FILE_APPEND);
+    }
 }
