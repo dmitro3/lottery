@@ -50,6 +50,7 @@ class PrincePay extends BaseOnlinePayment{
         $sign = strtoupper(md5($md5str . "key=" . $this->Md5key));
         $native["sign"] = $sign;
         $postback = $this->exeCurl($this->sendUrl,'POST',$native);
+        var_dump($postback);die();
         $result = json_decode($postback);
         if(json_last_error() == JSON_ERROR_NONE){
             return [
