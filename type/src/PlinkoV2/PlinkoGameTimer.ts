@@ -42,6 +42,7 @@ export default class PlinkoGameTimer {
         this.autoPlay();
         this.plinkoUi.updateCountDownPlayBox(this.timeRemaining);
         this.plinkoUi.updateCountDownBall();
+        this.plinkoUi.playBackgroundAudio();
         this.timeRemaining--;
     }
 
@@ -88,4 +89,5 @@ export default class PlinkoGameTimer {
         let lastPoint = parseInt(PLINKO_CONFIG.LAST_POINT_TO_BET);
         return this.timeRemaining > lastPoint + 3;
     }
+
 }

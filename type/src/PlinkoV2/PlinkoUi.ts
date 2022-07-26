@@ -8,7 +8,7 @@ import Storage from "./PlinkoStorage";
 
 export default class PlinkoUi {
     public constructor(private plinkoSocket: PlinkoSocket) { }
-
+    private backgroundSound: any;
     public playGame() {
         if (!PlinkoGlobal.acceptBet()) {
             return;
@@ -71,6 +71,7 @@ export default class PlinkoUi {
         // this.showBlurPopupIfInactive();
         this.loadPlinkoHistoryGame();
         this.loadGuiFromLocalStorage();
+        this.initAudio();
     }
     public initEvent() {
         let self = this;
@@ -100,7 +101,36 @@ export default class PlinkoUi {
             PlinkoGlobal.GAME_INITED = true;
         });
     }
-
+    private initAudio() {
+        setTimeout(function () {
+            if (typeof ShortPlinko != 'undefined') {
+                if (ShortPlinko.sound().isMute()) {
+                    Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
+                }
+                else {
+                    Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
+                }
+            }
+        }, 1000);
+        Selector._('#switch_audio').addEventListener('click', function () {
+            if (typeof ShortPlinko != 'undefined') {
+                if (ShortPlinko.sound().isMute()) {
+                    ShortPlinko.sound().unmute()
+                    if (this.backgroundSound) {
+                        this.backgroundSound.play();
+                    }
+                    Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
+                }
+                else {
+                    ShortPlinko.sound().mute();
+                    Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
+                    if (this.backgroundSound) {
+                        this.backgroundSound.stop();
+                    }
+                }
+            }
+        })
+    }
     private loadGuiFromLocalStorage() {
         Selector._(".qty_box input[name='qty']").value = Storage.getQty();
         let mode = Storage.getMode();
@@ -235,5 +265,10 @@ export default class PlinkoUi {
                 });
             }
         });
+    }
+    public playBackgroundAudio() {
+        if (typeof ShortPlinko != 'undefined') {
+            this.backgroundSound = ShortPlinko.sound().playSound('bg', true);
+        }
     }
 }

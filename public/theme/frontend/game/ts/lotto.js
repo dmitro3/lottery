@@ -994,6 +994,7 @@ var LottoUi = /** @class */ (function () {
     LottoUi.prototype.init = function () {
         this.initEvents();
         this.showQuestion();
+        this.loadPlinkoHistoryGame();
     };
     LottoUi.prototype.initEvents = function () {
         this.initEventCategoryChange();
@@ -1091,6 +1092,44 @@ var LottoUi = /** @class */ (function () {
             }
             else {
                 next.classList.remove("active");
+            }
+        });
+    };
+    LottoUi.prototype.loadPlinkoHistoryGame = function () {
+        var self = this;
+        var itemContent = document.querySelector("#game-gowin-history");
+        if (itemContent) {
+            XHR.send({
+                url: "get-game-lotto-history",
+                method: "GET",
+            }).then(function (res) {
+                if (res.code == 200 && res.html) {
+                    itemContent.innerHTML = res.html;
+                    self.initPaginateBox(itemContent);
+                }
+            });
+        }
+    };
+    LottoUi.prototype.initPaginateBox = function (element, callback) {
+        if (callback === void 0) { callback = null; }
+        var self = this;
+        var listPaginateBoxLinkBtn = element.querySelectorAll(".paginate-box-link-btn.action");
+        listPaginateBoxLinkBtn.forEach(function (btn) {
+            if (btn.dataset.href != "") {
+                btn.addEventListener("click", function () {
+                    XHR.send({
+                        url: this.dataset.href,
+                        method: "GET",
+                    }).then(function (res) {
+                        if (res.code == 200 && res.html) {
+                            element.innerHTML = res.html;
+                            self.initPaginateBox(element, callback);
+                            if (callback) {
+                                BASE_SUPPORT.callFunction(callback);
+                            }
+                        }
+                    });
+                });
             }
         });
     };

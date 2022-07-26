@@ -15,6 +15,7 @@ export default class LottoUi {
     init() {
         this.initEvents();
         this.showQuestion();
+        this.loadPlinkoHistoryGame();
     }
 
 
@@ -105,6 +106,45 @@ export default class LottoUi {
                 next.classList.add("active");
             } else {
                 next.classList.remove("active");
+            }
+        });
+    }
+    public loadPlinkoHistoryGame() {
+        var self = this;
+        var itemContent = document.querySelector("#game-gowin-history");
+        if (itemContent) {
+            XHR.send({
+                url: "get-game-lotto-history",
+                method: "GET",
+            }).then((res: any) => {
+                if (res.code == 200 && res.html) {
+                    itemContent.innerHTML = res.html;
+                    self.initPaginateBox(itemContent);
+                }
+            });
+        }
+    }
+    public initPaginateBox(element: any, callback: any = null) {
+        var self = this;
+        var listPaginateBoxLinkBtn = element.querySelectorAll(
+            ".paginate-box-link-btn.action"
+        );
+        listPaginateBoxLinkBtn.forEach((btn: any) => {
+            if (btn.dataset.href != "") {
+                btn.addEventListener("click", function () {
+                    XHR.send({
+                        url: this.dataset.href,
+                        method: "GET",
+                    }).then((res: any) => {
+                        if (res.code == 200 && res.html) {
+                            element.innerHTML = res.html;
+                            self.initPaginateBox(element, callback);
+                            if (callback) {
+                                BASE_SUPPORT.callFunction(callback);
+                            }
+                        }
+                    });
+                });
             }
         });
     }

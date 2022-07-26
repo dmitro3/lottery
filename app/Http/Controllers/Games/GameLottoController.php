@@ -51,6 +51,15 @@ class GameLottoController extends BaseGameController
 
         return $typeGame->toJson();
     }
+    public function getGameHistory($request)
+    {
+        $user = \Auth::user();
+        $listItems =  GameLottoPlayUserBet::where('user_id', $user->id)->where('game_lotto_play_user_bet_status_id', '<>', GameLottoPlayUserBet::STATUS_WAIT_RESULT)->orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'code' => 200,
+            'html' => view('games.lotto.history_results.game_history_result', compact('listItems'))->render()
+        ]);
+    }
     public function getGameChoosenNumber($request)
     {
         $type = (int)$request->input('typeGame', 0);

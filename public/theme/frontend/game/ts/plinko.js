@@ -447,6 +447,7 @@ var PlinkoGameTimer = /** @class */ (function () {
         this.autoPlay();
         this.plinkoUi.updateCountDownPlayBox(this.timeRemaining);
         this.plinkoUi.updateCountDownBall();
+        this.plinkoUi.playBackgroundAudio();
         this.timeRemaining--;
     };
     PlinkoGameTimer.prototype.refreshGame = function () {
@@ -843,6 +844,7 @@ var PlinkoUi = /** @class */ (function () {
         // this.showBlurPopupIfInactive();
         this.loadPlinkoHistoryGame();
         this.loadGuiFromLocalStorage();
+        this.initAudio();
     };
     PlinkoUi.prototype.initEvent = function () {
         var self = this;
@@ -871,6 +873,36 @@ var PlinkoUi = /** @class */ (function () {
         });
         document.addEventListener("game_inited", function () {
             _PlinkoGlobal__WEBPACK_IMPORTED_MODULE_2__["default"].GAME_INITED = true;
+        });
+    };
+    PlinkoUi.prototype.initAudio = function () {
+        setTimeout(function () {
+            if (typeof ShortPlinko != 'undefined') {
+                if (ShortPlinko.sound().isMute()) {
+                    _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
+                }
+                else {
+                    _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
+                }
+            }
+        }, 1000);
+        _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').addEventListener('click', function () {
+            if (typeof ShortPlinko != 'undefined') {
+                if (ShortPlinko.sound().isMute()) {
+                    ShortPlinko.sound().unmute();
+                    if (this.backgroundSound) {
+                        this.backgroundSound.play();
+                    }
+                    _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
+                }
+                else {
+                    ShortPlinko.sound().mute();
+                    _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
+                    if (this.backgroundSound) {
+                        this.backgroundSound.stop();
+                    }
+                }
+            }
         });
     };
     PlinkoUi.prototype.loadGuiFromLocalStorage = function () {
@@ -995,6 +1027,11 @@ var PlinkoUi = /** @class */ (function () {
                 });
             }
         });
+    };
+    PlinkoUi.prototype.playBackgroundAudio = function () {
+        if (typeof ShortPlinko != 'undefined') {
+            this.backgroundSound = ShortPlinko.sound().playSound('bg', true);
+        }
     };
     return PlinkoUi;
 }());

@@ -39,7 +39,7 @@
                 </div>
             @endif
             @if (isset($gameName) && $gameName == 'plinko')
-                <div class="c-row item c-row-middle-center" id="switch_audio" onclick="WINDLOAD.switchAudio(this)">
+                <div class="c-row item c-row-middle-center" id="switch_audio" >
                     @if (isset($activeAudio))
                         <img src="theme/frontend/img/volume-up-line.png" class="item-volume">
                     @else
