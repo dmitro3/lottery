@@ -15,6 +15,7 @@ export default class LottoUi {
     init() {
         this.initEvents();
         this.showQuestion();
+        this.loadPlinkoHistoryGame();
     }
 
 
@@ -29,12 +30,14 @@ export default class LottoUi {
             typeGame.addEventListener(
                 "change",
                 async function (e: any) {
+                    BaseGui.showLoading();
                     let input = this;
                     let parent = this.parentElement;
                     let type = input ? input.value : 0;
-                    BaseGui.showLoading();
+
                     let content: any = await self.getGameContent(type);
-                    BaseGui.hideLoading();
+                    await self.getChoosenNumber(type);
+
                     let target = Selector._(parent.getAttribute("data-target"));
                     let otherpanels =
                         target.parentElement.querySelectorAll(
@@ -46,6 +49,7 @@ export default class LottoUi {
 
                     target.innerHTML = content.html;
                     self.updateAfterGetGameContent();
+                    BaseGui.hideLoading();
                 },
                 false
             );
@@ -78,6 +82,19 @@ export default class LottoUi {
     getGameContent(typeGame: number) {
         return Ajax.get("get-game-lotto-content", { typeGame });
     }
+    async getChoosenNumber(typeGame: number) {
+        let response: any = await Ajax.get("get-game-lotto-choosen", { typeGame });
+        let numbers = response.data;
+        let str = ``;
+        if (numbers.length > 0) {
+            for (let i = 0; i < numbers.length; i++) {
+                const num = numbers[i];
+                str += `<span class="lotto">${num}</span>`
+            }
+            Selector._('.ls_lotto_choosen').innerHTML = str;
+        }
+
+    }
     showQuestion() {
         Selector.on("click", "span.question", function (e: any) {
             let _this = e.target;
@@ -89,6 +106,45 @@ export default class LottoUi {
                 next.classList.add("active");
             } else {
                 next.classList.remove("active");
+            }
+        });
+    }
+    public loadPlinkoHistoryGame() {
+        var self = this;
+        var itemContent = document.querySelector("#game-gowin-history");
+        if (itemContent) {
+            XHR.send({
+                url: "get-game-lotto-history",
+                method: "GET",
+            }).then((res: any) => {
+                if (res.code == 200 && res.html) {
+                    itemContent.innerHTML = res.html;
+                    self.initPaginateBox(itemContent);
+                }
+            });
+        }
+    }
+    public initPaginateBox(element: any, callback: any = null) {
+        var self = this;
+        var listPaginateBoxLinkBtn = element.querySelectorAll(
+            ".paginate-box-link-btn.action"
+        );
+        listPaginateBoxLinkBtn.forEach((btn: any) => {
+            if (btn.dataset.href != "") {
+                btn.addEventListener("click", function () {
+                    XHR.send({
+                        url: this.dataset.href,
+                        method: "GET",
+                    }).then((res: any) => {
+                        if (res.code == 200 && res.html) {
+                            element.innerHTML = res.html;
+                            self.initPaginateBox(element, callback);
+                            if (callback) {
+                                BASE_SUPPORT.callFunction(callback);
+                            }
+                        }
+                    });
+                });
             }
         });
     }

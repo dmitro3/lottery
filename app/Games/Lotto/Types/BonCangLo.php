@@ -9,7 +9,7 @@ class BonCangLo extends BonCangDe
 {
     public function checkBet(TableResult $tableResult, $bet)
     {
-        $numbers = explode(',', $bet->number);
+        $numbers = explode(',', $bet->numbers);
         $datas = $tableResult->getFourNumResultArray();
         $result = [];
         foreach ($datas as $data) {

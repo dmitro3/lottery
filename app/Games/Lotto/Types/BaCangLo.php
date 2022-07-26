@@ -9,7 +9,7 @@ class BaCangLo extends BaCangDe
 {
     public function checkBet(TableResult $tableResult, $bet)
     {
-        $numbers = explode(',', $bet->number);
+        $numbers = explode(',', $bet->numbers);
         $datas = $tableResult->getThreeNumResultArray();
         $result = [];
         foreach ($datas as $data) {

@@ -7,7 +7,7 @@ class NumberCondition
     protected $name;
     protected $rate;
     protected $numbers;
-    protected $maxAppear;
+    protected $maxAppear = 0;
     public function __construct($name, $rate, $numbers)
     {
         $this->name = $name;

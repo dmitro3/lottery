@@ -99,6 +99,7 @@ class LottoConnector implements ConnecterInterface
         $gameData = $this->messageInfo['gameData'] ?? null;
         if (!isset($currentGameClientInfo) || !isset($gameData)) {
             $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
+            return $this->connection;
         }
         $validator = $this->validatorPlayRequest($gameData);
         if ($validator->fails()) {
@@ -115,6 +116,7 @@ class LottoConnector implements ConnecterInterface
         $gameType = GameLottoType::find($type);
         if (!$gameType) {
             $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_CURRENT_GAME_INVALID, false, 'Xảy ra lỗi.'));
+            return $this->connection;
         }
         $chooseMin = $gameType->choose_min;
         $chooseMax = $gameType->choose_max;
@@ -124,7 +126,8 @@ class LottoConnector implements ConnecterInterface
             $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_GAME_DATA_INVALID, false, 'Số lượng số đã chọn không hợp lệ.'));
             return $this->connection;
         }
-        $minBet = $minBet * $qty;
+        $d = $chooseMin == $chooseMax ? $chooseMax : 1;
+        $minBet = $minBet * $qty / $d;
         if ($money < $minBet) {
             $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_GAME_DATA_INVALID, false, vsprintf('Số tiền cược tối thiểu là %s', [$minBet])));
             return $this->connection;

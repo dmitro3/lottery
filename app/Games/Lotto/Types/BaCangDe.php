@@ -21,7 +21,7 @@ class BaCangDe extends ATypeGame
 
     public function checkBet(TableResult $tableResult, $bet)
     {
-        $numbers = explode(',', $bet->number);
+        $numbers = explode(',', $bet->numbers);
         $datas = $tableResult->getByGiai(NoPrize::DAC_BIET);
         $rootNumber = $datas[0];
         $compareNumber = substr($rootNumber, -3);

@@ -4,6 +4,7 @@ namespace App\Games\Lotto;
 
 use App\Games\Lotto\Conditions\OrCondition;
 use App\Games\Lotto\Generators\MBGenerator;
+use App\Models\Games\Lotto\GameLottoPlayUserBet;
 use App\Models\Games\Lotto\GameLottoTableResult;
 use App\Models\WalletTransactionType;
 use Illuminate\Support\Arr;
@@ -33,20 +34,26 @@ class PrizeGameCollection
         $tableResult = new TableResult($results);
         foreach ($this->gameLottoPlayUserBets as $userBet) {
             $gameLottoType = $userBet->gameLottoType;
-            $user = $userBet->user();
-            $numberWins = $gameLottoType->checkBet($tableResult, $userBet);
-            if (count($numberWins) > 0) {
+            $typeGame = $gameLottoType->getTypeGame();
+
+            $user = $userBet->user;
+            $numberWins = $typeGame->checkBet($tableResult, $userBet);
+
+            if (($count = count($numberWins)) > 0) {
                 $amount = $userBet->amount;
                 $minbet = $gameLottoType->min_bet;
                 $win = $gameLottoType->win;
-                $prize = ($amount / $minbet) * $win;
+                $prize = ($amount / $minbet) * $win * $count;
 
-
-                $reason = vsprintf('Tiền thưởng game Lotto - %s (%s) - phiên game %s.', [$gameLottoType->name, implode($numberWins), $this->currentGameRecord->id]);
+                $reason = vsprintf('Tiền thưởng game Lotto - %s (%s) - phiên game %s.', [$gameLottoType->name, json_encode($numberWins), $this->currentGameRecord->id]);
                 $user->changeMoney($prize, $reason, WalletTransactionType::PLUS_MONEY_BET_GAME_LOTTO, $userBet->id);
-                $userBet->is_returned = 1;
-                $userBet->save();
+                $userBet->return_amount = $prize;
+                $userBet->game_lotto_play_user_bet_status_id = GameLottoPlayUserBet::STATUS_WIN;
+            } else {
+                $userBet->game_lotto_play_user_bet_status_id = GameLottoPlayUserBet::STATUS_LOSE;
             }
+            $userBet->is_returned = 1;
+            $userBet->save();
         }
     }
 

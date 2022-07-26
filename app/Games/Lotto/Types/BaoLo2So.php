@@ -9,7 +9,7 @@ class BaoLo2So extends ATypeGame
 {
     public function checkBet(TableResult $tableResult, $bet)
     {
-        $numbers = explode(',', $bet->number);
+        $numbers = explode(',', $bet->numbers);
         $datas = $tableResult->getTwoNumResultArray();
         $result = [];
         foreach ($datas as $data) {
@@ -19,6 +19,7 @@ class BaoLo2So extends ATypeGame
                 }
             }
         }
+
         return $result;
     }
 }

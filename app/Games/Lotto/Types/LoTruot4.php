@@ -13,7 +13,7 @@ class LoTruot4 extends LoXien2
     public function devideNumber($gameLottoPlayUserBets, $totalPrize)
     {
         $win = $this->gameLottoType->win;
-        $maxRate = $totalPrize / $win;
+        $maxRate = $totalPrize / ($win * 1000);
         $statisticList = $this->statisticNumber($gameLottoPlayUserBets);
         if ($maxRate == 0) {
             $this->excludeNumbers = $statisticList;
@@ -37,9 +37,9 @@ class LoTruot4 extends LoXien2
     }
     public function checkBet(TableResult $tableResult, $bet)
     {
-        $numbers = explode(',', $bet->number);
+        $numbers = explode(',', $bet->numbers);
         $datas = $tableResult->getTwoNumResultArray();
         $intersect = array_intersect($numbers, $datas);
-        return count($intersect) == 0 ? $numbers : [];
+        return count($intersect) == 0 ? [$numbers] : [];
     }
 }

@@ -7,7 +7,7 @@ export default class Ajax {
                 method: "GET",
                 data: data
             }).then((res: any) => {
-                if (res.code == 200 && res.html) {
+                if (res.code == 200 && (res.html || res.data)) {
                     resolve(res);
                 }
                 else {
