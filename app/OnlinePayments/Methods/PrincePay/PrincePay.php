@@ -20,24 +20,13 @@ class PrincePay extends BaseOnlinePayment{
         $this->sendUrl = SettingHelper::getSetting('prince_pay_send_url');
     }
     public function createPaymentRequest($data){
-        $transactionPrincepay = new TransactionPrincepay();
-        $transactionPrincepay->user_id = $data['user_id'];
-        $transactionPrincepay->data = json_encode($data);
-        $transactionPrincepay->map_id = $data['map_id'];
-        $transactionPrincepay->amount = $data['amount'];
-        $transactionPrincepay->transaction_princepay_status_id = TransactionPrincepayStatus::WAIT_PAYMENT;
-        $transactionPrincepay->transaction_princepay_type_id = TransactionPrincepayType::RECHARGE;
-        $transactionPrincepay->created_at = now();
-        $transactionPrincepay->updated_at = now();
-        $transactionPrincepay->save();
-
         $native = array(
             'uid' => $this->merchantId,
-            'orderid' => $transactionPrincepay->id,
+            'orderid' => $data['map_id'],
             'channel' => $data['channel'],
             'notify_url' => url()->to($this->callbackUrl),
             'return_url' => url()->to($this->redirectUrl),
-            'amount' => $transactionPrincepay->amount,
+            'amount' => $data['amount'],
             'userip' => $data['user_ip'],
             'timestamp' => time(),
             'custom' => ''
@@ -71,6 +60,19 @@ class PrincePay extends BaseOnlinePayment{
                 'message_error' => 'Dữ liệu trả về không hợp lệ'
             ];
         }
+        $transactionPrincepay = new TransactionPrincepay();
+        $transactionPrincepay->user_id = $data['user_id'];
+        $transactionPrincepay->data = json_encode($data);
+        $transactionPrincepay->transactionid = $result->result->transactionid;
+        $transactionPrincepay->map_id = $data['map_id'];
+        $transactionPrincepay->amount = $data['amount'];
+        $transactionPrincepay->response = $postback;
+        $transactionPrincepay->transaction_princepay_status_id = TransactionPrincepayStatus::WAIT_PAYMENT;
+        $transactionPrincepay->transaction_princepay_type_id = TransactionPrincepayType::RECHARGE;
+        $transactionPrincepay->created_at = now();
+        $transactionPrincepay->updated_at = now();
+        $transactionPrincepay->save();
+        
         $ret = $this->extractJson($postback);
         $ret['code'] = 200;
         return $ret;

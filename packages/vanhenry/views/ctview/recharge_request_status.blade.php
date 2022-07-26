@@ -76,5 +76,7 @@
         @if ($realItem->is_marketing == 1)
             <p class="mt-2" style="color:#a94442">(* Yêu cầu từ tài khoản Marketing)</p>
         @endif
+    @else
+        <p style="min-width: 110px;pointer-events: none;" class="btn py-1 btn-default btn-{{$realItem->recharge_status_id == RechargeStatus::STATUS_CONFIRMED ? 'success':''}}{{$realItem->recharge_status_id == RechargeStatus::STATUS_CANCEL ? 'danger':''}}">{{Support::show($realItem->rechargeStatus,'name')}}</p>
     @endif
 </td>

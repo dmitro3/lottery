@@ -27,10 +27,13 @@
                             @if ($item->game_win_user_bet_status_id == 1)
                                 <div class="money null">- - - -</div>
                             @else
-                                @if (($item->amount - $item->return_amount) > 0)
-                                    <div class="money">-{{number_format($item->amount - $item->return_amount,0,',','.')}} đ</div>
+                                @php
+                                    $amountGet = $item->return_amount - $item->amount; 
+                                @endphp
+                                @if ($amountGet < 0)
+                                    <div class="money">{{number_format($amountGet,0,',','.')}} đ</div>
                                 @else
-                                    <div class="money action">+{{number_format($item->amount - $item->return_amount,0,',','.')}} đ</div>
+                                    <div class="money action">+{{number_format($amountGet,0,',','.')}} đ</div>
                                 @endif
                             @endif
                         </div>

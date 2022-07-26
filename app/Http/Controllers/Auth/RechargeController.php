@@ -39,13 +39,13 @@ class RechargeController extends Controller
                 'html' => '<p class=""m-t-10>Phương thức thanh toán tạm thời không khả dụng.</p>'
             ]);
         }
+        
         switch ($rechargeMethod->id) {
             case RechargeMethod::DIRECT_TRANSFER_METHOD:
                 return $this->viewDirectTransferMethod($rechargeMethod);
                 break;
             case RechargeMethod::ONLINE_PAYMENT_PRINCE_PAY:
             case RechargeMethod::ONLINE_TRANSFER_PRINCE_PAY:
-            case RechargeMethod::ONLINE_MOMO_PRINCE_PAY:
                 return $this->viewOnlinePaymentMethod($rechargeMethod);
                 break;
             default:
@@ -92,7 +92,6 @@ class RechargeController extends Controller
                 return $this->sendDirectTransferRecharge($request);
             case RechargeMethod::ONLINE_PAYMENT_PRINCE_PAY:
             case RechargeMethod::ONLINE_TRANSFER_PRINCE_PAY:
-            case RechargeMethod::ONLINE_MOMO_PRINCE_PAY:
                 return $this->sendPrincePayRecharge($request);
                 break;
             default:

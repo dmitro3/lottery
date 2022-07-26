@@ -67,6 +67,7 @@ Route::group([
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::post('callback-prince-pay', 'OnlinePaymentCallbackController@callbackPrincePay');
+    Route::get('nap-tien-prince-pay', 'OnlinePaymentCallbackController@paymentSuccess');
     
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');
 });

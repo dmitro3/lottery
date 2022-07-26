@@ -10,6 +10,6 @@ class WalletHistory extends BaseModel
     }
     public function wallet()
     {
-        return $this->belongsTo(Wallet::class,'type');
+        return $this->belongsTo(Wallet::class);
     }
 }

@@ -28,4 +28,9 @@
             @include('tv::ctedit.select.'.$source,array('arrData'=>$arrData,'arrConfig' => $arrConfig))
         @endif
     @endif
+@else
+    <div class="form-group">
+        <p class="form-title">{{FCHelper::er($table,'note')}} <span class="count"></span></p>
+        <p style="width: 100%;pointer-events: none;" class="btn py-1 btn-default btn-{{$realItem->recharge_status_id == RechargeStatus::STATUS_CONFIRMED ? 'success':''}}{{$realItem->recharge_status_id == RechargeStatus::STATUS_CANCEL ? 'danger':''}}">{{Support::show($realItem->rechargeStatus,'name')}}</p>
+    </div>
 @endif
