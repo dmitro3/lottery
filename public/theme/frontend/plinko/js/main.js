@@ -2269,7 +2269,7 @@ var PegSound = /** @class */ (function () {
         this.duration = 300;
         this.sound = _SoundProvider__WEBPACK_IMPORTED_MODULE_1__["default"].getInstance().getSound("col");
         this.duration = this.sound.duration() * 1000;
-        this.sound.setVolume(0.2);
+        this.sound.setVolume(0.5);
         this.bornTime = new Date().getTime();
     }
     PegSound.prototype.play = function (time) {
@@ -2412,6 +2412,7 @@ var SoundManager = /** @class */ (function () {
                 sound.setLoop();
             sound.play();
         }
+        return sound;
     };
     SoundManager.exists = function (sound) {
         return !this.isTurnOff() && sound && sound.isLoaded();

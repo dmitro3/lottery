@@ -105,28 +105,27 @@ export default class PlinkoUi {
         setTimeout(function () {
             if (typeof ShortPlinko != 'undefined') {
                 if (ShortPlinko.sound().isMute()) {
-                    Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
+                    Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
                 }
                 else {
-                    Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
+                    Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
                 }
             }
         }, 1000);
         Selector._('#switch_audio').addEventListener('click', function () {
             if (typeof ShortPlinko != 'undefined') {
+                if (!this.backgroundSound) {
+                    this.backgroundSound = ShortPlinko.sound().getSound('bg');
+                }
                 if (ShortPlinko.sound().isMute()) {
                     ShortPlinko.sound().unmute()
-                    if (this.backgroundSound) {
-                        this.backgroundSound.play();
-                    }
+                    this.backgroundSound.play();
                     Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
                 }
                 else {
                     ShortPlinko.sound().mute();
                     Selector._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
-                    if (this.backgroundSound) {
-                        this.backgroundSound.stop();
-                    }
+                    this.backgroundSound.stop();
                 }
             }
         })
