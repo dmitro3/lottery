@@ -28,11 +28,11 @@ export default class LottoSocket extends BaseGameSocket {
         this.sendData(JSON.stringify(data));
     }
     public retrieveResult() {
-        let data: any = {};
-        data.type = connectionGameType;
-        data.currentGame = LottoGlobal.currentGameInfo;
-        data.action = LOTTO_STATUS.GAME_ACTION_RETRIEVE_RESULT;
-        this.sendData(JSON.stringify(data));
+        // let data: any = {};
+        // data.type = connectionGameType;
+        // data.currentGame = LottoGlobal.currentGameInfo;
+        // data.action = LOTTO_STATUS.GAME_ACTION_RETRIEVE_RESULT;
+        // this.sendData(JSON.stringify(data));
     }
     public sendPlayRequest(type: any, money: number, numbers: any) {
         let data: any = {};

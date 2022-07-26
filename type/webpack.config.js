@@ -1,6 +1,6 @@
 const path = require("path");
 module.exports = {
-    mode: "production",
+    mode: "development",
     entry: {
         plinko: "./src/plinkov2.ts",
         lotto: "./src/lotto.ts",
@@ -21,6 +21,8 @@ module.exports = {
     output: {
         filename: "[name].js",
         path: path.resolve(__dirname, "../public/theme/frontend/game/ts"),
+        library: "[name]",
+        libraryTarget: "var",
     },
     optimization: {
         splitChunks: {

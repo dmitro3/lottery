@@ -14,4 +14,12 @@ class GameLottoType extends BaseModel
     {
         return TypeProvider::getTypeGame($this);
     }
+    public function gameLottoPlayUserBets()
+    {
+        return $this->hasMany(GameLottoPlayUserBet::class);
+    }
+    public function gameLottoPlayRecords()
+    {
+        return $this->hasMany(GameLottoPlayUserBet::class);
+    }
 }
