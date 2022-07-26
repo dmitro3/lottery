@@ -42,6 +42,5 @@ class OnlinePaymentCallbackController extends Controller
             echo 'This transaction was unsuccessful';
             return;
         }
-        
     }
 }

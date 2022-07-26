@@ -10,8 +10,8 @@ class PrincePay extends BaseOnlinePayment{
     protected $merchantId;
     protected $Md5key;
     protected $sendUrl;
-    protected $redirectUrl = 'nap-tien-prince-pay';
     protected $callbackUrl = 'callback-prince-pay';
+    protected $redirectUrl = 'nap-tien-prince-pay';
 
     public function __construct()
     {
@@ -35,8 +35,8 @@ class PrincePay extends BaseOnlinePayment{
             'uid' => $this->merchantId,
             'orderid' => $transactionPrincepay->id,
             'channel' => $data['channel'],
-            'notify_url' => url()->to($this->redirectUrl),
-            'return_url' => url()->to($this->callbackUrl),
+            'notify_url' => url()->to($this->callbackUrl),
+            'return_url' => url()->to($this->redirectUrl),
             'amount' => $transactionPrincepay->amount,
             'userip' => $data['user_ip'],
             'timestamp' => time(),
@@ -50,9 +50,8 @@ class PrincePay extends BaseOnlinePayment{
         $sign = strtoupper(md5($md5str . "key=" . $this->Md5key));
         $native["sign"] = $sign;
         $postback = $this->exeCurl($this->sendUrl,'POST',$native);
-        var_dump($postback);die();
         $result = json_decode($postback);
-        if(json_last_error() == JSON_ERROR_NONE){
+        if(!(json_last_error() == JSON_ERROR_NONE)){
             return [
                 'code' => 100,
                 'message_error' => 'Dữ liệu trả về không hợp lệ'
