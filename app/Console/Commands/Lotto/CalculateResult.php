@@ -51,7 +51,7 @@ class CalculateResult extends Command
             $minute = $now->minute;
             $second = $now->second;
 
-            if ($minute % 2 == 1 && $second > (60 - LottoConfig::LAST_POINT_TO_BET)) {
+            if ($minute == 59 && $second > (60 - LottoConfig::LAST_POINT_TO_BET)) {
                 if (!$gameEnded) {
                     $this->generateGameResult();
                     $gameEnded = true;
