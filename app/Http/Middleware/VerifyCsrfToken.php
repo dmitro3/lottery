@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'dai-ly/upload-image-post'
+        'callback-prince-pay'
     ];
 }

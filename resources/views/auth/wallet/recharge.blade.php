@@ -44,7 +44,7 @@
                                 @else
                                     <img width="20px" height="20px" src="{%IMGV2.item.icon_disable.-1%}"  class="img">
                                 @endif
-                                <div class="name">Chuyển khoản nhanh</div>
+                                <div class="name">{{Support::show($item,'name')}}</div>
                                 @if ($key == 0)
                                     <div class="icon">
                                         <i class="van-icon van-icon-success" style="color: rgb(255, 255, 255); font-size: 14px;"></i>

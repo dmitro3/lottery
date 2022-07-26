@@ -1,14 +1,19 @@
 var RECHARGE_GUI = {
-    directTransferDone(res) {
+    sendRechargeDone(res) {
         if (res.message) {
             BASE_GUI.createFlashNotify(res.message);
         }
-        var payBoxContentResult = document.querySelector(
-            "#pay-box-content-result"
-        );
-        if (res.html && payBoxContentResult) {
-            payBoxContentResult.innerHTML = res.html;
-            BASE_GUI.initCopyTextbtn();
+        if (res.code == 200) {
+            var payBoxContentResult = document.querySelector(
+                "#pay-box-content-result"
+            );
+            if (res.type == "html" && res.html && payBoxContentResult) {
+                payBoxContentResult.innerHTML = res.html;
+                BASE_GUI.initCopyTextbtn();
+            }
+            if (res.type == "url" && res.url) {
+                window.open(res.url, "_blank");
+            }
         }
     },
     _initInputAmountSelecter(input, listAmountSelecter) {
