@@ -80,6 +80,17 @@ class PrizeOneGame
         return $this->includeNumbers;
     }
 
+
+    public function getIncludeArrayNumbers()
+    {
+        $results = [];
+        foreach ($this->includeNumbers as $item) {
+            $numbers = $item->getRealNumbers();
+            $results = array_merge($results, $numbers);
+        }
+        return $results;
+    }
+
     /**
      * Get the value of excludeNumbers
      *
@@ -90,6 +101,15 @@ class PrizeOneGame
         return $this->excludeNumbers;
     }
 
+    public function getExcludeArrayNumbers()
+    {
+        $results = [];
+        foreach ($this->excludeNumbers as $item) {
+            $numbers = $item->getRealNumbers();
+            $results = array_merge($results, $numbers);
+        }
+        return $results;
+    }
     /**
      * Get the value of gameKey
      *

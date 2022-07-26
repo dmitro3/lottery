@@ -10,6 +10,5 @@ class DeToNhat extends ATypeGame
     public function __construct(GameLottoType $gameLottoType)
     {
         parent::__construct($gameLottoType);
-        $this->noPrize = NoPrize::DAC_BIET();
     }
 }

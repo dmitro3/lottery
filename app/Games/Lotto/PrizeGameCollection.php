@@ -9,16 +9,17 @@ use Illuminate\Support\Collection;
 
 class PrizeGameCollection
 {
-    private $listPrizeGames;
-    private $currentGameRecord;
-    private $gameLottoPlayUserBets;
-    private $totalBetMoney = 0;
+    protected $listPrizeGames;
+    protected $currentGameRecord;
+    protected $gameLottoPlayUserBets;
+    protected $totalBetMoney = 0;
 
-    private $mixExcludeNumbers = [];
-    private $mixIncludeNumbers = [];
+    protected $mixExcludeNumbers = [];
+    protected $mixIncludeNumbers = [];
 
     public function __construct($currentGameRecord)
     {
+        $this->currentGameRecord = $currentGameRecord;
         $this->listPrizeGames = [];
         $this->gameLottoPlayUserBets = $currentGameRecord->gameLottoPlayUserBets()->get();
     }
@@ -37,24 +38,15 @@ class PrizeGameCollection
         }
         $this->mixIncludeNumbers = array_diff($this->mixIncludeNumbers, $this->mixExcludeNumbers);
 
-
-
-
-
-
-
-
-
         $generator = $this->makeGenerator();
-        $results = $generator->generate();
-        dd($results);
+        $generator->generate();
     }
     private function makeGenerator()
     {
-        $generator = new MBGenerator($this->mixIncludeNumbers, $this->mixExcludeNumbers);
+        $generator = new MBGenerator($this->currentGameRecord, $this->mixIncludeNumbers, $this->mixExcludeNumbers);
         foreach ($this->listPrizeGames as $game) {
             if ($game->getGameKey() == 'DE_DAU') {
-                $generator->addGameGiaiBay($game);
+                $generator->setGameGiaiBay($game);
             } else if ($game->getGameKey() == 'BA_CANG_DE') {
                 $generator->setGameDeBaCang($game);
             } else if ($game->getGameKey() == 'DE_TO_NHAT') {

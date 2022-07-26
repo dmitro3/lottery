@@ -14,12 +14,10 @@ abstract class ATypeGame implements ITypeGame
     protected GameLottoType $gameLottoType;
     protected $includeNumbers = [];
     protected $excludeNumbers = [];
-    protected $noPrize;
 
     public function __construct(GameLottoType $gameLottoType)
     {
         $this->gameLottoType = $gameLottoType;
-        $this->noPrize = NoPrize::ALL();
     }
     public function renderHtml()
     {

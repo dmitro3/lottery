@@ -7,9 +7,9 @@ use App\Games\Lotto\PrizeOneGame;
 class RandomBaCang extends BaseRandom
 {
     protected $gameDeBaCangs;
-    public function __construct($includeTwoNumbers, $excludeTwoNumbers, $gameDeBaCangs)
+    public function __construct($commonRandom, $gameDeBaCangs)
     {
-        parent::__construct($includeTwoNumbers, $excludeTwoNumbers);
+        parent::__construct($commonRandom);
         $this->gameDeBaCangs = $gameDeBaCangs;
     }
 
@@ -27,22 +27,26 @@ class RandomBaCang extends BaseRandom
 
     private function randomDeBaCang()
     {
+
         $num = -1;
         if (!$this->gameDeBaCangs) {
             return $num;
         }
-        $ins = $this->gameDeBaCangs->getIncludeNumbers();
-        $exs = $this->gameDeBaCangs->getExcludeNumbers();
+        $ins = $this->gameDeBaCangs->getIncludeArrayNumbers();
+        $exs = $this->gameDeBaCangs->getExcludeArrayNumbers();
         if (count($ins) > 0) {
-            $num = array_rand($ins);
-        } else {
-            do {
-                $rands = $this->randomNumber($num);
-                $num = $rands[0];
-                $add = rand(0, 9);
-                $tmpNum = $add . $num;
-            } while (in_array($tmpNum, $exs));
+            $key = array_rand($ins);
+            $num = $ins[$key];
+            $this->commonRandom->unsetInclude(substr($num, 1));
         }
+        // else {
+        //     do {
+        //         $rands = $this->commonRandom->randomNumber($num);
+        //         $num = $rands[0];
+        //         $add = rand(0, 9);
+        //         $tmpNum = $add . $num;
+        //     } while (in_array($tmpNum, $exs));
+        // }
         return $num;
     }
     private function checkDeBaCang($num)
@@ -50,8 +54,8 @@ class RandomBaCang extends BaseRandom
         if (!$this->gameDeBaCangs) {
             return $num;
         }
-        $ins = $this->gameDeBaCangs->getIncludeNumbers();
-        $exs = $this->gameDeBaCangs->getExcludeNumbers();
+        $ins = $this->gameDeBaCangs->getIncludeArrayNumbers();
+        $exs = $this->gameDeBaCangs->getExcludeArrayNumbers();
         $result = $this->findNumIfMatchTwoLastNumber($ins, $num);
         $num = $result->getNum();
         if (!$result->getStatus()) {
@@ -64,7 +68,7 @@ class RandomBaCang extends BaseRandom
     {
         $flag = false;
         for ($i = 0; $i <= 9; $i++) {
-            $add = $i;
+            $add = rand(0, 9);
             $tmpNum = $add . $num;
             if (!in_array($tmpNum, $exs)) {
                 $num = $tmpNum;
@@ -74,7 +78,7 @@ class RandomBaCang extends BaseRandom
         }
         if (!$flag) {
             do {
-                $rands = $this->randomNumber($num);
+                $rands = $this->commonRandom->randomNumber($num);
                 $num = $rands[0];
                 $add = rand(0, 9);
                 $tmpNum = $add . $num;

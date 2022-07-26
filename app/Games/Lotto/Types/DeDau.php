@@ -11,7 +11,6 @@ class DeDau extends ATypeGame
     public function __construct(GameLottoType $gameLottoType)
     {
         parent::__construct($gameLottoType);
-        $this->noPrize = NoPrize::DAC_BIET();
     }
     protected function getRateNumber($money, $numbers, $amount_base)
     {
