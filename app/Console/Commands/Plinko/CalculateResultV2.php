@@ -74,5 +74,7 @@ class CalculateResultV2 extends Command
         $prize = new PrizeV2();
         $prize->calculate($currentGameRecord->id);
         $currentGameRecord->end();
+        unset($currentGameRecord);
+        unset($prize);
     }
 }

@@ -1,10 +1,34 @@
 <?php
-namespace crawlmodule\loterie\Controllers;
-use Illuminate\Routing\Controller as BaseController;
 
-class Controller extends BaseController
+namespace crawlmodule\loterie\XoSoSources;
+
+use crawlmodule\loterie\Contracts\IXoSoSource;
+
+abstract class AXoSoSource implements IXoSoSource
 {
-    public function exeCurl($url, $type = 'GET', $data = null, $headers = [])
+    private $date;
+    public function __construct($date)
+    {
+        $this->date = $date;
+    }
+    protected function getTimeString()
+    {
+        $day = $this->date->day;
+        $day = $day < 10 ? '0' . $day : $day;
+
+        $month = $this->date->month;
+        $month = $month < 10 ? '0' . $month : $month;
+        return  $day . '-' . $month . '-' . $this->date->year;
+    }
+    protected function urlExists($url)
+    {
+        $headers = @get_headers($url);
+        if (!is_array($headers)) {
+            return false;
+        }
+        return stripos($headers[0], "200 OK") ? true : false;
+    }
+    protected function execCurl($url, $type = 'GET', $data = null, $headers = [])
     {
         $curl = curl_init();
         $params = array(
@@ -41,11 +65,16 @@ class Controller extends BaseController
         }
         return $res;
     }
-    public function urlExists($url){
-        $headers = @get_headers($url);
-        if (!is_array($headers)) {
-            return false;
+    public function getResults()
+    {
+        $link = $this->getLinkResult();
+        if ($this->urlExists($link)) {
+            @include_once(__DIR__ . '/../Libs/simple_html_dom.php');
+            if ($result = $this->crawl($link)) {
+                return $result;
+            }
         }
-        return stripos($headers[0],"200 OK")?true:false;
+        return false;
     }
+    protected abstract function crawl($link);
 }

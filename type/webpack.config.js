@@ -4,6 +4,7 @@ module.exports = {
     entry: {
         plinko: "./src/plinkov2.ts",
         lotto: "./src/lotto.ts",
+        lottomb: "./src/lottomb.ts",
     },
     devtool: false,
     module: {

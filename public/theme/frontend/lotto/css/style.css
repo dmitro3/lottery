@@ -437,3 +437,7 @@
     padding: 0 .4rem;
     background-color: #fb4e4e
 }
+.game-betting.lottomb .content .time-box .out .number .item {
+    margin: 0px 2px;
+    padding: 5px 4px;
+}

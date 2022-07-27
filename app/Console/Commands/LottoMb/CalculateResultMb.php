@@ -1,29 +1,28 @@
 <?php
 
-namespace App\Console\Commands\Lotto;
+namespace App\Console\Commands\LottoMb;
 
 use App\Games\Lotto\Enums\Config as LottoConfig;
-use App\Games\Lotto\Prize;
-use App\Models\Games\Lotto\GameLottoPlayRecord;
-use App\Models\Games\Lotto\GameLottoPlayType;
-use App\Models\Games\Lotto\GameLottoPlayUserBet;
+use App\Games\LottoMb\PrizeMb;
+use App\Models\Games\LottoMb\GameLottoMbPlayRecord;
+use App\Models\Games\LottoMb\GameLottoMbPlayType;
 use Illuminate\Console\Command;
 
-class CalculateResult extends Command
+class CalculateResultMb extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'lotto:generate-result';
+    protected $signature = 'lottomb:generate-result';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Calculate Result Lotto';
+    protected $description = 'Calculate Result LottoMb';
 
     /**
      * Create a new command instance.
@@ -49,9 +48,10 @@ class CalculateResult extends Command
         while (true) {
             $now = now();
             $minute = $now->minute;
+            $hour = $now->hour;
             $second = $now->second;
 
-            if ($minute == 59 && $second > (60 - LottoConfig::LAST_POINT_TO_BET)) {
+            if ($hour >= 19 &&  $minute >= 0 && $second >= 0) {
                 if (!$gameEnded) {
                     $this->generateGameResult();
                     $gameEnded = true;
@@ -61,18 +61,18 @@ class CalculateResult extends Command
             }
 
             $this->info($minute . '-' . $second);
-            sleep(1);
+            sleep(300);
         }
 
         $this->info("End");
     }
     private function generateGameResult()
     {
-        $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
+        $currentGameRecord = GameLottoMbPlayType::find(1)->getCurrentGameRecord();
         if (!$currentGameRecord) return;
         if ($currentGameRecord->is_end == 1) return;
 
-        $prize = new Prize($currentGameRecord);
+        $prize = new PrizeMb($currentGameRecord);
         $prize->calculate();
         $currentGameRecord->end();
         unset($currentGameRecord);

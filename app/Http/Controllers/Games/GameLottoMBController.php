@@ -6,6 +6,7 @@ use App\Games\BaseLotto\LottoMb;
 
 class GameLottoMBController extends GameLottoController
 {
+    protected $game = 'lottomb';
     public function __construct()
     {
         parent::__construct();

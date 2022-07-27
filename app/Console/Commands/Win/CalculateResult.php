@@ -55,6 +55,7 @@ class CalculateResult extends Command
                         $currentGame->initWinNumber();
                         $currentGame->end();
                     }
+                    unset($listGameWinType);
                     $gameEnded = true;
                 }
             } else {

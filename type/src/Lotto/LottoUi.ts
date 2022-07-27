@@ -79,11 +79,17 @@ export default class LottoUi {
         this.gameChoose.removeChoosen();
         this.gameSelect.removeChoosen();
     }
+    protected getUrlGameContent() {
+        return "get-game-lotto-content";
+    }
     getGameContent(typeGame: number) {
-        return Ajax.get("get-game-lotto-content", { typeGame });
+        return Ajax.get(this.getUrlGameContent(), { typeGame });
+    }
+    protected getUrlLottoChoosen() {
+        return "get-game-lotto-choosen";
     }
     async getChoosenNumber(typeGame: number) {
-        let response: any = await Ajax.get("get-game-lotto-choosen", { typeGame });
+        let response: any = await Ajax.get(this.getUrlLottoChoosen(), { typeGame });
         let numbers = response.data;
         let str = ``;
         if (numbers.length > 0) {
@@ -109,12 +115,15 @@ export default class LottoUi {
             }
         });
     }
+    protected getUrlHistory() {
+        return 'get-game-lotto-history';
+    }
     public loadPlinkoHistoryGame() {
         var self = this;
         var itemContent = document.querySelector("#game-gowin-history");
         if (itemContent) {
             XHR.send({
-                url: "get-game-lotto-history",
+                url: self.getUrlHistory(),
                 method: "GET",
             }).then((res: any) => {
                 if (res.code == 200 && res.html) {

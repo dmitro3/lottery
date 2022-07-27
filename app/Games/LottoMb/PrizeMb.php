@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Games\Lotto;
+namespace App\Games\LottoMb;
 
+use App\Games\Lotto\Prize;
 
-class Prize
+class PrizeMb extends Prize
 {
     protected $currentGameRecord;
     public function __construct($currentGameRecord)
@@ -12,7 +13,7 @@ class Prize
     }
     public function calculate()
     {
-        $prizeGameCollection = new PrizeGameCollection($this->currentGameRecord);
+        $prizeGameCollection = new PrizeGameMbCollection($this->currentGameRecord);
         $prizeGameCollection->generate();
         $prizeGameCollection->calculate();
     }

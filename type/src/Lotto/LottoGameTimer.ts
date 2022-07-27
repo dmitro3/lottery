@@ -2,11 +2,11 @@ import Selector from "../Base/Selector";
 import LottoSocket from "./LottoSocket";
 
 export default class LottoGameTimer {
-    private interValGameTime: any = null;
-    private timeRemaining: number = 0;
-    private gamePlinkoTimeBox: any;
-    private needRetreiveResult: boolean = false;
-    public constructor(private gameSocket: LottoSocket) {
+    protected interValGameTime: any = null;
+    protected timeRemaining: number = 0;
+    protected gamePlinkoTimeBox: any;
+    protected needRetreiveResult: boolean = false;
+    public constructor(protected gameSocket: LottoSocket) {
         this.gamePlinkoTimeBox = Selector._("#game-lotto-time-box");
     }
     public initInfo(data: any) {

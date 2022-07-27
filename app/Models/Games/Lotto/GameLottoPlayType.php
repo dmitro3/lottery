@@ -36,10 +36,16 @@ class GameLottoPlayType extends BaseModel
     protected function renderGameRecord()
     {
         $today = now();
+        $yesterday = $today->addDays(-1);
+        $existYesterday =  $this->isExistItemByDate($yesterday);
+        if (!$existYesterday) {
+            $this->generateGameByTime($yesterday);
+        }
         $existToday =  $this->isExistItemByDate($today);
         if (!$existToday) {
             $this->generateGameByTime($today);
         }
+
         $tomorrow = now()->addDays(1);
         $existTomorrow = $this->isExistItemByDate($tomorrow);
         if (!$existTomorrow) {
@@ -60,12 +66,21 @@ class GameLottoPlayType extends BaseModel
     }
     protected function generateGameByTime($timeAnchor)
     {
+        $hour = $timeAnchor->hour;
+        $startTime = $timeAnchor;
+        if ($hour >= 19) {
+            $startTime = $timeAnchor->addDays(1);
+        }
+        $startTime->hour(19);
+        $startTime->minute(0);
+        $startTime->second(0);
+        $timeStampStart = $timeAnchor->timestamp - 86400;
+
 
         $currentMinuteRange = $this->seconds / 60;
         $day = $timeAnchor->day;
         $month = $timeAnchor->month;
         $year = $timeAnchor->year;
-        $timeStampStart = $timeAnchor->startOfDay()->timestamp;
         $count = 1;
         $dataInsert = [];
         for ($i = 0; $i < 24; $i++) {
@@ -84,8 +99,9 @@ class GameLottoPlayType extends BaseModel
                     $dataAdd['created_at'] = now();
                     $dataAdd['updated_at'] = now();
                     $dataAdd['start_time'] = $timeStampStart;
-                    $dataAdd['end_time'] = $timeStampStart + $this->seconds;
-                    $timeStampStart = $dataAdd['end_time'];
+                    $endTime = $timeStampStart;
+                    $dataAdd['end_time'] = $endTime - 3600; //end vào lúc 18h, quay số lúc 18h15
+                    $timeStampStart = $endTime;
                     array_push($dataInsert, $dataAdd);
                     $count++;
                 }

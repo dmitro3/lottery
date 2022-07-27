@@ -1,9 +1,8 @@
 <?php
 
-namespace realtimemodule\pushserver\Connecters\Games;
+namespace realtimemodule\pushserver\Connecters\Games\Lotto;
 
-use App\Models\Games\Lotto\GameLottoPlayType;
-use App\Models\Games\Lotto\GameLottoPlayUserBet;
+use App\Games\Lotto\Base\Abstracts\ALottoable;
 use App\Models\Games\Lotto\GameLottoType;
 use realtimemodule\pushserver\Contracts\ConnecterInterface;
 use realtimemodule\pushserver\Models\User;
@@ -13,9 +12,8 @@ use App\Models\WalletTransactionType;
 use \realtimemodule\pushserver\Enums\Lotto\Status as LottoStatus;
 
 
-class LottoConnector implements ConnecterInterface
+abstract class BaseLottoConnector extends ALottoable implements ConnecterInterface
 {
-
 
     protected $connection;
     protected $clients;
@@ -56,9 +54,9 @@ class LottoConnector implements ConnecterInterface
         }
         return $this->connection;
     }
-    private function getCurrentGameTypeInfo($action)
+    protected function getCurrentGameTypeInfo($action)
     {
-        $gamePlinkoType = GameLottoPlayType::find(1);
+        $gamePlinkoType = $this->gameLottoProvider->getGamePlayType()::find(1);
         if (!isset($gamePlinkoType)) {
             $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_STATUS_DATA_NOT_FOUND, false, 'Game tạm thời không khả dụng.'));
             return $this->connection;
@@ -76,7 +74,7 @@ class LottoConnector implements ConnecterInterface
         $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_STATUS_SUCCESS, true, 'Thành công.', $data, $action));
         return $this->connection;
     }
-    private function validatorPlayRequest($data)
+    protected function validatorPlayRequest($data)
     {
         return \Validator::make($data, [
 
@@ -93,7 +91,7 @@ class LottoConnector implements ConnecterInterface
             'numbers' => 'Số',
         ]);
     }
-    private function play($action)
+    protected function play($action)
     {
         $currentGameClientInfo = $this->messageInfo['currentGame'] ?? null;
         $gameData = $this->messageInfo['gameData'] ?? null;
@@ -134,7 +132,7 @@ class LottoConnector implements ConnecterInterface
         }
 
 
-        $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
+        $currentGameRecord = $this->gameLottoProvider->getGamePlayType()::find(1)->getCurrentGameRecord();
         $user = $this->connection['userTargetMessage'];
         $money = $money * 1000;
         if ($money > $user->getAmount()) {
@@ -142,7 +140,7 @@ class LottoConnector implements ConnecterInterface
             return $this->connection;
         }
 
-        $itemUserBet = GameLottoPlayUserBet::toDatabase($user, $currentGameRecord, $gameType, $numbers, $money);
+        $itemUserBet = $this->gameLottoProvider->getGameUserBet()::toDatabase($user, $currentGameRecord, $gameType, $numbers, $money);
         $reason = vsprintf('Trừ tiền cược game Lotto. Phiên giao dịch %s.', [$currentGameRecord->id]);
         $user->changeMoney(0 - $money, $reason, WalletTransactionType::MINUS_MONEY_BET_GAME_LOTTO, $itemUserBet->id);
 
@@ -150,7 +148,7 @@ class LottoConnector implements ConnecterInterface
         return $this->connection;
     }
 
-    private function buildResponse($code, $status, $message, $data = [], $action = null)
+    protected function buildResponse($code, $status, $message, $data = [], $action = null)
     {
         $dataResponse = [];
         $dataResponse['code'] = $code;

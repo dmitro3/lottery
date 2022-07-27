@@ -14,6 +14,7 @@ class PushServerProvider implements MessageComponentInterface
     const TYPE_GAME_WIN = 1;
     const TYPE_GAME_PLINKO = 2;
     const TYPE_GAME_LOTTO = 3;
+    const TYPE_GAME_LOTTO_MB = 4;
 
     protected $clients;
     protected $connectionList;

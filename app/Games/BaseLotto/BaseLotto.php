@@ -9,4 +9,5 @@ abstract class BaseLotto
     abstract function getGameRecord();
     abstract function getGameTableResult();
     abstract function getGameUserBet();
+    abstract function getGenerator();
 }

@@ -16,7 +16,7 @@ use App\Models\Games\Lotto\GameLottoType;
 abstract class GameBaseLottoController extends BaseGameController
 {
     protected BaseLotto $gameLottoProvider;
-
+    protected $game = 'lotto';
 
     public function index($request)
     {
@@ -34,7 +34,7 @@ abstract class GameBaseLottoController extends BaseGameController
             $results =  $this->gameLottoProvider->getGameTableResult()::select('type_prize', 'value')->where('game_lotto_play_record_id', $prevGameRecordId)->get()->groupBy('type_prize')->toArray();
         }
         $tableResult = new TableResult($results);
-        return view('games.lotto.index', compact('user', 'showBaseLoading', 'categories', 'types', 'tableResult', 'prevGameRecordId'));
+        return view('games.' . $this->game . '.index', compact('user', 'showBaseLoading', 'categories', 'types', 'tableResult', 'prevGameRecordId'));
     }
     public function getGameContent($request)
     {
@@ -59,7 +59,7 @@ abstract class GameBaseLottoController extends BaseGameController
     {
         $type = (int)$request->input('typeGame', 0);
         if ($type == 0) return;
-        $currentGameRecord = GameLottoPlayType::find(1)->getCurrentGameRecord();
+        $currentGameRecord = $this->gameLottoProvider->getGamePlayType()::find(1)->getCurrentGameRecord();
         $user = \Auth::user();
         $bets = $currentGameRecord->gameLottoPlayUserBets()->select('numbers')->where('user_id', $user->id)->get()->pluck('numbers');
         return response()->json(
