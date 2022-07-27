@@ -44,7 +44,7 @@ class PlinkoConnector implements ConnecterInterface
         if (!isset($this->connection['userTargetMessage'])) {
             $userTargetMessage = User::find($this->connection['user_id']);
             if (!isset($userTargetMessage)) {
-                $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_NOT_LOGIN, false, 'Vui lòng đăng nhập để sử dụng tính năng này.'));
+                $this->from->send($this->buildResponse(PlinkoStatus::GAME_CONNECT_STATUS_NOT_LOGIN, false, 'Vui lòng đăng nhập để sử dụng tính năng này.' . $this->connection['user_id']));
                 return $this->connection;
             }
             $this->connection['userTargetMessage'] = $userTargetMessage;
