@@ -77,7 +77,7 @@ class LoginController extends Controller
         $credentials = ['phone' => $phone, 'password'=>$request->password];
         if (Auth::attempt($credentials, true)) {
             $user->logLoginAction();
-            return $this->authenticated();
+            return $this->authenticated($request);
         }else {
             return response()->json([
                 'code' => 100,
@@ -136,9 +136,9 @@ class LoginController extends Controller
         ]);
     }
 
-    protected function authenticated()
+    protected function authenticated($request)
     {
-
+        Auth::logoutOtherDevices($request->password);
         return response()->json([
             'code' => 200,
             'message' => 'Đăng nhập thành công',

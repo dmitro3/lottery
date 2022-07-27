@@ -42,6 +42,7 @@ Route::group([
 
         Route::get('/wingo-bet-history ', 'AccountController@wingoBetHistory');
         Route::get('/plinko-bet-history ', 'AccountController@plinkoBetHistory');
+        Route::get('/lotto-bet-history ', 'AccountController@lottoBetHistory');
 
         // Ví
         Route::get('/vi-cua-toi', 'WalletController@index');

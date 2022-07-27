@@ -22,4 +22,8 @@ class GameLottoType extends BaseModel
     {
         return $this->hasMany(GameLottoPlayUserBet::class);
     }
+    public function gameLottoCategory()
+    {
+        return $this->belongsTo(GameLottoCategory::class,'game_lotto_category_id');
+    }
 }

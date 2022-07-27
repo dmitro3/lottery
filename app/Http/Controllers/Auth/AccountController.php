@@ -199,7 +199,7 @@ class AccountController extends Controller
         }
         return response()->json([
             'code' => 200,
-            'html' => view('auth.account.wingo_bet_history_result',compact('user','listItems','type'))->render()
+            'html' => view('auth.account.bet_history.wingo_bet_history_result',compact('user','listItems','type'))->render()
         ]);
     }
     public function plinkoBetHistory()
@@ -215,7 +215,26 @@ class AccountController extends Controller
         }
         return response()->json([
             'code' => 200,
-            'html' => view('auth.account.plinko_bet_history_result',compact('user','listItems','type'))->render()
+            'html' => view('auth.account.bet_history.plinko_bet_history_result',compact('user','listItems','type'))->render()
+        ]);
+    }
+    public function lottoBetHistory()
+    {
+        if(!Auth::check()) return $this->goLogin();
+        $user = Auth::user();
+        $listItems = $user->gameLottoPlayUserBet()
+                        ->with(['gameLottoType'=>function($q){
+                            $q->with('gameLottoCategory');
+                        }])
+                        ->orderBy('id','desc')
+                        ->paginate(20);
+        $type = 'normal';
+        if (isset(request()->type) && request()->type == 'load_item') {
+            $type = 'load_item';
+        }
+        return response()->json([
+            'code' => 200,
+            'html' => view('auth.account.bet_history.lotto_bet_history_result',compact('user','listItems','type'))->render()
         ]);
     }
 }

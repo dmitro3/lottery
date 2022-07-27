@@ -8,6 +8,11 @@ use Currency;
 
 class Support
 {
+    public static function flash($typeNotify, $messageNotify)
+    {
+        \Session::flash('typeNotify', $typeNotify);
+        \Session::flash('messageNotify', $messageNotify);
+    }
     public static function renderBackLinkParamater($linkBack){
         return '?returnurl='.base64_encode($linkBack);
     }

@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        \Support::flash(100, trans('Vui lòng đăng nhập'));
+        \Support::flash(100, trans('Tài khoản của bạn đã đăng nhập ở một thiết bị khác. Vui lòng đăng nhập lại!'));
         return  $request->expectsJson()
                     ? response()->json(['message' => $exception->getMessage()], 401)
                     : redirect()->guest(url('/dang-nhap'));
