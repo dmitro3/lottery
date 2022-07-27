@@ -100,7 +100,7 @@ class GameLottoPlayType extends BaseModel
                     $dataAdd['updated_at'] = now();
                     $dataAdd['start_time'] = $timeStampStart;
                     $endTime = $timeStampStart;
-                    $dataAdd['end_time'] = $endTime - 3600; //end vào lúc 18h, quay số lúc 18h15
+                    $dataAdd['end_time'] = $endTime; //end vào lúc 18h, quay số lúc 18h15
                     $timeStampStart = $endTime;
                     array_push($dataInsert, $dataAdd);
                     $count++;

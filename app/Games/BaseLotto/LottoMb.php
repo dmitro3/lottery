@@ -2,6 +2,7 @@
 
 namespace App\Games\BaseLotto;
 
+use App\Games\LottoMb\Enums\Config;
 use App\Games\LottoMb\Generators\MBMbGenerator;
 use App\Models\Games\LottoMb\GameLottoMbPlayRecord;
 use App\Models\Games\LottoMb\GameLottoMbPlayType;
@@ -29,5 +30,9 @@ class LottoMb extends BaseLotto
     function getGenerator()
     {
         return MBMbGenerator::class;
+    }
+    function getConfig()
+    {
+        return Config::class;
     }
 }

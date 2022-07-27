@@ -100,5 +100,6 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @endsection
 @section('js')
 {{-- <script src="theme/frontend/lotto/js/gui.js" defer></script> --}}
+<script src="theme/frontend/game/ts/lib.js" defer></script>
 <script src="theme/frontend/game/ts/lotto.js" defer></script>
 @endsection
