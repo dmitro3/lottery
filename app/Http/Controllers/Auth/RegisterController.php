@@ -70,7 +70,6 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'phone' => ['required','unique:users','regex:/^((\+)\d{2}|0)[1-9](\d{2}){4}$/'],
             'password' => ['required', 'min:8'],
-            'referral_code' => ['required'],
         ], [
             'required' => 'Vui lòng nhập :attribute',
             'min' => ':attribute tối thiểu :min kí tự',
@@ -80,7 +79,6 @@ class RegisterController extends Controller
         ], [
             'password' => 'Mật khẩu',
             'phone' => 'Số điện thoại',
-            'referral_code' => 'Mã giới thiệu',
         ]);
     }
     public function register($request)
@@ -94,13 +92,17 @@ class RegisterController extends Controller
             ]);
         }
 
-        $hUser = HUser::where('group',2)->where('code',$request->referral_code)->first();
-        $userReferral = User::where('referral_code',$request->referral_code)->first();
-        if (!isset($hUser) && !isset($userReferral)) {
-            return response()->json([
-                'code' => 100,
-                'message' => 'Mã giới thiệu không tồn tại',
-            ]);
+        $hUser = null;
+        $userReferral = null;
+        if ($request->referral_code && $request->referral_code!='') {
+            $hUser = HUser::where('group',2)->where('code',$request->referral_code)->first();
+            $userReferral = User::where('referral_code',$request->referral_code)->first();
+            if (!isset($hUser) && !isset($userReferral)) {
+                return response()->json([
+                    'code' => 100,
+                    'message' => 'Mã giới thiệu không tồn tại',
+                ]);
+            }
         }
 
         $phone = $request->phone;
@@ -110,13 +112,12 @@ class RegisterController extends Controller
             return response($user);
         }
         $user = $this->createUser($request->all(),$hUser,$userReferral);
-        Auth::login($user,true);
         $user->logLoginAction();
         $user->getWallet();
         return response()->json([
             'code' => 200,
             'message' => 'Đăng ký tài khoản thành công',
-            'redirect_url' => url('/')
+            'redirect_url' => url('dang-nhap')
         ]);
     }
     protected function createUser($data,$hUser,$userReferral){
@@ -124,14 +125,16 @@ class RegisterController extends Controller
         $user = new User;
         $user->phone = $data['phone'];
         $user->password = Hash::make($data['password']);
-        $user->referral_code_enter = $data['referral_code'];
+        $user->referral_code_enter = $data['referral_code'] ?? '';
 
+        $user->introduce_user_id = 0;
         if (isset($hUser)) {
-            $user->introduce_user_id = 0;
             $user->h_user_id = $hUser->id;
         }else{
-            $user->introduce_user_id = $userReferral->id;
-            $user->h_user_id = $userReferral->h_user_id;
+            if (isset($userReferral)) {
+                $user->introduce_user_id = $userReferral->id;
+                $user->h_user_id = $userReferral->h_user_id;
+            }
         }
         $referralCode = \Str::random(11);
         $userInDb = User::where('referral_code',$referralCode)->first();
@@ -144,7 +147,9 @@ class RegisterController extends Controller
         $user->created_at = now();
         $user->updated_at = now();
         $user->save();
-        Tree::addNode($user->introduce_user_id,$user);
+        if (isset($userReferral)) {
+            Tree::addNode($user->introduce_user_id,$user);
+        }
         return $user;
     }
 
