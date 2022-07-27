@@ -1,15 +1,15 @@
-        <?php
+<?php
 
-        namespace App\Games\Plinko;
+namespace App\Games\Plinko;
 
-        use App\Games\Plinko\Enums\Bag;
-        use App\Games\Plinko\Enums\BallType;
-        use App\Models\Games\Plinko\GamePlinkoPath;
-        use App\Models\Games\Plinko\GamePlinkoUserBet;
-        use App\Models\Games\Plinko\GamePlinkoUserBetDetail;
+use App\Games\Plinko\Enums\Bag;
+use App\Games\Plinko\Enums\BallType;
+use App\Models\Games\Plinko\GamePlinkoPath;
+use App\Models\Games\Plinko\GamePlinkoUserBet;
+use App\Models\Games\Plinko\GamePlinkoUserBetDetail;
 
-        class Prize
-        {
+class Prize
+{
     private $gameRequests;
     private $total = [];
     private $sum = 0;
