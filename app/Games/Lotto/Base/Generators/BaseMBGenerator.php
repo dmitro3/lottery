@@ -3,7 +3,6 @@
 namespace App\Games\Lotto\Base\Generators;
 
 use App\Games\Lotto\Base\Abstracts\ALottoable;
-use App\Games\Lotto\Base\Contracts\Lottoable;
 use App\Games\Lotto\Enums\NoPrize;
 use App\Games\Lotto\Generators\CommonRandom;
 use App\Games\Lotto\Generators\RandomBaCang;
@@ -11,7 +10,6 @@ use App\Games\Lotto\Generators\RandomBonCang;
 use App\Games\Lotto\Generators\RandomDe;
 use App\Games\Lotto\Generators\RandomGiai7;
 use App\Games\Lotto\PrizeOneGame;
-use App\Models\Games\Lotto\GameLottoTableResult;
 
 abstract class BaseMBGenerator extends ALottoable
 {
@@ -68,8 +66,6 @@ abstract class BaseMBGenerator extends ALottoable
     {
         $this->gameLoBonCangs =  $game;
     }
-
-
 
     public function generate()
     {
