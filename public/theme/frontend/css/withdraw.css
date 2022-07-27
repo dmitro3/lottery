@@ -251,17 +251,16 @@
 }
 
 .mian .selectBox .conBox .box .list .item {
-    height: .93333rem;
-    padding: 0 .4rem;
-    line-height: .93333rem;
+    padding: 0 0.21333rem;
+    line-height: .53333rem;
     color: #414141;
-    border-bottom: .02667rem solid #ebebeb
+    border-bottom: 0.02667rem solid #ebebeb;
 }
 
-.mian .selectBox .conBox .box .list .item .name {
-    max-width: 6.4rem;
+.mian .selectBox .conBox .box .list .item .van-ellipsis {
     overflow: hidden;
-    white-space: nowrap
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .mian .selectBox .conBox .box .list .icon {

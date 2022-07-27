@@ -172,6 +172,7 @@ class FCHelper
             if (isset($json["has_file"]) && $json['has_file'] == 0) {
                 return $json["file_name"];
             }
+            $img = 'public/'.$img;
             if (file_exists($img)) {
                 return $img;
             }

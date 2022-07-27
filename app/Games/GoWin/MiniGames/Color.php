@@ -12,11 +12,6 @@ class Color extends MiniGame implements GoWinMiniGameInterface
         'violet' => [0,5],
         'red' => [0,2,4,6,8]
     ];
-    protected $colorMultiple = [
-        'green' => 2,
-        'violet' => 5,
-        'red' => 2
-    ];
     protected $colorHistoryPreview = [
         0 => ['red','violet'],
         1 => ['green'],
@@ -29,13 +24,23 @@ class Color extends MiniGame implements GoWinMiniGameInterface
         8 => ['red'],
         9 => ['green'],
     ];
+    public static function getColorMultiple()
+    {
+        $colorMultiple = [
+            'green'  => (float)\SettingHelper::getSetting('wingo_percent_color_green_refund',1),
+            'violet' => (float)\SettingHelper::getSetting('wingo_percent_color_violet_refund',1),
+            'red'    => (float)\SettingHelper::getSetting('wingo_percent_color_red_refund',1)
+        ];
+        return $colorMultiple;
+    }
     public function isWin($number)
     {
         return in_array($number,$this->colorNumberMap[$this->value] ?? []);
     }
     public function calculationAmountWin($number,$amountBet)
     {
-        return $amountBet*($this->colorMultiple[$this->value] ?? 0);
+        $colorMultiple = self::getColorMultiple();
+        return $amountBet*($colorMultiple[$this->value] ?? 0);
     }
     public function getHistoryHtml($winNumber)
     {

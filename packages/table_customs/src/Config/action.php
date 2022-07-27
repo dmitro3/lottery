@@ -27,5 +27,19 @@ return [
     //         ]
     //     ],
     // ]
+    'users' => [
+        [
+            'label' => 'Chi tiết người dùng',
+            'url' => url('esystem/user-manage/user-info'),
+            'icon' => 'fa fa-user',
+            'class' => '',
+            'query' => [
+                'id' => [
+                    'fix' => false,
+                    'value' => 'id',
+                ]
+            ]
+        ]
+    ],
 ]
 ?>

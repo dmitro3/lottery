@@ -1,6 +1,6 @@
 var WIN_GUI = (function () {
-    var popup = document.querySelector(".van-popup");
-    var overlay = document.querySelector(".van-overlay");
+    var popup = document.querySelector(".van-popup-bet-game");
+    var overlay = document.querySelector(".van-overlay-bet-game");
     var _betting_mark = popup.querySelector(".betting-mark");
     var box_metting_text = popup.querySelector(".box .choose");
     var ipMiniGame = popup.querySelector("input[name=mini_game]");
@@ -166,6 +166,7 @@ var WIN_GUI = (function () {
         listPaginateBoxLinkBtn.forEach((btn) => {
             if (btn.dataset.href != "") {
                 btn.addEventListener("click", function () {
+                    BASE_GUI.showLoading();
                     XHR.send({
                         url: this.dataset.href,
                         method: "GET",
@@ -177,6 +178,7 @@ var WIN_GUI = (function () {
                                 BASE_SUPPORT.callFunction(callback);
                             }
                         }
+                        BASE_GUI.hideLoading();
                     });
                 });
             }
@@ -591,9 +593,11 @@ var WINDLOAD = (function () {
         var userTokenIp = document.querySelector("input[name=auth_token]");
         if (!userTokenIp) return;
         var userToken = userTokenIp.value;
-        connecter = new WebSocket(
-            `ws://localhost:8080/?auth_token=${userToken}`
-        );
+        var urlConncet = "wss://vinlott.net/wss/?auth_token=";
+        if (window.location.host == "doanso.test") {
+            var urlConncet = "ws://localhost:8081/?auth_token=";
+        }
+        connecter = new WebSocket(`${urlConncet}${userToken}`);
         connecter.onopen = function (e) {
             wsReady = true;
             BASE_GUI.hideLoading();

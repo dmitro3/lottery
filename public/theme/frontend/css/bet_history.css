@@ -1,0 +1,84 @@
+.mian {
+    background-color: #fbfcfd
+}
+
+.mian .van-sticky--fixed {
+    top: 1.33333rem;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    max-width: 10rem
+}
+
+.mian .tab {
+    font-size: .42667rem
+}
+
+.mian .con-box .list {
+    padding: .4rem
+}
+
+.mian .con-box .list .item {
+    border-bottom: .02667rem solid #f2f5f7;
+    background-color: #fff;
+    margin-bottom: .26667rem
+}
+
+.mian .con-box .list .item .info {
+    height: .8rem
+}
+
+.mian .con-box .list .item .info .number {
+    text-align: right;
+    width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical
+}
+
+.mian .con-box .list .item .info .OrderNumber {
+    font-size: .4rem;
+    min-width: 3.73333rem;
+    max-width: 5.33333rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical
+}
+
+.mian .con-box .list .item .info .name {
+    background-color: #fb4e4e;
+    color: #fff;
+    height: .8rem;
+    line-height: .8rem;
+    font-size: .4rem;
+    max-width: 4rem
+}
+
+.mian .con-box .list .item .info .name .type {
+    height: 100%;
+    padding: 0 .13333rem
+}
+
+.mian .con-box .list .item .info .money {
+    color: #fb4e4e;
+    font-size: .50667rem;
+    font-weight: 600
+}
+
+.mian .con-box .list .item .info .money.action {
+    color: #5cba47
+}
+
+.mian .con-box .list .item .info .money.null {
+    color: #666
+}
+
+.mian .con-box .list .item .info .time {
+    font-size: .37333rem;
+    color: #999
+}

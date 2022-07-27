@@ -7,19 +7,17 @@ use App\Models\Games\Win\{
     GameWinMultiple,
     GameWinMoneyItem,
     GameWinUserBet,
+    GameWinRecord
 };
 
 class GameWinController extends BaseGameController
 {
     public function index($request)
     {
-        // $this->renderGameWinRecord();
-        // foreach (GameWinRecord::get() as $item) {
+        // foreach (GameWinRecord::get() as $key => $item) {
         //     $item->win_number = rand(0,9);
         //     $item->save();
         // }
-        // var_dump(1);die();
-
         $user = \Auth::user();
         $showBaseLoading = true;
         $activeAudio = isset($_COOKIE['switch_audio']) && $_COOKIE['switch_audio'] == 'true';
@@ -27,13 +25,6 @@ class GameWinController extends BaseGameController
         $listGameWinMultiple = GameWinMultiple::where('act',1)->orderBy('ord','asc')->get();
         $listGameWinMoneyItem = GameWinMoneyItem::where('act',1)->orderBy('ord','asc')->get();
         return view('games.win.index',compact('listGameWinType','listGameWinMultiple','listGameWinMoneyItem','activeAudio','user','showBaseLoading'));
-    }
-    public function renderGameWinRecord()
-    {
-        $listGameWinType = GameWinType::get();
-        foreach ($listGameWinType as $itemGameWinType) {
-            $itemGameWinType->renderGameRecord();
-        }
     }
     public function getGameHistory($request)
     {
@@ -75,6 +66,7 @@ class GameWinController extends BaseGameController
             return response()->json(['code'=>100]);
         }
         $user = \Auth::user();
+        $type = $request->type ?? 'normal';
         $listItems = GameWinUserBet::where('user_id',$user->id)
                                     ->with('gameWinUserBetStatus')
                                     ->where('game_win_type_id',$gameWinType->id)
@@ -82,7 +74,12 @@ class GameWinController extends BaseGameController
                                     ->paginate(10);
         return response()->json([
             'code' => 200,
-            'html' => view('games.win.history_results.user_bet_history',compact('listItems'))->render()
+            'html' => view('games.win.history_results.user_bet_history',compact('listItems','type'))->render()
         ]);
+    }
+    public function betHistoryWingo()
+    {   
+        $listGameWinType = GameWinType::where('act',1)->orderBy('ord','asc')->get();
+        return view('games.win.user_bet_history_all',compact('listGameWinType'));
     }
 }

@@ -90,7 +90,7 @@ trait ViewTrait{
 		if (($customTabs = config('sys_tab'.'.'.$table))) {
             $class = $customTabs['class'];
             $method = $customTabs['method'];
-            $listData = (new $class)->$method([$customTabs,$table,$data]);
+            $listData = (new $class)->$method([$customTabs,$table,$data, $this, $model]);
         }else{
 			$listData = $this->getDataTable($model, $data);
 		}

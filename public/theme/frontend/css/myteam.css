@@ -1,0 +1,174 @@
+.fd-select-box {
+    position: relative;
+    width: 3.2rem;
+    padding-right: 0.53333rem;
+    padding-left: 0.26667rem;
+    height: 0.96rem;
+    line-height: 0.96rem;
+    border: 0.02667rem solid #ababab;
+    border-radius: 0.10667rem;
+    color: #333;
+    font-size: 0.37333rem;
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.fd-select-box.action {
+    border: 0.02667rem solid #df3832;
+}
+.fd-select-box .fd-arrow {
+    position: absolute;
+    top: 0;
+    right: 0.13333rem;
+    height: 100%;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+.fd-select-box .fd-arrow.fd-down {
+    transform: rotate(180deg);
+}
+.fd-select-box .fd-select-list {
+    position: absolute;
+    width: 100%;
+    max-height: 5.33333rem;
+    overflow: auto;
+    list-style: none;
+    top: 0.96rem;
+    left: 0;
+    background: #fff;
+    box-shadow: 0 0 0.13333rem rgba(0, 0, 0, 0.2);
+    z-index: 9;
+}
+.fd-select-box .fd-select-list li {
+    padding-left: 0.32rem;
+    line-height: 0.8rem;
+    cursor: pointer;
+}
+.fd-select-box .fd-select-list li:hover {
+    background: #df3832;
+}
+.fd-select-box .fd-select-list li.active {
+    background: #df3832;
+    color: #fff;
+}
+.mian {
+    padding-bottom: 1.86667rem;
+    background-color: #fbfcfd;
+}
+.mian .head-right {
+    border-radius: 0.26667rem;
+    background: rgba(120, 11, 14, 0.24);
+}
+.mian .promotion {
+    padding-top: 1.06667rem;
+}
+.mian .promotion .tab {
+    background-color: #fff;
+    height: 1.06667rem;
+    line-height: 1.06667rem;
+    overflow: hidden;
+    position: fixed;
+    z-index: 999;
+    top: 1.33333rem;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    max-width: 10rem;
+}
+.mian .promotion .tab ul li {
+    width: 25%;
+    text-align: center;
+    font-size: 0.4rem;
+    color: #333;
+}
+.mian .promotion .tab ul li.action {
+    color: #df3832;
+}
+.mian .promotion .date {
+    font-size: 0.42667rem;
+    height: 0.90667rem;
+    line-height: 0.90667rem;
+}
+.mian .promotion .date .img {
+    width: 0.4rem;
+}
+.mian .promotion .tit {
+    background: #f4f4f4;
+    padding: 0 0.4rem;
+    height: 0.90667rem;
+    line-height: 0.90667rem;
+    color: #333;
+}
+.mian .promotion .number {
+    padding: 0.26667rem 0.4rem 0;
+}
+.mian .promotion .number .item {
+    width: 50%;
+    height: 0.66667rem;
+    line-height: 0.66667rem;
+}
+.mian .promotion .ipt {
+    border: 0.02667rem solid #ababab;
+    padding: 0 0.26667rem;
+    border-radius: 0.13333rem;
+    width: 3.2rem;
+    height: 0.96rem;
+    line-height: 0.96rem;
+}
+.mian .promotion .ipt:focus {
+    border: 0.02667rem solid #df3832;
+}
+.mian .promotion .btn {
+    height: 0.96rem;
+    line-height: 0.96rem;
+    padding: 0 0.26667rem;
+    min-width: 1.6rem;
+    background-color: #df3832;
+    color: #fff;
+    border-radius: 0.13333rem;
+    box-shadow: 0 0.10667rem 0.53333rem 0.05333rem rgba(228, 38, 34, 0.25);
+}
+.mian .promotion .table {
+    margin: 0.26667rem 0.4rem 0;
+    background: #fff;
+    box-shadow: 0 0.13333rem 0.29333rem 0.02667rem rgba(0, 0, 0, 0.12);
+    border-radius: 0.10667rem;
+}
+.mian .promotion .table .hd {
+    background: #f4f4f4;
+    border-radius: 0.10667rem;
+    height: 0.93333rem;
+    line-height: 0.93333rem;
+}
+.mian .promotion .table .item {
+    position: relative;
+}
+.mian .promotion .table .item .bd {
+    height: 0.93333rem;
+    line-height: 0.93333rem;
+}
+.mian .promotion .table .item .bd .action {
+    color: #e42622;
+    position: relative;
+}
+.mian .promotion .table .item .bd .action:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 0.10667rem solid transparent;
+    border-right: 0.10667rem solid transparent;
+    border-top: 0.21333rem solid #e42622;
+    transform: translate(-50%);
+}
+.mian .promotion .table .item .bdshow {
+    background-color: #fff;
+    width: 100%;
+    padding: 0.26667rem;
+    border: 0.02667rem solid #d7d4d4;
+    box-shadow: 0 0.13333rem 0.29333rem 0.02667rem rgba(0, 0, 0, 0.12);
+    border-radius: 0.10667rem;
+    line-height: 0.58667rem;
+}

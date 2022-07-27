@@ -109,6 +109,7 @@ class HUserAuthenticate
         }
         $_action = [];
         switch ($action) {
+            case 'checkFieldDuplicated':
             case 'getData':
                 $_action = [
                     'view',
@@ -152,6 +153,7 @@ class HUserAuthenticate
             case 'updateRefer':
             case 'trash':
             case 'backtrash':
+            case 'checkFieldDuplicated':
             case 'do_assign':
                 $_action = [
                     'update'
@@ -160,11 +162,13 @@ class HUserAuthenticate
             case 'insert':
             case 'store':
             case 'storeAjax':
+            case 'checkFieldDuplicated':
             case 'do_import':
                 $_action = [
                     'insert'
                 ];
                 break;
+            case 'checkFieldDuplicated':
             case 'copy':
                 $_action = [
                     'copy'

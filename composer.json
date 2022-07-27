@@ -51,6 +51,7 @@
             "vanhenry\\minify\\": "packages/vanhenry/minify/src",
             "CustomTable\\": "packages/table_customs/src",
             "realtimemodule\\pushserver\\": "packages/realtimemodule/pushserver/src",
+            "crawlmodule\\loterie\\": "packages/crawlmodule/loterie/src",
             "ExampleRS\\": "packages/example_packages/src"
         }
     },

@@ -1,3 +1,7 @@
+a{
+    color: #2c3e50;
+}
+
 .game .logo {
     height: 1.01333rem;
     width: 2.66667rem
@@ -260,35 +264,35 @@
     background: #fa4e46
 }
 
-.game .page-nav {
+.page-nav {
     margin-top: .53333rem;
     padding-bottom: .53333rem;
     height: 1.06667rem
 }
 
-.game .page-nav .number {
+.page-nav .number {
     width: 2.66667rem;
     height: 1.06667rem;
     line-height: 1.06667rem;
     background-color: #f6f7f8
 }
 
-.game .page-nav .arr {
+.page-nav .arr {
     height: 1.06667rem;
     width: 1.06667rem;
     background-color: #d8d8d8;
     border-radius: .13333rem
 }
 
-.game .page-nav .arr .icon {
+.page-nav .arr .icon {
     color: #7f7f7f
 }
 
-.game .page-nav .arr .icon.action {
+.page-nav .arr .icon.action {
     color: #fff
 }
 
-.game .page-nav .arr.action {
+.page-nav .arr.action {
     background-color: #fb4e4e
 }
 
@@ -306,7 +310,7 @@
 .game .rule-box .info {
     padding: .4rem;
     font-size: .37333rem;
-    line-height: 1.06667rem
+    line-height: 1.5;
 }
 
 .game .rule-box .info .comment {

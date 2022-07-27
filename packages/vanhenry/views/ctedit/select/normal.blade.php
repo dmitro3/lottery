@@ -31,7 +31,7 @@
 <div class="form-group ">
     <p class="form-title" for="">{{ FCHelper::ep($table, 'note') }}
         <p />
-    <div class="form-reset flex">
+    <div class="form-control form-reset flex">
         <select {{ FCHelper::ep($table, 'require') == 1 ? 'required' : '' }} @if($disabled) disabled @endif style="width:100%"
             placeholder="{{ FCHelper::ep($table, 'note') }}" class=" {{ $isAjax ? 'ajx_search_single_' . $name : 'select2' }}"
             name="{{ $name }}">

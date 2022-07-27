@@ -1,0 +1,161 @@
+.big-title {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: white !important;
+    background-color: #087990 !important;
+    padding: 6px 12px;
+    font-weight: bold;
+}
+.base-table-all {
+    width: 100%;
+    border: solid 1px #e1e1e1;
+    border-radius: 0;
+}
+.base-info-box{
+    background: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
+    .item-user-info{
+        .item-title{
+            display: inline-block;
+            min-width: 120px;
+        }
+        &:not(:first-child){
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: solid 1px #ebebeb;
+        }
+    }
+}
+.base-table-all th,
+.base-table-all td {
+    text-align: left;
+    padding: 6px 8px;
+    vertical-align: middle;
+}
+
+.base-table-all td>* {
+    vertical-align: middle;
+}
+
+.base-table-all td:not(:last-child) {
+    border-right: solid 1px #e1e1e1;
+}
+
+.base-table-all td .fa {
+    min-width: 16px;
+    text-align: center;
+}
+
+.base-table-all tbody tr:not(:last-child) td {
+    border-bottom: solid 1px #e1e1e1;
+}
+
+.base-table-all td:first-child {
+    color: #f8f9fa !important;
+    background-color: #212529 !important;
+    font-weight: 700;
+    width: 180px;
+}
+
+.base-table-all th:not(:last-child) {
+    border-right: solid 1px #f8f9fa !important;
+}
+
+.base-table-horizontal {
+    width: 100%;
+    border: solid 1px #e1e1e1;
+    border-radius: 0;
+}
+
+.base-table-horizontal th,
+.base-table-horizontal td {
+    text-align: left;
+    padding: 3px 8px;
+    vertical-align: middle;
+}
+
+.base-table-horizontal th {
+    color: #f8f9fa !important;
+    background-color: #212529 !important;
+    font-weight: 700;
+    width: 180px;
+    padding: 6px 8px;
+}
+
+.base-table-horizontal td>* {
+    vertical-align: middle;
+}
+
+.base-table-horizontal td:not(:last-child) {
+    border-right: solid 1px #e1e1e1;
+}
+
+.base-table-horizontal td .fa {
+    min-width: 16px;
+    text-align: center;
+}
+
+.base-table-horizontal tbody tr:not(:last-child) td {
+    border-bottom: solid 1px #e1e1e1;
+}
+
+.base-table-horizontal th:not(:last-child) {
+    border-right: solid 1px #f8f9fa !important;
+}
+.text-center{
+    text-align: center!important;
+}
+.color-gray{
+    color: #888;;
+}
+.fs-16 {
+    font-size: 16px;
+}
+
+.fs-18 {
+    font-size: 18px;
+}
+
+.fs-20 {
+    font-size: 20px;
+}
+.bg-small-gray{
+    background: #f9f9f9;
+}
+.form-user-info{
+    input{
+        width: 100%;
+        height: 36px;
+        border-radius: 5px;
+        border: solid 1px #ebebeb;
+        padding: 0px 10px;
+    }
+}
+.in-loading-item{
+    position: relative;
+    &::before{
+        content:'';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        z-index: 2;
+    }
+    &::after{
+        content:"\f110";
+        font-family: 'FontAwesome';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-animation: fa-spin 2s infinite linear;
+        animation: fa-spin 1s infinite linear;
+        font-size: 30px;
+        z-index: 3;
+        margin-left: -25px;
+        margin-top: -25px;
+    }
+}

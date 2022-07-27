@@ -1,0 +1,10 @@
+{
+    "name": "lotto/crawler",
+    "authors": [
+        {
+            "name": "abc",
+            "email": "abc@gmail.com"
+        }
+    ],
+    "require": {}
+}

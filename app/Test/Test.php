@@ -5,6 +5,6 @@ use Illuminate\Http\Request;
 class Test
 {
     function a($array){
-        dd($array);
+        // dd($array);
     }
 }

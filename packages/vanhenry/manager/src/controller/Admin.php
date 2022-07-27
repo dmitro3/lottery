@@ -35,7 +35,6 @@ class Admin extends BaseAdminController
     }
 
 	public function index(){
-		// return view('vh::index');
 		$gaViewKey = SettingHelper::getSetting('ga_view_key');
 		return view('vh::dashboard', compact('gaViewKey'));
 	}
@@ -628,5 +627,22 @@ class Admin extends BaseAdminController
 			'data' => $data
 		]);
 	}
+
+	public function checkFieldDuplicated($table)
+    {
+        $request = request();
+        $field = $request->name;
+        $val = $request->value;
+        $dataFile = DB::table($table)->where($field, \Str::of($val)->trim())->first();
+        if (($dataFile != null && isset($request->id) && $dataFile->id == $request->id) || $dataFile == null) {
+            return response([
+                'code' => 200
+            ]);
+        } else {
+            return response([
+                'code' => 100
+            ]);
+        }
+    }
 }
 ?>

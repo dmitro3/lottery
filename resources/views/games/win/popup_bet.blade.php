@@ -1,8 +1,8 @@
 @php
     use \realtimemodule\pushserver\Helpers\PushServerHelper;
 @endphp
-<div class="van-overlay" style="z-index: 2031; display: none;"></div>
-<div class="van-popup van-popup--round van-popup--bottom van-slide-up-enter-active"
+<div class="van-overlay van-overlay-bet-game" style="z-index: 2031; display: none;"></div>
+<div class="van-popup van-popup-bet-game van-popup--round van-popup--bottom van-slide-up-enter-active"
     style="max-width: 10rem; left: auto; z-index: 2032; display: none;">
     <div class="betting-mark">
         <input type="hidden" name="mini_game">
@@ -55,7 +55,7 @@
                         <div class="agree p-r-15">Tôi đồng ý</div>
                     </span>
                 </div>
-                <span class="txt">Quy tắc bán trước</span>
+                <span class="txt btn-show-van-popup" data-target="#pre-sale-rules-popup">Quy tắc bán trước</span>
             </div>
         </div>
         <div class="foot c-row">

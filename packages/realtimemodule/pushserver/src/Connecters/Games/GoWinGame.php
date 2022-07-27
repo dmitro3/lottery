@@ -145,8 +145,8 @@ class GoWinGame implements ConnecterInterface
         $data['game_type_name'] = $gameWinType->name;
         $data['game_idx'] = $currentGame->id;
         $data['qty'] = $qty;
-        $data['base_amount'] = number_format($itemUserBet->amount_base).' đ';
-        $data['amount'] = number_format($itemUserBet->amount).' đ';
+        $data['base_amount'] = number_format($itemUserBet->amount_base,0,',','.').' đ';
+        $data['amount'] = number_format($itemUserBet->amount,0,',','.').' đ';
         $data['mini_game_name'] = $miniGame->miniGamePreviewName;
         $data['value_select_name'] = $miniGame->getValuePreviewName();
         $data['value'] = $itemUserBet->select_value;

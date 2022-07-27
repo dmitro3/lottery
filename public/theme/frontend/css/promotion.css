@@ -1,0 +1,370 @@
+.mian {
+    padding-bottom: 1.86667rem;
+    background-color: #fbfcfd;
+}
+.mian .head-right {
+    border-radius: 0.26667rem;
+    background: rgba(120, 11, 14, 0.24);
+}
+.mian .promotion {
+    padding-top: 1.06667rem;
+    padding-bottom: 0.53333rem;
+}
+.mian .promotion .tab {
+    background-color: #fff;
+    height: 1.06667rem;
+    line-height: 1.06667rem;
+    overflow: hidden;
+    position: fixed;
+    z-index: 999;
+    top: 1.33333rem;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    max-width: 10rem;
+}
+.mian .promotion .tab ul li {
+    width: 25%;
+    text-align: center;
+    font-size: 0.4rem;
+    color: #333;
+}
+.mian .promotion .tab ul li.action {
+    color: #df3832;
+}
+.mian .promotion .tit {
+    background: #f4f4f4;
+    padding: 0 0.4rem;
+    height: 0.90667rem;
+    line-height: 0.90667rem;
+    color: #333;
+}
+.mian .promotion .tit .btn {
+    padding: 0 0.21333rem;
+    margin-top: 0.10667rem;
+    background: #e42622;
+    box-shadow: 0 0.10667rem 0.53333rem 0.05333rem rgba(228, 38, 34, 0.25);
+    border-radius: 0.21333rem;
+    height: 0.69333rem;
+    color: #fff;
+}
+.mian .promotion .info {
+    padding: 0.26667rem 0.4rem;
+}
+.mian .promotion .info-data .left {
+    text-align: center;
+    padding: 0.26667rem 0;
+    width: 40%;
+    background: rgba(223, 56, 50, 0.02);
+    border: 0.04rem solid #df3832;
+    border-radius: 0.26667rem;
+}
+.mian .promotion .info-data .left .all {
+    font-size: 0.4rem;
+}
+.mian .promotion .info-data .left .num {
+    font-size: 0.53333rem;
+    padding: 0.13333rem 0;
+    color: #df3832;
+    font-weight: 600;
+}
+.mian .promotion .info-data .left .txt {
+    color: #333;
+    font-size: 0.37333rem;
+    line-height: 0.66667rem;
+}
+.mian .promotion .info-data .right {
+    width: 50%;
+    padding: 0.26667rem 0 0.26667rem 0.26667rem;
+    background: rgba(223, 56, 50, 0.02);
+    border: 0.04rem solid #df3832;
+    border-radius: 0.26667rem;
+}
+.mian .promotion .info-data .right .txt {
+    color: #333;
+    font-size: 0.37333rem;
+    line-height: 0.53333rem;
+}
+.mian .promotion .info-data .right .txt .num {
+    color: #df3832;
+    letter-spacing: 0;
+    font-weight: 600;
+}
+.mian .promotion .info-img .img {
+    width: 40%;
+}
+.mian .promotion .info-img .img-box,
+.mian .promotion .info-img .img img {
+    width: 100%;
+}
+.mian .promotion .info-img .btn-list {
+    width: 50%;
+}
+.mian .promotion .info-img .btn-list .btn-box {
+    width: 100%;
+}
+.mian .promotion .info-img .btn-list .btn {
+    height: 1.06667rem;
+    background: #e42622;
+    box-shadow: 0 0.10667rem 0.53333rem 0.05333rem rgba(228, 38, 34, 0.25);
+    border-radius: 0.26667rem;
+    color: #fff;
+}
+.mian .promotion .table {
+    margin: 0.4rem 0.4rem 0;
+    background: #fff;
+    box-shadow: 0 0.13333rem 0.29333rem 0.02667rem rgba(0, 0, 0, 0.12);
+    border-radius: 0.10667rem;
+    overflow-y: auto;
+}
+.mian .promotion .table .box {
+    min-width: 10.66667rem;
+}
+.mian .promotion .table .box .fw {
+    font-weight: 600;
+}
+.mian .promotion .table .hd {
+    background: #f4f4f4;
+    border-radius: 0.10667rem;
+    height: 0.93333rem;
+    line-height: 0.93333rem;
+}
+.mian .promotion .table .hd.dl {
+    height: 1.06667rem;
+    line-height: 0.53333rem;
+}
+.mian .promotion .table .hd .txt {
+    font-size: 0.32rem;
+}
+.mian .promotion .table .bd {
+    height: 0.93333rem;
+    line-height: 0.93333rem;
+}
+.mian .promotion .team {
+    padding: 0 0.4rem;
+    margin-top: 0.4rem;
+    color: #333;
+    font-size: 0.37333rem;
+    line-height: 0.66667rem;
+    position: relative;
+}
+.mian .promotion .team .xin {
+    position: absolute;
+    top: 0.13333rem;
+    left: 0.4rem;
+    font-size: 0.8rem;
+    color: #e42622;
+}
+.mian .promotion .team .txt {
+    text-indent: 1em;
+}
+.mian .promotion .vip {
+    padding: 0 0.53333rem;
+    border: 0.05333rem solid #e42622;
+    border-radius: 0.74667rem;
+    height: 1.06667rem;
+}
+.mian .promotion .award {
+    padding: 0.26667rem 0.4rem;
+}
+.mian .promotion .award .txt {
+    line-height: 0.66667rem;
+    margin-bottom: 0.13333rem;
+}
+.mian .picker {
+    padding: 0.53333rem 0 0.4rem;
+}
+.mian .picker .item {
+    flex: 0 1 33.5%;
+    height: 1.06667rem;
+    line-height: 1.06667rem;
+    border: 0.02667rem solid #eee;
+    margin-bottom: -0.02667rem;
+    margin-right: -0.02667rem;
+    text-align: center;
+}
+.mian {
+    padding-bottom: 1.86667rem;
+    background-color: #fbfcfd;
+}
+.mian .head-right {
+    border-radius: 0.26667rem;
+    background: rgba(120, 11, 14, 0.24);
+}
+.mian .promotion {
+    padding-top: 1.06667rem;
+    padding-bottom: 0.53333rem;
+}
+.mian .promotion .tab {
+    background-color: #fff;
+    height: 1.06667rem;
+    line-height: 1.06667rem;
+    overflow: hidden;
+    position: fixed;
+    z-index: 999;
+    top: 1.33333rem;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    max-width: 10rem;
+}
+.mian .promotion .tab ul li {
+    width: 25%;
+    text-align: center;
+    font-size: 0.4rem;
+    color: #333;
+}
+.mian .promotion .tab ul li.action {
+    color: #df3832;
+}
+.mian .promotion .tit {
+    background: #f4f4f4;
+    padding: 0 0.4rem;
+    height: 0.90667rem;
+    line-height: 0.90667rem;
+    color: #333;
+}
+.mian .promotion .tit .btn {
+    padding: 0 0.21333rem;
+    margin-top: 0.10667rem;
+    background: #e42622;
+    box-shadow: 0 0.10667rem 0.53333rem 0.05333rem rgba(228, 38, 34, 0.25);
+    border-radius: 0.21333rem;
+    height: 0.69333rem;
+    color: #fff;
+}
+.mian .promotion .info {
+    padding: 0.26667rem 0.4rem;
+}
+.mian .promotion .info-data .left {
+    text-align: center;
+    padding: 0.26667rem 0;
+    width: 40%;
+    background: rgba(223, 56, 50, 0.02);
+    border: 0.04rem solid #df3832;
+    border-radius: 0.26667rem;
+}
+.mian .promotion .info-data .left .all {
+    font-size: 0.4rem;
+}
+.mian .promotion .info-data .left .num {
+    font-size: 0.53333rem;
+    padding: 0.13333rem 0;
+    color: #df3832;
+    font-weight: 600;
+}
+.mian .promotion .info-data .left .txt {
+    color: #333;
+    font-size: 0.37333rem;
+    line-height: 0.66667rem;
+}
+.mian .promotion .info-data .right {
+    width: 50%;
+    padding: 0.26667rem 0 0.26667rem 0.26667rem;
+    background: rgba(223, 56, 50, 0.02);
+    border: 0.04rem solid #df3832;
+    border-radius: 0.26667rem;
+}
+.mian .promotion .info-data .right .txt {
+    color: #333;
+    font-size: 0.37333rem;
+    line-height: 0.53333rem;
+}
+.mian .promotion .info-data .right .txt .num {
+    color: #df3832;
+    letter-spacing: 0;
+    font-weight: 600;
+}
+.mian .promotion .info-img .img {
+    width: 40%;
+}
+.mian .promotion .info-img .img-box,
+.mian .promotion .info-img .img img {
+    width: 100%;
+}
+.mian .promotion .info-img .btn-list {
+    width: 50%;
+}
+.mian .promotion .info-img .btn-list .btn-box {
+    width: 100%;
+}
+.mian .promotion .info-img .btn-list .btn {
+    height: 1.06667rem;
+    background: #e42622;
+    box-shadow: 0 0.10667rem 0.53333rem 0.05333rem rgba(228, 38, 34, 0.25);
+    border-radius: 0.26667rem;
+    color: #fff;
+}
+.mian .promotion .table {
+    margin: 0.4rem 0.4rem 0;
+    background: #fff;
+    box-shadow: 0 0.13333rem 0.29333rem 0.02667rem rgba(0, 0, 0, 0.12);
+    border-radius: 0.10667rem;
+    overflow-y: auto;
+}
+.mian .promotion .table .box {
+    min-width: 10.66667rem;
+}
+.mian .promotion .table .box .fw {
+    font-weight: 600;
+}
+.mian .promotion .table .hd {
+    background: #f4f4f4;
+    border-radius: 0.10667rem;
+    height: 0.93333rem;
+    line-height: 0.93333rem;
+}
+.mian .promotion .table .hd.dl {
+    height: 1.06667rem;
+    line-height: 0.53333rem;
+}
+.mian .promotion .table .hd .txt {
+    font-size: 0.32rem;
+}
+.mian .promotion .table .bd {
+    height: 0.93333rem;
+    line-height: 0.93333rem;
+}
+.mian .promotion .team {
+    padding: 0 0.4rem;
+    margin-top: 0.4rem;
+    color: #333;
+    font-size: 0.37333rem;
+    line-height: 0.66667rem;
+    position: relative;
+}
+.mian .promotion .team .xin {
+    position: absolute;
+    top: 0.13333rem;
+    left: 0.4rem;
+    font-size: 0.8rem;
+    color: #e42622;
+}
+.mian .promotion .team .txt {
+    text-indent: 1em;
+}
+.mian .promotion .vip {
+    padding: 0 0.53333rem;
+    border: 0.05333rem solid #e42622;
+    border-radius: 0.74667rem;
+    height: 1.06667rem;
+}
+.mian .promotion .award {
+    padding: 0.26667rem 0.4rem;
+}
+.mian .promotion .award .txt {
+    line-height: 0.66667rem;
+    margin-bottom: 0.13333rem;
+}
+.mian .picker {
+    padding: 0.53333rem 0 0.4rem;
+}
+.mian .picker .item {
+    flex: 0 1 33.5%;
+    height: 1.06667rem;
+    line-height: 1.06667rem;
+    border: 0.02667rem solid #eee;
+    margin-bottom: -0.02667rem;
+    margin-right: -0.02667rem;
+    text-align: center;
+}

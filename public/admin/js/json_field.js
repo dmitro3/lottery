@@ -168,7 +168,7 @@ var ELEMENTOR_JSON_FIELD = function(clazz){
 		            r = r - d + 10
 		        }
 		        urltype = 2, "image" == a && (urltype = 1), "media" == a && (urltype = 3);
-		        var o = "Tech5s FileManager";
+		        var o = "FileManager";
 		        "undefined" != typeof e.settings.filemanager_title && e.settings.filemanager_title && (o = e.settings.filemanager_title);
 		        var l = "key";
 		        "undefined" != typeof e.settings.filemanager_sort_by && e.settings.filemanager_sort_by && (f = "&sort_by=" + e.settings.filemanager_sort_by);
@@ -207,11 +207,11 @@ var ELEMENTOR_JSON_FIELD = function(clazz){
 			    plugins: [
 			    "advlist autosave autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
 			    "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-			    "save table contextmenu directionality emoticons template paste tech5sfilemanager textcolor colorpicker autoresize"
+			    "save table contextmenu directionality emoticons template paste teachfilemanager textcolor colorpicker autoresize"
 			    ],
 			    toolbar: "image",
 			    toolbar1:"bold italic underline hr | alignleft aligncenter alignright alignjustify | bullist numlist",
-			    toolbar2:"formatselect fontselect fontsizeselect | link unlink table | forecolor backcolor | tech5sfilemanager | image | mathSymbols",
+			    toolbar2:"formatselect fontselect fontsizeselect | link unlink table | forecolor backcolor | teachfilemanager | image | mathSymbols",
 			    toolbar3:"",
 			    sticky_offset: 45,
 			    image_advtab: true ,
@@ -240,7 +240,7 @@ var ELEMENTOR_JSON_FIELD = function(clazz){
 			    image_advtab: true,
 			    init_instance_callback:this.myCustomInitInstance,
 			    external_filemanager_path:this.baseurl+this.admincp+'/Media/media',
-			    filemanager_title:"Tech5s File Manager" ,
+			    filemanager_title:"File Manager" ,
 			    external_plugins: { "filemanager" : this.baseurl+"admin/plug/tinymce/plugin.min.js",
 							"mathSymbols": this.baseurl+"admin/plug/tinymce/plugins/mathsymbols-tinymce-plugin/plugin.js"},
 			    file_browser_callback: function(field_name, url, type, win) {

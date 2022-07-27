@@ -91,5 +91,30 @@
 		Route::get('editSitemap','SysController@editSitemap');
 		Route::post('updateSitemap','SysController@updateSitemap');
 		Route::post('change-type-menu',array( 'uses'=>"SysController@changeTypeMenu"));
+
+		Route::post('checkFieldDuplicated/{table}', array('uses' => "Admin@checkFieldDuplicated"));
+		
+		// Thông tin game
+		Route::get('game-info/{game}', array('uses' => "GameViewController@gameInfo"));
+
+		// Thông tin người dùng
+		Route::get('user-manage/user-info', array('uses' => "UserManageController@userInfo"));
+		Route::get('user-manage/load-user-withdraw-request', array('uses' => "UserManageController@loadUserWithdrawRequest"));
+		Route::post('user-manage/change-user-withdraw-request', array('uses' => "UserManageController@changeUserWithdrawRequest"));
+		Route::get('user-manage/load-user-recharge-request', array('uses' => "UserManageController@loadUserRechargeRequest"));
+		Route::post('user-manage/change-user-recharge-request', array('uses' => "UserManageController@changeUserRechargeRequest"));
+		Route::post('user-manage/edit-user-info', array('uses' => "UserManageController@editUserInfo"));
+		Route::post('user-manage/user-change-status', array('uses' => "UserManageController@userChangeStatus"));
+		Route::post('user-manage/edit-user-bank-info', array('uses' => "UserManageController@editUserBankInfo"));
+		Route::post('user-manage/plus-user-money', array('uses' => "UserManageController@plusUserMoney"));
+		Route::post('user-manage/minus-user-money', array('uses' => "UserManageController@minusUserMoney"));
+		Route::post('user-manage/load-user-statical-money', array('uses' => "UserManageController@loadUserStaticalMoney"));
+		Route::get('user-manage/top-recharge-user', array('uses' => "UserManageController@topRechargeUser"));
+
+		// Thống kê hệ thống
+
+		Route::get('system-statical/all-revenue-cost', array('uses' => "SystemStaticalController@allRevenueCost"));
+		Route::get('system-statical/total-receipts', array('uses' => "SystemStaticalController@totalReceipt"));
+		Route::get('system-statical/total-amount-spent', array('uses' => "SystemStaticalController@totalAmountSpent"));
 	});
 ?>

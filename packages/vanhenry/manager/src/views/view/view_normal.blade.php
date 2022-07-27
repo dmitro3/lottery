@@ -1,7 +1,7 @@
 @extends('vh::master')
     @section('css')
         @if($tableData->get('has_yoast_seo','') == 1)
-            <link rel="stylesheet" href="admin/tech5s_yoast_seo/theme/css/yoastseo.css" type="text/css">
+            <link rel="stylesheet" href="admin/teach_yoast_seo/theme/css/yoastseo.css" type="text/css">
         @endif
         @php
             $styles = config('sys_view'.'.'.$tableData->get('table_map').'.style',false);

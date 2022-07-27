@@ -14,4 +14,8 @@ class GameWinUserBet extends BaseModel
     {
         return $this->belongsTo(GameWinUserBetStatus::class);
     }
+    public function gameWinType()
+    {
+        return $this->belongsTo(GameWinType::class);
+    }
 }

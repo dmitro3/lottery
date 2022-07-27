@@ -6,6 +6,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	{!! SEOHelper::HEADER_SEO(@$currentItem ? $currentItem : null) !!}
+	<link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.woff2" as="font" type="font/woff2" crossorigin="">
+    <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.woff" as="font" type="font/woff" crossorigin="">
+    <link rel="preload" href="theme/frontend/fonts/vant-icon-db1de1.ttf" as="font" type="font/ttf" crossorigin="">
+	<link rel="preload" href="theme/frontend/js/hackertimer.js" as="script">
+	<script src="theme/frontend/js/hackertimer.js"></script>
 	@yield('cssl')
 	<link rel="stylesheet" href="theme/frontend/css/base.css">
     <link rel="stylesheet" href="theme/frontend/css/app.css">
@@ -28,9 +33,11 @@
 	@yield('content')
 	@include('loading')
 	{[CMS_FOOTER]}
-	@yield('jsl')
-	<script src="theme/frontend/js/sweetalert.min.js" defer></script>
+	
 	<script src="theme/frontend/js/xhr.js" defer></script>
+	<script src="theme/frontend/js/sweetalert.min.js" defer></script>
+	<script src="theme/frontend/js/infinite-load.js" defer></script>
+	@yield('jsl')
 	<script src="theme/frontend/js/base.js" defer></script>
 	@yield('js')
 </body>

@@ -126,4 +126,8 @@ class BaseModel extends Model
         }
         return \Cache::get('min_word_length');
     }
+    public function scopeIncludedTheCost($q)
+    {
+        return $q->where('is_marketing', 0);
+    }
 }
