@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Helpers\Mobile_Detect;
 use App\Models\Games\Lotto\GameLottoPlayUserBet;
+use App\Models\Games\LottoMb\GameLottoMbPlayUserBet;
 use vanhenry\manager\model\HUser;
 use App\Models\Games\Win\{
     GameWinUserBet
@@ -112,6 +113,10 @@ class User extends Authenticatable
     public function gameLottoPlayUserBet()
     {
         return $this->hasMany(GameLottoPlayUserBet::class);
+    }
+    public function gameLottoMbPlayUserBet()
+    {
+        return $this->hasMany(GameLottoMbPlayUserBet::class);
     }
     public function userIntroduce()
     {

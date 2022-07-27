@@ -4,6 +4,8 @@ namespace vanhenry\manager\controller;
 use App\Models\Games\Lotto\GameLottoCategory;
 use App\Models\Games\Lotto\GameLottoPlayRecord;
 use App\Models\Games\Lotto\GameLottoPlayType;
+use App\Models\Games\LottoMb\GameLottoMbPlayRecord;
+use App\Models\Games\LottoMb\GameLottoMbPlayType;
 use vanhenry\manager\helpers\CT;
 use App\Models\Games\Win\{
     GameWinType,
@@ -37,6 +39,9 @@ class GameViewController extends Admin
                 break;
             case 'lotto':
                 return $this->gameInfoLotto();
+                break;
+            case 'lottomb':
+                return $this->gameInfoLottoMb();
                 break;
             default:
                 abort(404);
@@ -157,5 +162,44 @@ class GameViewController extends Admin
             return GameLottoCategory::with('gameLottoTypes')->get();;
         });
         return view('vh::game_infos.loto_history_result',compact('listItems','gameLottoCategory'))->render();
+    }
+
+    private function gameInfoLottoMB(){
+        $action = request()->action;
+        switch ($action) {
+            case 'load_current_game_type_history':
+                return $this->loadCurrentGameLotoMbTypeHistory();
+                break;
+            case 'load_current_game':
+                return $this->loadCurrentGameLottoMb();
+                break;
+            default:
+                break;
+        }
+        return view('vh::game_infos.lottomb');
+    }
+    private function loadCurrentGameLottoMb(){
+        $GameLottoMbPlayType = GameLottoMbPlayType::find(1);
+        if (!isset($GameLottoMbPlayType)) {
+            return 'Game tạm thời không khả dụng';
+        }
+        $currentGame = $GameLottoMbPlayType->getCurrentGameRecord();
+        $gameLottoCategory = \Cache::rememberForever('adminGameLottoCategory', function () {
+            return GameLottoCategory::with('gameLottoTypes')->get();;
+        });
+        return response()->json([
+            'current_game_idx' => $currentGame->id,
+            'time_remaining' => $currentGame->getTimeRemaining(),
+            'html' => view('vh::game_infos.lotto_mb_current_game_result',compact('currentGame','gameLottoCategory'))->render()
+        ]);
+    }
+    private function loadCurrentGameLotoMbTypeHistory(){
+        $listItems = GameLottoMbPlayRecord::orderBy('id','desc')
+                                ->where('end_time','<=',now()->timestamp)
+                                ->paginate(10);
+        $gameLottoCategory = \Cache::rememberForever('adminGameLottoCategory', function () {
+            return GameLottoCategory::with('gameLottoTypes')->get();;
+        });
+        return view('vh::game_infos.loto_mb_history_result',compact('listItems','gameLottoCategory'))->render();
     }
 }

@@ -15,10 +15,11 @@
     <div class="c-row c-row-between c-row-middle info">
         <div class="type">{{number_format($item->amount,0,',','.')}} đ</div>
         <div>
-            @if ($item->game_win_user_bet_status_id == GameLottoPlayUserBet::STATUS_WAIT_RESULT)
+            @if ($item->game_lotto_play_user_bet_status_id == GameLottoPlayUserBet::STATUS_WAIT_RESULT)
                 <div class="money null">- - - -</div>
             @else
-                @if ($item->game_win_user_bet_status_id == GameLottoPlayUserBet::STATUS_LOSE)
+                @if ($item->game_lotto_play_user_bet_status_id == GameLottoPlayUserBet::STATUS_LOSE)
+
                     <div class="money">-{{number_format($item->amount,0,',','.')}} đ</div>
                 @else
                     <div class="money action">+{{number_format($item->return_amount,0,',','.')}} đ</div>
