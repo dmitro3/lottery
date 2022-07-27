@@ -1,4 +1,4 @@
-var TECH5SYOAST = (function(){
+var TEACHYOAST = (function(){
 	var blockSeo = null;
 	var globalApp = null;
 	var _initHiddenOldField = function(){
@@ -42,7 +42,7 @@ var TECH5SYOAST = (function(){
 		});
 	}
 	var _initTranslator = function  () {
-	   	fetch('admin/tech5s_yoast_seo/theme/json/vi.json').then(function(response){
+	   	fetch('admin/teach_yoast_seo/theme/json/vi.json').then(function(response){
 	   		return response.json();
 	   	}).then(function(json){
 	   		_initYoastSeoJs({

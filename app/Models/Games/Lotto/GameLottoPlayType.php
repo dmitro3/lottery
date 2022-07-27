@@ -9,6 +9,10 @@ class GameLottoPlayType extends BaseModel
 {
     use HasFactory;
 
+    public function getGameLottoRecordClass()
+    {
+        return GameLottoPlayRecord::class;
+    }
     public function gameLottoPlayRecords()
     {
         return $this->hasMany(GameLottoPlayRecord::class);
@@ -16,7 +20,7 @@ class GameLottoPlayType extends BaseModel
     public function getCurrentGameRecord()
     {
         $nowTimeStamp = now()->timestamp;
-        return GameLottoPlayRecord::where('game_lotto_play_type_id', $this->id)
+        return $this->getGameLottoRecordClass()::where('game_lotto_play_type_id', $this->id)
             ->where('start_time', '<=', $nowTimeStamp)
             ->where('end_time', '>', $nowTimeStamp)
             ->first();
@@ -29,7 +33,7 @@ class GameLottoPlayType extends BaseModel
         }
     }
 
-    private function renderGameRecord()
+    protected function renderGameRecord()
     {
         $today = now();
         $existToday =  $this->isExistItemByDate($today);
@@ -43,18 +47,18 @@ class GameLottoPlayType extends BaseModel
         }
     }
 
-    private function isExistItemByDate($time)
+    protected function isExistItemByDate($time)
     {
         $day = $time->day;
         $month = $time->month;
         $year = $time->year;
-        $item = GameLottoPlayRecord::where('day', $day)
+        $item = $this->getGameLottoRecordClass()::where('day', $day)
             ->where('month', $month)
             ->where('year', $year)
             ->first();
         return isset($item);
     }
-    private function generateGameByTime($timeAnchor)
+    protected function generateGameByTime($timeAnchor)
     {
 
         $currentMinuteRange = $this->seconds / 60;
@@ -87,12 +91,12 @@ class GameLottoPlayType extends BaseModel
                 }
             }
             if ($count % 200 == 0) {
-                GameLottoPlayRecord::insert($dataInsert);
+                $this->getGameLottoRecordClass()::insert($dataInsert);
                 $dataInsert = [];
             }
         }
         if (count($dataInsert) > 0) {
-            GameLottoPlayRecord::insert($dataInsert);
+            $this->getGameLottoRecordClass()::insert($dataInsert);
         }
     }
 }

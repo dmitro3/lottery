@@ -1,7 +1,7 @@
 @extends('vh::master')
 @section('css')
 	@if ($tableData->get('has_yoast_seo', '') == 1)
-		<link rel="stylesheet" href="admin/tech5s_yoast_seo/theme/css/yoastseo.css" type="text/css">
+		<link rel="stylesheet" href="admin/teach_yoast_seo/theme/css/yoastseo.css" type="text/css">
 	@endif
     @php
         $styles = config('sys_view'.'.'.$tableData->get('table_map').'.style',false);
@@ -95,7 +95,7 @@
 		<form action="{{ $actionNormal }}" dt-ajax="{{ $actionAjax }}"
 			dt-normal="{{ $actionNormal }}" method="post" id="frmUpdate">
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
-			<input type="hidden" name="tech5s_controller"
+			<input type="hidden" name="teach_controller"
 				value="{{ $tableData->get('controller', '') }}">
 			<div id="mainedit" class="row">
 				<div class="col-xs-12 col-md-9 p0">
@@ -181,8 +181,8 @@
 <?php $tableYoastSeo = \Config::get('manager.table_yoast_seo'); ?>
 @section('js')
 	@if ($tableData->get('has_yoast_seo', '') == 1)
-		<script type="text/javascript" src="admin/tech5s_yoast_seo/theme/js/yoastseo.js" defer></script>
-		<script type="text/javascript" src="admin/tech5s_yoast_seo/theme/js/script.js" defer></script>
+		<script type="text/javascript" src="admin/teach_yoast_seo/theme/js/yoastseo.js" defer></script>
+		<script type="text/javascript" src="admin/teach_yoast_seo/theme/js/script.js" defer></script>
 	@endif
     @php
         $scripts = config('sys_view'.'.'.$tableData->get('table_map').'.script',false);

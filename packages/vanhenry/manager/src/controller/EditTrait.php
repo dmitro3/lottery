@@ -368,8 +368,8 @@ trait EditTrait
                     $data[$key] = implode(',', $value);
                 }
             }
-            $tech5s_controller = $data['tech5s_controller'];
-            unset($data['tech5s_controller']);
+            $teach_controller = $data['teach_controller'];
+            unset($data['teach_controller']);
 
             $configMapTables = FCHelper::getConfigMapTableRewrite($table);
 
@@ -394,7 +394,7 @@ trait EditTrait
                     }
                 } else {
                     $dataRoutes = array(
-                        'controller' => $tech5s_controller,
+                        'controller' => $teach_controller,
                         'vi_link' => $data['slug'],
                         'table' => $table->table_map,
                         'vi_name' => isset($data['name']) ? $data['name'] : "",

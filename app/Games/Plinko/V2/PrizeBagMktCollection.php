@@ -43,8 +43,8 @@ class PrizeBagMktCollection extends PrizeBagCollection
     {
         if (!static::$prizeBagMarketing) {
             static::$prizeBagMarketing = new PrizeBagMktCollection();
-            static::$prizeBagMarketing->generate();
         }
+        static::$prizeBagMarketing->generate();
         return static::$prizeBagMarketing;
     }
 }
