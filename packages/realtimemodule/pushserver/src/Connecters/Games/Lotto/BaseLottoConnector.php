@@ -3,6 +3,7 @@
 namespace realtimemodule\pushserver\Connecters\Games\Lotto;
 
 use App\Games\Lotto\Base\Abstracts\ALottoable;
+use App\Games\Lotto\Enums\Config as LottoConfig;
 use App\Models\Games\Lotto\GameLottoType;
 use realtimemodule\pushserver\Contracts\ConnecterInterface;
 use realtimemodule\pushserver\Models\User;
@@ -104,7 +105,11 @@ abstract class BaseLottoConnector extends ALottoable implements ConnecterInterfa
             $this->from->send($this->buildResponse(100, false, $validator->errors()->first()));
             return $this->connection;
         }
-
+        $currentGameRecord = $this->gameLottoProvider->getGamePlayType()::find(1)->getCurrentGameRecord();
+        if ($currentGameClientInfo['current_game_idx'] != $currentGameRecord->id || $currentGameRecord->end_time - now()->timestamp <= $this->gameLottoProvider->getConfig()::LAST_POINT_TO_BET) {
+            $this->from->send($this->buildResponse(LottoStatus::GAME_CONNECT_CURRENT_GAME_INVALID, false, 'Đã hết thời gian đặt cược của ván này.'));
+            return $this->connection;
+        }
         $type = (int)$gameData['type'];
         $numbers = $gameData['numbers'];
         $numbers = is_array($numbers) ? $numbers : [];
@@ -132,7 +137,7 @@ abstract class BaseLottoConnector extends ALottoable implements ConnecterInterfa
         }
 
 
-        $currentGameRecord = $this->gameLottoProvider->getGamePlayType()::find(1)->getCurrentGameRecord();
+
         $user = $this->connection['userTargetMessage'];
         $money = $money * 1000;
         if ($money > $user->getAmount()) {

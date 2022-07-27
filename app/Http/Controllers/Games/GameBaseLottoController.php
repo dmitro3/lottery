@@ -61,7 +61,7 @@ abstract class GameBaseLottoController extends BaseGameController
         if ($type == 0) return;
         $currentGameRecord = $this->gameLottoProvider->getGamePlayType()::find(1)->getCurrentGameRecord();
         $user = \Auth::user();
-        $bets = $currentGameRecord->gameLottoPlayUserBets()->select('numbers')->where('user_id', $user->id)->get()->pluck('numbers');
+        $bets = $currentGameRecord->gameLottoPlayUserBets()->select('numbers')->where('game_lotto_type_id', $type)->where('user_id', $user->id)->get()->pluck('numbers');
         return response()->json(
             ['code' => 200, 'data' => $bets]
         );

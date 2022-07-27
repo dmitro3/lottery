@@ -1004,7 +1004,7 @@ var LottoUi = /** @class */ (function () {
         typeGames.forEach(function (typeGame) {
             typeGame.addEventListener("change", function (e) {
                 return __awaiter(this, void 0, void 0, function () {
-                    var input, parent, type, content, target, otherpanels;
+                    var input, parent, type, content, target, otherpanels, subtype;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -1015,9 +1015,6 @@ var LottoUi = /** @class */ (function () {
                                 return [4 /*yield*/, self.getGameContent(type)];
                             case 1:
                                 content = _a.sent();
-                                return [4 /*yield*/, self.getChoosenNumber(type)];
-                            case 2:
-                                _a.sent();
                                 target = _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"]._(parent.getAttribute("data-target"));
                                 otherpanels = target.parentElement.querySelectorAll(":scope > .panel");
                                 otherpanels.forEach(function (otherpanel, i) {
@@ -1025,6 +1022,10 @@ var LottoUi = /** @class */ (function () {
                                 });
                                 target.innerHTML = content.html;
                                 self.updateAfterGetGameContent();
+                                subtype = _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"]._('.type.type_js.nav-item input:checked').value;
+                                return [4 /*yield*/, self.getChoosenNumber(subtype)];
+                            case 2:
+                                _a.sent();
                                 _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].hideLoading();
                                 return [2 /*return*/];
                         }
@@ -1045,8 +1046,23 @@ var LottoUi = /** @class */ (function () {
     LottoUi.prototype.initEventTypeChange = function () {
         var self = this;
         _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"].on("change", ".type_js.nav-item input[name=type]", function (e) {
-            self.clearChoosenItem();
-            self.formbet.updateBoxTitle();
+            return __awaiter(this, void 0, void 0, function () {
+                var type;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].showLoading();
+                            type = _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"]._('.type.type_js.nav-item input:checked').value;
+                            self.clearChoosenItem();
+                            self.formbet.updateBoxTitle();
+                            return [4 /*yield*/, self.getChoosenNumber(type)];
+                        case 1:
+                            _a.sent();
+                            _Base_BaseGui__WEBPACK_IMPORTED_MODULE_1__["default"].hideLoading();
+                            return [2 /*return*/];
+                    }
+                });
+            });
         });
     };
     LottoUi.prototype.clearChoosenItem = function () {
@@ -1077,8 +1093,8 @@ var LottoUi = /** @class */ (function () {
                                 num = numbers[i];
                                 str += "<span class=\"lotto\">".concat(num, "</span>");
                             }
-                            _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"]._('.ls_lotto_choosen').innerHTML = str;
                         }
+                        _Base_Selector__WEBPACK_IMPORTED_MODULE_2__["default"]._('.ls_lotto_choosen').innerHTML = str;
                         return [2 /*return*/];
                 }
             });

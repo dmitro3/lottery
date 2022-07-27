@@ -99,6 +99,6 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
 
 @endsection
 @section('js')
-<script src="theme/frontend/game/ts/src_Base_Socket_ts-src_Lotto_Games_FormBet_ts-src_Lotto_Games_GameChoose_ts-src_Lotto_Games_G-a0c846.js" defer></script>
+<script src="theme/frontend/game/ts/lib.js" defer></script>
 <script src="theme/frontend/game/ts/lottomb.js" defer></script>
 @endsection

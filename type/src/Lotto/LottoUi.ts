@@ -36,7 +36,7 @@ export default class LottoUi {
                     let type = input ? input.value : 0;
 
                     let content: any = await self.getGameContent(type);
-                    await self.getChoosenNumber(type);
+
 
                     let target = Selector._(parent.getAttribute("data-target"));
                     let otherpanels =
@@ -49,6 +49,8 @@ export default class LottoUi {
 
                     target.innerHTML = content.html;
                     self.updateAfterGetGameContent();
+                    let subtype = Selector._('.type.type_js.nav-item input:checked').value;
+                    await self.getChoosenNumber(subtype);
                     BaseGui.hideLoading();
                 },
                 false
@@ -69,9 +71,13 @@ export default class LottoUi {
         Selector.on(
             "change",
             ".type_js.nav-item input[name=type]",
-            function (e: any) {
+            async function (e: any) {
+                BaseGui.showLoading();
+                let type = Selector._('.type.type_js.nav-item input:checked').value;
                 self.clearChoosenItem();
                 self.formbet.updateBoxTitle();
+                await self.getChoosenNumber(type);
+                BaseGui.hideLoading();
             }
         );
     }
@@ -97,8 +103,8 @@ export default class LottoUi {
                 const num = numbers[i];
                 str += `<span class="lotto">${num}</span>`
             }
-            Selector._('.ls_lotto_choosen').innerHTML = str;
         }
+        Selector._('.ls_lotto_choosen').innerHTML = str;
 
     }
     showQuestion() {

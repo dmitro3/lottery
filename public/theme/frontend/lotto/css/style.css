@@ -418,6 +418,9 @@
 .plot_totay .db {
     font-size: 20px;
 }
+.result_plot_threads{
+    position: relative;
+}
 .result_plot_threads .mark-box {
     height: 100%;
     width: 100%;
@@ -440,4 +443,8 @@
 .game-betting.lottomb .content .time-box .out .number .item {
     margin: 0px 2px;
     padding: 5px 4px;
+}
+.game-betting.lottomb .result_plot_threads .mark-box .item {
+    font-size: 2rem;
+    margin: 0px 5px !important;
 }
