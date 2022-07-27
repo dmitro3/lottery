@@ -2,7 +2,10 @@
 
 namespace App\Games\BaseLotto;
 
-
+use App\Models\Games\LottoMb\GameLottoMbPlayRecord;
+use App\Models\Games\LottoMb\GameLottoMbPlayType;
+use App\Models\Games\LottoMb\GameLottoMbPlayUserBet;
+use App\Models\Games\LottoMb\GameLottoMbTableResult;
 
 class LottoMb extends BaseLotto
 {
@@ -12,14 +15,14 @@ class LottoMb extends BaseLotto
     }
     function getGameRecord()
     {
-        return GameLottoPlayRecord::class;
+        return GameLottoMbPlayRecord::class;
     }
     function getGameTableResult()
     {
-        return GameLottoTableResult::class;
+        return GameLottoMbTableResult::class;
     }
     function getGameUserBet()
     {
-        return GameLottoPlayUserBet::class;
+        return GameLottoMbPlayUserBet::class;
     }
 }
