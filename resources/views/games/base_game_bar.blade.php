@@ -8,6 +8,9 @@
             case 'plinko':
                 $backLink = 'plinko';
                 break;
+            case 'lotto':
+                $backLink = 'lotto';
+                break;
             default:
                 break;
         }

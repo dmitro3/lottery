@@ -42,6 +42,7 @@ Route::group([
 
         Route::get('/wingo-bet-history ', 'AccountController@wingoBetHistory');
         Route::get('/plinko-bet-history ', 'AccountController@plinkoBetHistory');
+        Route::get('/lotto-bet-history ', 'AccountController@lottoBetHistory');
 
         // Ví
         Route::get('/vi-cua-toi', 'WalletController@index');
@@ -67,6 +68,7 @@ Route::group([
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::post('callback-prince-pay', 'OnlinePaymentCallbackController@callbackPrincePay');
+    Route::get('nap-tien-prince-pay', 'OnlinePaymentCallbackController@paymentSuccess');
     
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');
 });

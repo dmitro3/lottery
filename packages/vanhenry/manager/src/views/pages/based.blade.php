@@ -91,7 +91,7 @@
 								</div>
 								<div class="content">
 									<p class="name">{{RechargeRequest::count()}}</p>
-									<a href="esystem/view/exercises" class="smooth">Yêu cầu nạp tiền</a>
+									<a href="esystem/view/recharge_requests" class="smooth">Yêu cầu nạp tiền</a>
 								</div>
 							</div>
 						</div>
@@ -102,7 +102,7 @@
 								</div>
 								<div class="content">
 									<p class="name">{{RechargeRequest::where('recharge_status_id',3)->count()}}</p>
-									<a href="esystem/view/video_lectures" class="smooth">Yêu cầu nạp tiền thất bại</a>
+									<a href="esystem/view/recharge_requests?tab=3" class="smooth">Yêu cầu nạp tiền thất bại</a>
 								</div>
 							</div>
 						</div>

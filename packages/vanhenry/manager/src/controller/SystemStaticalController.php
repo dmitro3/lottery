@@ -58,6 +58,7 @@ class SystemStaticalController extends Admin
                                 ->where('created_at','>=',$startDate)
                                 ->where('created_at','<=',$endDate)
                                 ->where('type',WalletTransactionType::RECHARGE_MONEY)
+                                ->orderBy('id','desc')
                                 ->paginate(10);
         return view('vh::statical.system.total_receipt_result',compact('listItems'));
     }
@@ -69,6 +70,7 @@ class SystemStaticalController extends Admin
                                 ->where('created_at','>=',$startDate)
                                 ->where('created_at','<=',$endDate)
                                 ->where('withdrawal_request_status_id',WithdrawalRequestStatus::STATUS_CONFIRMED)
+                                ->orderBy('id','desc')
                                 ->paginate(10);
         return view('vh::statical.system.total_amount_spent_result',compact('listItems'));
     }

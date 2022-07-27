@@ -148,7 +148,6 @@ var PLINKO_UI = {
     },
 };
 
-
 var PLINKO_SOCKET = {
     connecter: null,
     wsReady: false,

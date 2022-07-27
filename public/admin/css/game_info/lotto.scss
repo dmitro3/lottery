@@ -1,0 +1,109 @@
+.big-title {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-size: 18px;
+    color: white !important;
+    background-color: #087990 !important;
+    padding: 6px 12px;
+    font-weight: bold;
+}
+
+.lotto-history-list-item{
+    .item{
+        border: solid 1px #e1e1e1;
+        margin-top: 10px;
+        .header-item{
+            padding: 6px;
+            background: #f9f9ff;
+            color: #3d405c;
+        }
+        .item-more-detail{
+            border-top: solid 1px #e1e1e1;
+            .title-box{
+                width: 80px;
+                padding: 6px;
+                color: #3d405c;
+            }
+            .inner-item{
+                width: calc(100% - 80px);
+                &.title{
+                    .item-content{
+                        background: #ebebeb;
+                    }
+                }
+            }
+            .item-content{
+                padding: 6px;
+                text-align: center;
+                border-left: solid 1px #e1e1e1;
+            }
+        }
+    }
+    .title-box{
+        background: rgba(249, 249, 249, 0.5);
+    }
+}
+.item-group-wrapper{
+    display: flex;
+    .group-title{
+        width: 100px;
+        border-top: solid 1px #e1e1e1;
+        border-right: solid 1px #e1e1e1;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #17a2b8;
+        color: #fff;
+    }
+    .list-item{
+        width: calc(100% - 100px);
+    }
+}
+.current-game-countdown-timebox{
+    justify-content: center;
+    display: flex;
+    padding: 5px;
+    .item{
+        margin: 5px;
+        background: #428bca;
+        display: block;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+}
+.lotto-current-item-wrapper{
+    position: relative;
+}
+.in-loading-item{
+    position: relative;
+    &::before{
+        content:'';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        z-index: 2;
+    }
+    &::after{
+        content:"\f110";
+        font-family: 'FontAwesome';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-animation: fa-spin 2s infinite linear;
+        animation: fa-spin 1s infinite linear;
+        font-size: 30px;
+        z-index: 3;
+        margin-left: -25px;
+        margin-top: -25px;
+    }
+}

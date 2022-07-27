@@ -22,25 +22,14 @@
             </div>
         </div>
     </div>
-    @if ($rechargeMethod->id == RechargeMethod::ONLINE_MOMO_PRINCE_PAY)
-        <div class="list m-t-10 c-row c-row-between c-flex-warp">
-            <div class="li amount-selecter" data-amout="20000"><span class="number">20K</span></div>
-            <div class="li amount-selecter" data-amout="50000"><span class="number">50K</span></div>
-            <div class="li amount-selecter" data-amout="100000"><span class="number">100k</span></div>
-            <div class="li amount-selecter" data-amout="1500000"><span class="number">1.5M</span></div>
-            <div class="li amount-selecter" data-amout="2000000"><span class="number">2M</span></div>
-            <div class="li amount-selecter" data-amout="10000000"><span class="number">10M</span></div>
-        </div>
-    @else
-        <div class="list m-t-10 c-row c-row-between c-flex-warp">
-            <div class="li amount-selecter" data-amout="50000"><span class="number">50K</span></div>
-            <div class="li amount-selecter" data-amout="100000"><span class="number">100K</span></div>
-            <div class="li amount-selecter" data-amout="500000"><span class="number">500k</span></div>
-            <div class="li amount-selecter" data-amout="1000000"><span class="number">1M</span></div>
-            <div class="li amount-selecter" data-amout="5000000"><span class="number">5M</span></div>
-            <div class="li amount-selecter" data-amout="10000000"><span class="number">10M</span></div>
-        </div>
-    @endif
+    <div class="list m-t-10 c-row c-row-between c-flex-warp">
+        <div class="li amount-selecter" data-amout="50000"><span class="number">50K</span></div>
+        <div class="li amount-selecter" data-amout="100000"><span class="number">100K</span></div>
+        <div class="li amount-selecter" data-amout="500000"><span class="number">500k</span></div>
+        <div class="li amount-selecter" data-amout="1000000"><span class="number">1M</span></div>
+        <div class="li amount-selecter" data-amout="5000000"><span class="number">5M</span></div>
+        <div class="li amount-selecter" data-amout="10000000"><span class="number">10M</span></div>
+    </div>
     <div class="m-t-10">
         {!!Support::show($rechargeMethod,'content')!!}
     </div>
