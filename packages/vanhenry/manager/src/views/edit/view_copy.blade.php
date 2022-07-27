@@ -58,7 +58,7 @@ else{
 <div id="maincontent">
 	<form action="{{$actionNormal}}" dt-ajax="{{$actionAjax}}" dt-normal="{{$actionNormal}}" method="post" id="frmUpdate">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
-		<input type="hidden" name="tech5s_controller" value="{{$tableData->get('controller','')}}">
+		<input type="hidden" name="teach_controller" value="{{$tableData->get('controller','')}}">
 		<div id="mainedit" class="row">
 			<div class="col-xs-12 col-md-9 p0">
 				<?php 

@@ -879,28 +879,27 @@ var PlinkoUi = /** @class */ (function () {
         setTimeout(function () {
             if (typeof ShortPlinko != 'undefined') {
                 if (ShortPlinko.sound().isMute()) {
-                    _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
+                    _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
                 }
                 else {
-                    _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
+                    _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
                 }
             }
         }, 1000);
         _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').addEventListener('click', function () {
             if (typeof ShortPlinko != 'undefined') {
+                if (!this.backgroundSound) {
+                    this.backgroundSound = ShortPlinko.sound().getSound('bg');
+                }
                 if (ShortPlinko.sound().isMute()) {
                     ShortPlinko.sound().unmute();
-                    if (this.backgroundSound) {
-                        this.backgroundSound.play();
-                    }
+                    this.backgroundSound.play();
                     _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-off-outline.png" class="item-volume">';
                 }
                 else {
                     ShortPlinko.sound().mute();
                     _Base_Selector__WEBPACK_IMPORTED_MODULE_1__["default"]._('#switch_audio').innerHTML = '<img src="theme/frontend/img/volume-up-line.png" class="item-volume">';
-                    if (this.backgroundSound) {
-                        this.backgroundSound.stop();
-                    }
+                    this.backgroundSound.stop();
                 }
             }
         });

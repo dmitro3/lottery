@@ -34,15 +34,15 @@ trait ImportTrait{
 
 		$objPHPExcel = new PHPExcel();
 
-		$objPHPExcel->getProperties()->setCreator("Tech5s");
+		$objPHPExcel->getProperties()->setCreator("Tech");
 
-		$objPHPExcel->getProperties()->setLastModifiedBy("VTH");
+		$objPHPExcel->getProperties()->setLastModifiedBy("CCC");
 
 		$objPHPExcel->getProperties()->setTitle("Office 2007 XLSX Test Document");
 
 		$objPHPExcel->getProperties()->setSubject("Office 2007 XLSX Test Document");
 
-		$objPHPExcel->getProperties()->setDescription("Import by CMS version 3 of Tech5s");
+		$objPHPExcel->getProperties()->setDescription("Import by CMS version 3 of Tech");
 
 		return $objPHPExcel;
 

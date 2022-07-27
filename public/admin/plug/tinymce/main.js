@@ -9,10 +9,10 @@ var TINYMCE = $(function() {
 			'advlist autolink lists link image charmap print preview hr anchor pagebreak',
 			'searchreplace wordcount visualblocks visualchars code fullscreen',
 			'insertdatetime media nonbreaking save table contextmenu directionality',
-			'emoticons template paste textcolor colorpicker textpattern tech5sfilemanager'
+			'emoticons template paste textcolor colorpicker textpattern teachfilemanager'
 			],
 			toolbar1:"code preview |bold italic underline hr strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | removeformat subscript superscript",
-			toolbar2:"styleselect formatselect fontselect fontsizeselect | link unlink table | forecolor backcolor | pastetext pagebreak | spellchecker | tech5sfilemanager | image media | mathSymbols",
+			toolbar2:"styleselect formatselect fontselect fontsizeselect | link unlink table | forecolor backcolor | pastetext pagebreak | spellchecker | teachfilemanager | image media | mathSymbols",
 			toolbar3:"",
 			style_formats: [
 				{title: 'Bold text', inline: 'b'},
@@ -57,7 +57,7 @@ var TINYMCE = $(function() {
 			image_advtab: true,
 			init_instance_callback:myCustomInitInstance,
 			external_filemanager_path:baseurl+admincp+'/media/view',
-			filemanager_title:"Tech5s File Manager" ,
+			filemanager_title:"File Manager" ,
 			external_plugins: { "filemanager" : baseurl+"admin/plug/tinymce/plugin.min.js",
 							"mathSymbols": baseurl+"admin/plug/tinymce/plugins/mathsymbols-tinymce-plugin/plugin.js"},
 			file_browser_callback: function(field_name, url, type, win) {
@@ -76,7 +76,7 @@ var TINYMCE = $(function() {
 			r = r - d + 10
 		}
 		urltype = 2, "image" == a && (urltype = 1), "media" == a && (urltype = 3);
-		var o = "Tech5s FileManager";
+		var o = "FileManager";
 		"undefined" != typeof e.settings.filemanager_title && e.settings.filemanager_title && (o = e.settings.filemanager_title);
 		var l = "key";
 		"undefined" != typeof e.settings.filemanager_sort_by && e.settings.filemanager_sort_by && (f = "&sort_by=" + e.settings.filemanager_sort_by);
