@@ -22,4 +22,8 @@ class RechargeMethod extends BaseModel
                 break;
         }
     }
+    public static function getPrincePayMethodId()
+    {
+        return [self::ONLINE_PAYMENT_PRINCE_PAY,self::ONLINE_TRANSFER_PRINCE_PAY];
+    }
 }

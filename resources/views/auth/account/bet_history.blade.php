@@ -29,6 +29,9 @@
                         <div class="van-tab" data-action="tai-khoan/lotto-bet-history">
                             <span class="van-tab__text van-tab__text--ellipsis">Lotto</span>
                         </div>
+                        <div class="van-tab" data-action="tai-khoan/lottomb-bet-history">
+                            <span class="van-tab__text van-tab__text--ellipsis">Lotto Miền Bắc</span>
+                        </div>
                         <div class="van-tabs__line" style="width: 48px; transform: translateX(-100%);transition-duration: 0.3s;"></div>
                     </div>
                 </div>

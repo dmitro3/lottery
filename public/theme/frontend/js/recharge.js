@@ -89,6 +89,7 @@ var RECHARGE_BASE = (function () {
             ".item-recharge-method.action"
         );
         if (!itemRechargeMethodActive) return;
+        BASE_GUI.showLoading();
         XHR.send({
             url: "tai-khoan/init-recharge-method",
             method: "GET",
@@ -96,6 +97,7 @@ var RECHARGE_BASE = (function () {
                 idx: itemRechargeMethodActive.dataset.idx,
             },
         }).then((res) => {
+            BASE_GUI.hideLoading();
             var payBoxContentResult = document.querySelector(
                 "#pay-box-content-result"
             );
