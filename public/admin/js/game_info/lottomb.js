@@ -8,8 +8,9 @@ var GAMEINFO_LOTTOmbMB = (function () {
             clearInterval(timeIntevalCurrentGame);
         }
         function gameTimer() {
-            minutes = (anchorTime / 60) | 0;
-            seconds = anchorTime % 60 | 0;
+            hours = (anchorTime / 3600) | 0;
+            minutes = (anchorTime % 3600) / 60;
+            seconds = (anchorTime % 3600) % 60 | 0;
             minutes = minutes < 10 ? "0" + minutes : String(minutes);
             seconds = seconds < 10 ? "0" + seconds : String(seconds);
             if (anchorTime <= 0) {
@@ -23,6 +24,9 @@ var GAMEINFO_LOTTOmbMB = (function () {
                 initCurrentGame();
             } else {
                 $(".current-game-countdown-timebox").html(`
+                    <div class="item">${hours.substr(0, 1)}</div>
+                    <div class="item">${hours.substr(1, 1)}</div>
+                    <div class="item c-row c-row-middle">:</div>
                     <div class="item">${minutes.substr(0, 1)}</div>
                     <div class="item">${minutes.substr(1, 1)}</div>
                     <div class="item c-row c-row-middle">:</div>

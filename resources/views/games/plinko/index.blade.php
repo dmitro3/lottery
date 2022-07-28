@@ -8,7 +8,8 @@ use \realtimemodule\pushserver\Helpers\PushServerHelper;
     var connectionGameType = '{{PushServerHelper::generateHash(\realtimemodule\pushserver\PushServerProvider::TYPE_GAME_PLINKO)}}';
     var PLINKO_STATUS = <?php echo json_encode(\realtimemodule\pushserver\Enums\Plinko\Status::getConstList()) ?>;
     var PLINKO_CONFIG = <?php echo json_encode(\App\Games\Plinko\Enums\Config::getConstList()) ?>;
-    var SOCKET_URL = 'ws://localhost:8081/'
+    var SOCKET_URL = 'ws://localhost:8081/';
+    var FEE_RATE = '{[game_fee]}';
 </script>
 @endsection
 @section('content')
