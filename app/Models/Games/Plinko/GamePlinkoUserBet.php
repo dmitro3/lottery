@@ -33,10 +33,10 @@ class GamePlinkoUserBet extends BaseModel
         $this->save();
         $user = $this->user;
         $reason = vsprintf('Cộng tiền thắng game Plinko. Phiên giao dịch %s.', [$this->game_plinko_record_id]);
-        $user->changeMoney($returnAmount, $reason, WalletTransactionType::PLUS_MONEY_BET_GAME_PLINKO, $this->id,$this->is_marketing,false);
+        $user->changeMoney($returnAmount, $reason, WalletTransactionType::PLUS_MONEY_BET_GAME_PLINKO, $this->id, $this->is_marketing, false);
     }
 
-    public static function toDatabase($user, $currentGameRecord, BallType $ball, $mode, $qty, $totalMoney)
+    public static function toDatabase($user, $currentGameRecord, BallType $ball, $mode, $qty)
     {
         $baseAmount = $ball->getBetAmount();
         $bet = new static();

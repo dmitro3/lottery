@@ -1,15 +1,18 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Wallet extends BaseModel
 {
     use HasFactory;
-    public function changeMoney($amount,$reason,$type,$mapId,$isMarketing = 0,$chechAgain = true)
+    public function changeMoney($amount, $reason, $type, $mapId, $isMarketing = 0, $chechAgain = true)
     {
         $listTypeCommissionAble = WalletTransactionType::getArrTypeTakeCommissionAble();
 
         $user = $this->user ?? null;
-        if (isset($user) && $user->is_marketing_account == 0 && in_array($type,$listTypeCommissionAble)) {
+        if (isset($user) && $user->is_marketing_account == 0 && in_array($type, $listTypeCommissionAble)) {
             $commissionIncurred = new CommissionIncurred;
             $commissionIncurred->user_id = $this->user_id;
             $commissionIncurred->amount = abs($amount);

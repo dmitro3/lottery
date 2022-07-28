@@ -1,10 +1,13 @@
 <?php
+
 namespace App\Games\GoWin\MiniGames;
+
 use App\Games\GoWin\Contracts\GoWinMiniGameInterface;
 use App\Models\Games\Win\{
     GameWinUserBet,
     GameWinUserBetStatus
 };
+
 class MiniGame implements GoWinMiniGameInterface
 {
     public $miniGameName = '';
@@ -18,11 +21,17 @@ class MiniGame implements GoWinMiniGameInterface
     }
     public function validateValue()
     {
-        return in_array($this->value,$this->validValue);
+        return in_array($this->value, $this->validValue);
     }
-    public function toDatabase($gameWinType,$currentGame,$user,$qty,$amoutItem)
+    public function toDatabase($gameWinType, $currentGame, $user, $qty, $amoutItem)
     {
         $user->fresh();
+
+        $itemMoney = $amoutItem->money;
+        $fee = (float)\SettingHelper::getSetting('game_fee', 2);
+        $realItemMoney = $itemMoney - (int)($fee * $itemMoney / 100);
+
+
         $itemGameWinUserBet = new GameWinUserBet;
         $itemGameWinUserBet->user_id = $user->id;
         $itemGameWinUserBet->game_win_type_id = $gameWinType->id;
@@ -31,7 +40,7 @@ class MiniGame implements GoWinMiniGameInterface
         $itemGameWinUserBet->select_value = $this->value;
         $itemGameWinUserBet->qty = $qty;
         $itemGameWinUserBet->amount_base = $amoutItem->money;
-        $itemGameWinUserBet->amount = $amoutItem->money * $qty;
+        $itemGameWinUserBet->amount = $realItemMoney * $qty;
         $itemGameWinUserBet->return_amount = 0;
         $itemGameWinUserBet->game_win_user_bet_status_id = GameWinUserBetStatus::STATUS_WAIT_RESULT;
         $itemGameWinUserBet->is_returned = 0;
@@ -43,13 +52,13 @@ class MiniGame implements GoWinMiniGameInterface
     }
     public function getValuePreviewName()
     {
-        return isset($this->valueNameMap[$this->value]) ? $this->valueNameMap[$this->value]:$this->value;
+        return isset($this->valueNameMap[$this->value]) ? $this->valueNameMap[$this->value] : $this->value;
     }
     public function isWin($number)
     {
         return false;
     }
-    public function calculationAmountWin($number,$amountBet)
+    public function calculationAmountWin($number, $amountBet)
     {
         return 0;
     }

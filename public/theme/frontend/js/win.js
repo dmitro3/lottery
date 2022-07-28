@@ -594,7 +594,10 @@ var WINDLOAD = (function () {
         if (!userTokenIp) return;
         var userToken = userTokenIp.value;
         var urlConncet = "wss://vinlott.net/wss/?auth_token=";
-        if (window.location.host == "doanso.test") {
+        if (
+            window.location.host == "doanso.test" ||
+            window.location.hostname == "localhost"
+        ) {
             var urlConncet = "ws://localhost:8081/?auth_token=";
         }
         connecter = new WebSocket(`${urlConncet}${userToken}`);
@@ -836,6 +839,7 @@ var WINDLOAD = (function () {
     var betSuccess = function (data) {
         var htmlContent = document.createElement("div");
         htmlContent.classList.add("content-game-win-bet-scuccess");
+
         htmlContent.innerHTML = `
             <div class="item-info">
                 <div class="title">Phiên giao dịch:</div>
@@ -854,7 +858,7 @@ var WINDLOAD = (function () {
             <div class="item-info">
                 <div class="title">Số tiền giao dịch:</div>
                 <div class="value">
-                    ${data.qty} x ${data.base_amount} = <strong>${data.amount}</strong>
+                    ${data.qty} x ${data.base_amount} - ${data.fee}% phí = <strong>${data.amount}</strong>
                 </div>
             </div>
         `;

@@ -145,7 +145,12 @@ abstract class BaseLottoConnector extends ALottoable implements ConnecterInterfa
             return $this->connection;
         }
 
-        $itemUserBet = $this->gameLottoProvider->getGameUserBet()::toDatabase($user, $currentGameRecord, $gameType, $numbers, $money);
+
+        $fee = (float)\SettingHelper::getSetting('game_fee', 2);
+        $realMoney = $money - (int)($fee * $money / 100);
+
+
+        $itemUserBet = $this->gameLottoProvider->getGameUserBet()::toDatabase($user, $currentGameRecord, $gameType, $numbers, $realMoney);
         $reason = vsprintf('Trừ tiền cược game Lotto. Phiên giao dịch %s.', [$currentGameRecord->id]);
         $user->changeMoney(0 - $money, $reason, WalletTransactionType::MINUS_MONEY_BET_GAME_LOTTO, $itemUserBet->id);
 

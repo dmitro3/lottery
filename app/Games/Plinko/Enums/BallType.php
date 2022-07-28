@@ -13,6 +13,13 @@ class BallType extends BaseEnum
 
     public function getBetAmount()
     {
+        $amount = $this->_getBetAmount();
+        $fee = (float)\SettingHelper::getSetting('game_fee', 2);
+        $realAmount = $amount - (int)($fee * $amount / 100);
+        return $realAmount;
+    }
+    private function _getBetAmount()
+    {
         switch ($this->getValue()) {
             case BallType::NORMAL:
                 return 1000;
@@ -23,6 +30,7 @@ class BallType extends BaseEnum
         }
         return 0;
     }
+
     public function getBetAmountText()
     {
         switch ($this->getValue()) {

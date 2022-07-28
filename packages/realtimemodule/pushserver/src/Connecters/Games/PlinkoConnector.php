@@ -123,7 +123,8 @@ class PlinkoConnector implements ConnecterInterface
             return $this->connection;
         }
 
-        $itemUserBet = GamePlinkoUserBet::toDatabase($user, $currentGameRecord, $ball, $mode, $qty, $totalMoney);
+
+        $itemUserBet = GamePlinkoUserBet::toDatabase($user, $currentGameRecord, $ball, $mode, $qty);
         $reason = vsprintf('Trừ tiền cược game Plinko. Phiên giao dịch %s.', [$currentGameRecord->id]);
         $user->changeMoney(0 - $totalMoney, $reason, WalletTransactionType::MINUS_MONEY_BET_GAME_PLINKO, $itemUserBet->id);
 

@@ -62,12 +62,15 @@ class CrawlSample extends Command
         $din->year = 2022;
         $din->month = 7;
         $din->day = 27;
-        $days = explode(',', '20/02/2022');
-        foreach ($days as $d) {
-            $date = \Carbon\Carbon::createFromFormat('d/m/Y', $d);
-            if ($date->year == $din->year && $date->month == $din->month && $date->day == $din->day) {
-                dd('true');
+        $days = explode(',', '');
+        try {
+            foreach ($days as $d) {
+                $date = \Carbon\Carbon::createFromFormat('d/m/Y', $d);
+                if ($date->year == $din->year && $date->month == $din->month && $date->day == $din->day) {
+                    dd('true');
+                }
             }
+        } catch (\Throwable $th) {
         }
         $this->info("End " . $this->description);
     }

@@ -25,8 +25,10 @@ abstract class GameBaseLottoController extends BaseGameController
         $categories = GameLottoCategory::select('name', 'id')->act()->get();
         $types = GameLottoType::select('id', 'code', 'choose_min', 'choose_max', 'bet', 'win', 'min_bet')->act()->get()->keyBy('code');
         $currentGameRecord = $this->gameLottoProvider->getGamePlayType()::find(1)->getCurrentGameRecord();
-
-        $prevGameRecord = $this->gameLottoProvider->getGameRecord()::select('id')->where('id', '<', $currentGameRecord->id)->orderBy('id', 'desc')->limit(1)->first();
+        $prevGameRecord = null;
+        if ($currentGameRecord) {
+            $prevGameRecord = $this->gameLottoProvider->getGameRecord()::select('id')->where('id', '<', $currentGameRecord->id)->orderBy('id', 'desc')->limit(1)->first();
+        }
         $results = [];
         $prevGameRecordId = 0;
         if ($prevGameRecord) {
