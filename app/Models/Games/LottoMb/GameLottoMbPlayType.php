@@ -35,8 +35,20 @@ class GameLottoMbPlayType extends GameLottoPlayType
             $this->generateGameByTime($tomorrow);
         }
     }
+    private function getDayExcept($din){
+        $day = \SettingHelper::getSetting('lottomb_excerpt_day','');
+        $days = explode(',',$day);
+        foreach ($days as $d) {
+            $date = \Carbon\Carbon::createFromFormat('d/m/Y', $d);
+            if($date->year == $din->year && $date->month == $din->month && $date->day == $din->day){
+                return true;
+            }
+        }
+        
+    }
     protected function generateGameByTime($timeAnchor)
     {
+        
         $startDate = clone $timeAnchor;
         $endDate = clone $timeAnchor;
         $endDate->addDays(1);
